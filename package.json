@@ -1,0 +1,27 @@
+{
+  "name": "scatter",
+  "version": "1.0.0",
+  "description": "A simple scatter-plot plugin panel table formatted data in Grafana using the react panel template",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "repository": "github:michaeldmoore/michaeldmoore-scatter-panel",
+  "author": "michaeldmoore",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel/issues",
+    "email": "plugins@grafana.com"
+  },
+  "devDependencies": {
+    "@grafana/data": "7.0.0",
+    "@grafana/toolkit": "7.0.0",
+    "@grafana/ui": "^7.0.0",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=12 <13"
+  }
+}
