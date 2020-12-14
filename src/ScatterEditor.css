@@ -1,0 +1,17 @@
+.FieldSetsEditor{
+    display:flex;
+    margin-bottom: 15px;
+}
+
+.ScatterDotSize{
+    width:65px;
+    padding-right:5px;
+}
+
+.ScatterDot{
+    padding-top:7px;
+}
+
+.ScatterSelect{
+    width:100%;
+}

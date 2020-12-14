@@ -1,7 +1,11 @@
-type SeriesSize = 'sm' | 'md' | 'lg';
+import { FieldSet } from "FieldSet";
 
 export interface ScatterOptions {
-  text: string;
-  showSeriesCount: boolean;
-  seriesCountSize: SeriesSize;
+    xAxisField: number,
+    yAxisFields: number[],
+    fieldSets: FieldSet[],
+    xAxisMin: number,
+    xAxisMax: number,
+    yAxisMin: number,
+    yAxisMax: number,
 }

@@ -1,68 +1,117 @@
 import React from 'react';
-import { PanelProps } from '@grafana/data';
-import { ScatterOptions } from 'types';
-import { css, cx } from 'emotion';
-import { stylesFactory, useTheme } from '@grafana/ui';
+import * as d3 from 'd3';
+//import { css, cx } from 'emotion';
 
-interface Props extends PanelProps<ScatterOptions> {}
+import { PanelProps } from '@grafana/data';
+
+import { ScatterOptions } from 'types';
+
+//const docsUrl = 'https://grafana.com/grafana/plugins/marcusolsson-treemap-panel';
+
+interface Props extends PanelProps<ScatterOptions> { }
 
 export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const theme = useTheme();
-  const styles = getStyles();
-  return (
-    <div
-      className={cx(
-        styles.wrapper,
-        css`
-          width: ${width}px;
-          height: ${height}px;
-        `
-      )}
-    >
-      <svg
-        className={styles.svg}
-        width={width}
-        height={height}
-        xmlns="http://www.w3.org/2000/svg"
-        xmlnsXlink="http://www.w3.org/1999/xlink"
-        viewBox={`-${width / 2} -${height / 2} ${width} ${height}`}
-      >
-        <g>
-          <circle style={{ fill: `${theme.isLight ? theme.palette.greenBase : theme.palette.blue95}` }} r={100} />
-        </g>
-      </svg>
+  const frame = data.series[0];
 
-      <div className={styles.textBox}>
-        {options.showSeriesCount && (
-          <div
-            className={css`
-              font-size: ${theme.typography.size[options.seriesCountSize]};
-            `}
-          >
-            Number of series: {data.series.length}
-          </div>
-        )}
-        <div>Text option value: {options.text}</div>
+  let colData = new Array();
+  frame.fields.forEach((field, i) => {
+    colData.push({
+      name: field.name,
+      displayName: field.config?.displayName || field.name,
+      values: field.values.toArray().map(Number)
+    });
+  })
+
+  if (colData.length < 2) {
+    return (
+      <div style={{ overflow: 'hidden', height: '100%' }}>
+        <p>To get started, create a table query that returns 2 or more numeric columns</p>
       </div>
-    </div>
+    );
+  }
+  else if (options.xAxisField >= colData.length) {
+    return (
+      <div style={{ overflow: 'hidden', height: '100%' }}>
+        <p>X Axis field setting not found in current query</p>
+      </div>
+    );
+  }
+  else {
+    let fieldSets = options.fieldSets.filter(x => x != null && x?.col >= 0 && x?.col < colData.length);
+    if (fieldSets.length == 0) {
+      return (
+        <div style={{ overflow: 'hidden', height: '100%' }}>
+          <p>No Y Axis(s) data found in current query</p>
+        </div>
+      );
+    }
+    else {
+      return generateContent(width, height, options, colData);
+    }
+  }
+}
+
+function generateContent(width: number, height: number, options:ScatterOptions, colData: { name: string, displayName: string, values: number[] }[]) {
+
+  let colValues = colData.map(c => { return c.values });
+  let xValues = colValues[options.xAxisField];
+  let xExtent = d3.extent(xValues);
+
+  let yValues = options.fieldSets.map(f => { return colValues[f.col] });
+  let yExtents = yValues.map(c => { return d3.extent(c) });
+  let yExtent = [d3.min(yExtents.map(c => { return c[0] }) as number[]), d3.max(yExtents.map(c => { return c[1] }) as number[])];
+
+  if (!isNaN(options.xAxisMin))
+    xExtent[0] = options.xAxisMin;
+
+  if (!isNaN(options.xAxisMax))
+    xExtent[1] = options.xAxisMax;
+
+  if (!isNaN(options.yAxisMin))
+    yExtent[0] = options.yAxisMin;
+
+  if (!isNaN(options.yAxisMax))
+    yExtent[1] = options.yAxisMax;
+
+  let margin = ({ top: 20, right: 10, bottom: 20, left: 30 })
+
+  const xScale = d3
+    .scaleLinear()
+    .nice()
+    .domain(xExtent as [number, number])
+    .range([margin.left, width - margin.right]);
+
+  const xAxis = d3.axisBottom(xScale);
+
+  const yScale = d3
+    .scaleLinear()
+    .nice()
+    .domain(yExtent as [number, number])
+    .range([height - margin.bottom, margin.top]);
+
+  const yAxis = d3.axisLeft(yScale);
+
+  return (
+    <svg width={width} height={height} fill='red'>
+      <g
+        transform={`translate(${margin.left}, 0)`}
+        ref={node => {
+          d3.select(node).call(yAxis as any);
+        }}
+      />
+      <g
+        transform={`translate(0, ${height - margin.bottom})`}
+        ref={node => {
+          d3.select(node).call(xAxis as any);
+        }}
+      />
+      <g>
+        {options.fieldSets.map((y, i: number) => (
+          xValues.map((x, j) => {
+            return <circle cx={xScale(x)} cy={yScale(yValues[i][j])} r={y.size} fill={y.color} />
+          })
+        ))}
+      </g>
+    </svg>
   );
 };
-
-const getStyles = stylesFactory(() => {
-  return {
-    wrapper: css`
-      position: relative;
-    `,
-    svg: css`
-      position: absolute;
-      top: 0;
-      left: 0;
-    `,
-    textBox: css`
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      padding: 10px;
-    `,
-  };
-});
