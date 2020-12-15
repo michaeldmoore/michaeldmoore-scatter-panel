@@ -55,23 +55,17 @@ function generateContent(width: number, height: number, options:ScatterOptions, 
 
   let colValues = colData.map(c => { return c.values });
   let xValues = colValues[options.xAxisField];
-  let xExtent = d3.extent(xValues);
+  let xExtent = [
+    options.xAxisExtents.min == null ? d3.min(xValues) : options.xAxisExtents.min, 
+    options.xAxisExtents.max == null ? d3.max(xValues) : options.xAxisExtents.max, 
+  ];
 
   let yValues = options.fieldSets.map(f => { return colValues[f.col] });
   let yExtents = yValues.map(c => { return d3.extent(c) });
-  let yExtent = [d3.min(yExtents.map(c => { return c[0] }) as number[]), d3.max(yExtents.map(c => { return c[1] }) as number[])];
-
-  if (!isNaN(options.xAxisMin))
-    xExtent[0] = options.xAxisMin;
-
-  if (!isNaN(options.xAxisMax))
-    xExtent[1] = options.xAxisMax;
-
-  if (!isNaN(options.yAxisMin))
-    yExtent[0] = options.yAxisMin;
-
-  if (!isNaN(options.yAxisMax))
-    yExtent[1] = options.yAxisMax;
+  let yExtent = [
+    options.yAxisExtents.min == null ? d3.min(yExtents.map(c => { return c[0] }) as number[]) : options.yAxisExtents.min, 
+    options.yAxisExtents.max == null ? d3.max(yExtents.map(c => { return c[1] }) as number[]) : options.yAxisExtents.max
+  ];
 
   let margin = ({ top: 20, right: 10, bottom: 20, left: 30 })
 

@@ -1,8 +1,9 @@
 import { PanelPlugin } from '@grafana/data';
-import { ScatterOptions } from './types';
+import { Extents, ScatterOptions } from './types';
 import { ScatterPanel } from './ScatterPanel';
 import { FieldSelectEditor } from './FieldSelectEditor';
 import { FieldSetsEditor } from './FieldSetsEditor';
+import { ExtentsEditor } from 'ExtentsEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions(builder => {
@@ -25,33 +26,49 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       defaultValue: [],
     });
 
-    builder.addNumberInput({
-      path: 'xAxisMin',
-      name: 'X Axis Min (leave blank for auto)',
-      defaultValue: NaN,
-      category: ['Layout'],
+    builder.addCustomEditor({
+      id: 'xAxisExtents',
+      path: 'xAxisExtents',
+      name: 'X Axis Extent (Min & Max)',
+      category: ['Field Mappings'],
+      editor: ExtentsEditor,
+      defaultValue: new Extents(NaN, NaN),
     });
 
-    builder.addNumberInput({
-      path: 'xAxisMax',
-      name: 'X Axis Max (leave blank for auto)',
-      defaultValue: NaN,
-      category: ['Layout'],
+    builder.addCustomEditor({
+      id: 'yAxisExtents',
+      path: 'yAxisExtents',
+      name: 'Y Axis Extent (Min & Max)',
+      category: ['Field Mappings'],
+      editor: ExtentsEditor,
+      defaultValue: new Extents(NaN, NaN),
     });
 
-    builder.addNumberInput({
-      path: 'yAxisMin',
-      name: 'Y Axis Min (leave blank for auto)',
-      defaultValue: NaN,
-      category: ['Layout'],
+    builder.addBooleanSwitch({
+      path: 'showLegend',
+      name: 'Show legend',
+      defaultValue: false
     });
 
-    builder.addNumberInput({
-      path: 'yAxisMax',
-      name: 'Y Axis Max (leave blank for auto)',
-      defaultValue: NaN,
-      category: ['Layout'],
+    builder.addTextInput({
+      path: 'xAxisTitle',
+      name: 'X Axis Title',
+      defaultValue: ""
     });
+
+    builder.addTextInput({
+      path: 'yAxisTitle',
+      name: 'Y Axis Title',
+      defaultValue: ""
+    });
+
+    builder.addBooleanSwitch({
+      path: 'rotateYAxisTitle',
+      name: 'Rotate Y Axis Title',
+      defaultValue: false,
+      showIf: config => config.yAxisTitle?.length > 0 
+    });
+
 
     return builder;
 });
