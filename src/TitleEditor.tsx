@@ -15,7 +15,7 @@ export const TitleEditor: React.FC<Props> = ({ item, value, onChange, context })
           type="string"
           value={value.text}
           onChange={e => {
-            value.text = e.target.value;
+            value.text = (e.target as HTMLInputElement).value;
             onChange(value)
           }
           }
@@ -28,7 +28,7 @@ export const TitleEditor: React.FC<Props> = ({ item, value, onChange, context })
           label="Size"
           value={value.size}
           onChange={e => {
-            value.size = e.target.valueAsNumber;
+            value.size = (e.target as HTMLInputElement).valueAsNumber;
             onChange(value)
           }
           }

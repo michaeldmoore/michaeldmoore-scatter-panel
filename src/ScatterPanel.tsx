@@ -1,12 +1,9 @@
 import React from 'react';
 import * as d3 from 'd3';
-//import { css, cx } from 'emotion';
 
 import { PanelProps } from '@grafana/data';
 
 import { FieldSet, Margins, ScatterOptions } from 'types';
-
-//const docsUrl = 'https://grafana.com/grafana/plugins/marcusolsson-treemap-panel';
 
 interface Props extends PanelProps<ScatterOptions> { }
 
@@ -51,35 +48,36 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
   }
 }
 
-function generateContent(width: number, height: number, options:ScatterOptions, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[]) {
+function generateContent(width: number, height: number, options: ScatterOptions, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[]) {
 
   let colValues = colData.map(c => { return c.values });
   let xValues = colValues[options.xAxisField];
   let xExtent = [
-    options.xAxisExtents.min == null ? d3.min(xValues) : options.xAxisExtents.min, 
-    options.xAxisExtents.max == null ? d3.max(xValues) : options.xAxisExtents.max, 
+    options.xAxisExtents.min || d3.min(xValues),
+    options.xAxisExtents.max || d3.max(xValues)
   ];
 
   let yValues = fieldSets.map(f => { return colValues[f.col] });
   let yExtents = yValues.map(c => { return d3.extent(c) });
   let yExtent = [
-    options.yAxisExtents.min == null ? d3.min(yExtents.map(c => { return c[0] }) as number[]) : options.yAxisExtents.min, 
-    options.yAxisExtents.max == null ? d3.max(yExtents.map(c => { return c[1] }) as number[]) : options.yAxisExtents.max
+    options.yAxisExtents.min || d3.min(yExtents.map(c => { return c[0] }) as number[]),
+    options.yAxisExtents.max || d3.max(yExtents.map(c => { return c[1] }) as number[])
   ];
 
-  let margins = new Margins (20, 10, 20, 30);
+  let margins = new Margins(20, 10, 20, 30);
 
   let legend = drawLegend(width, height, options, margins);
   let yTitle = drawYTitle(width, height, options, margins);
   let xTitle = drawXTitle(width, height, options, margins);
+  /*
   let border = <rect
-        transform={`translate(${margins.left}, ${margins.top})`}
-        width={width - margins.left - margins.right}
-        height={height - margins.top - margins.bottom}
-        stroke="yellow"
-        strokeWidth="1"
-      />
-
+    transform={`translate(${margins.left}, ${margins.top})`}
+    width={width - margins.left - margins.right}
+    height={height - margins.top - margins.bottom}
+    stroke="yellow"
+    strokeWidth="1"
+  />
+*/
 
   const xScale = d3
     .scaleLinear()
@@ -126,33 +124,32 @@ function generateContent(width: number, height: number, options:ScatterOptions, 
   );
 };
 
-function drawLegend(width: number, height: number, options:ScatterOptions, margins:Margins){
-  if (options.showLegend)
-  {
+function drawLegend(width: number, height: number, options: ScatterOptions, margins: Margins) {
+  if (options.showLegend) {
     let dx = 100;
     let dy = 20 * options.fieldSets.length;
-    
+
     margins.right += dx;
 
     return <g
-        transform={`translate(${width - dx}, ${margins.top})`}
-      >
-      <rect 
+      transform={`translate(${width - dx}, ${margins.top})`}
+    >
+      <rect
         className="ScatterLegendRect"
         width={dx}
         height={dy}
-        stroke="white" 
+        stroke="white"
         stroke-width="1"
       />
-      </g>;
+    </g>;
   }
 
   return null;
 }
 
-function drawXTitle(width: number, height: number, options:ScatterOptions, margins:Margins){
+function drawXTitle(width: number, height: number, options: ScatterOptions, margins: Margins) {
   let title = options.xAxisTitle;
-  if (title.text){
+  if (title.text) {
     let scale = title.size;
     let dx = 8.2 * scale * title.text.length;
     let dy = 14;
@@ -162,33 +159,33 @@ function drawXTitle(width: number, height: number, options:ScatterOptions, margi
     return <g
       transform={`translate(${(width + margins.left - margins.right) / 2.0}, ${height - dy * scale}) scale(${scale})`}
     >
-      <text 
+      <text
         className="ScatterXTitleRect"
         alignment-baseline="hanging"
         text-anchor="middle"
         width={dx}
         height={dy}
         fill={title.color}
-        >{title.text}</text>
-    </g>;  
+      >{title.text}</text>
+    </g>;
   }
   return null;
 }
 
-function drawYTitle(width: number, height: number, options:ScatterOptions, margins:Margins){
+function drawYTitle(width: number, height: number, options: ScatterOptions, margins: Margins) {
   let title = options.yAxisTitle;
-  if (title.text){
+  if (title.text) {
     let scale = title.size;
     let dx = 8.2 * title.text.length;
     let dy = 14;
 
-    if (options.rotateYAxisTitle){
+    if (options.rotateYAxisTitle) {
       margins.left += dy * scale;
 
       return <g
         transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) rotate(-90) scale(${scale})`}
       >
-        <text 
+        <text
           className="ScatterXTitleRect"
           alignment-baseline="hanging"
           text-anchor="middle"
@@ -196,23 +193,23 @@ function drawYTitle(width: number, height: number, options:ScatterOptions, margi
           height={dy}
           fill={title.color}
         >{title.text}</text>
-      </g>;    
+      </g>;
     }
-    else{
+    else {
       margins.left += dx * scale;
 
       return <g
         transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) scale(${scale})`}
       >
-        <text 
+        <text
           className="ScatterXTitleRect"
           text-anchor="left"
           width={dx}
           height={dy}
           fill={title.color}
         >{title.text}</text>
-      </g>;  
-      }
+      </g>;
+    }
   }
   return null;
 }

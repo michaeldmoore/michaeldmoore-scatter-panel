@@ -49,7 +49,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
                 max={20}
                 title="Set size of dot"
                 onChange={e => {
-                  values[index].size = e.target.valueAsNumber;
+                  values[index].size = (e.target as HTMLInputElement).valueAsNumber;
                   onChange(values)
                 }
                 }
