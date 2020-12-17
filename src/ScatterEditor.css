@@ -27,3 +27,27 @@
 .ScatterLegendRect{
     border:1px solid rgba(255, 255, 255, 0.25);
 }
+
+.TitleEditor{
+    display:flex;
+}
+
+.TitleText{
+    padding-right:20px;
+}
+
+.TitleSize{
+    padding-right:20px;
+    max-width: 70px;
+}
+
+.TitleColor{
+    padding-top:7px;
+}
+
+.TitleLabel{
+    padding-top:8px;
+    color:#777;
+    font-size: smaller;
+}
+

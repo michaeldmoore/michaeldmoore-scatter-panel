@@ -1,9 +1,10 @@
 import { PanelPlugin } from '@grafana/data';
-import { Extents, ScatterOptions } from './types';
+import { Extents, ScatterOptions, Title } from './types';
 import { ScatterPanel } from './ScatterPanel';
 import { FieldSelectEditor } from './FieldSelectEditor';
 import { FieldSetsEditor } from './FieldSetsEditor';
 import { ExtentsEditor } from 'ExtentsEditor';
+import { TitleEditor } from 'TitleEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions(builder => {
@@ -50,25 +51,28 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       defaultValue: false
     });
 
-    builder.addTextInput({
+    builder.addCustomEditor({
+      id: 'xAxisTitle',
       path: 'xAxisTitle',
       name: 'X Axis Title',
-      defaultValue: ""
+      editor: TitleEditor,
+      defaultValue: new Title("","#777",1)
     });
 
-    builder.addTextInput({
+    builder.addCustomEditor({
+      id: 'yAxisTitle',
       path: 'yAxisTitle',
       name: 'Y Axis Title',
-      defaultValue: ""
+      editor: TitleEditor,
+      defaultValue: new Title("","#777",1)
     });
 
     builder.addBooleanSwitch({
       path: 'rotateYAxisTitle',
       name: 'Rotate Y Axis Title',
       defaultValue: false,
-      showIf: config => config.yAxisTitle?.length > 0 
+      showIf: config => config.yAxisTitle.text?.length > 0 
     });
-
 
     return builder;
 });

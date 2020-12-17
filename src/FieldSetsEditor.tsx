@@ -31,7 +31,10 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
                 value={values[index].col}
                 isClearable={values.length > 1}
                 onChange={e => {
-                  values[index].col = e?.value;
+                  if(e)
+                    values[index].col = e.value;
+                  else
+                    values.splice(index,1);  
                   onChange(values)
                 }
                 }
