@@ -24,6 +24,7 @@ export interface ScatterOptions {
     xAxisExtents: Extents,
     yAxisExtents: Extents,
     showLegend: boolean,
+    legendSize: number,
     xAxisTitle: Title,
     yAxisTitle: Title,
     rotateYAxisTitle: boolean    

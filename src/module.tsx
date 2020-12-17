@@ -48,7 +48,16 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
     builder.addBooleanSwitch({
       path: 'showLegend',
       name: 'Show legend',
+      category: ['Legend'],
       defaultValue: false
+    });
+
+    builder.addNumberInput({
+      path: 'legendSize',
+      name: 'Size',
+      category: ['Legend'],
+      defaultValue: 1,
+      showIf: config => config.showLegend 
     });
 
     builder.addCustomEditor({

@@ -51,22 +51,23 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
 function generateContent(width: number, height: number, options: ScatterOptions, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[]) {
 
   let colValues = colData.map(c => { return c.values });
+  let colNames = colData.map(c => { return c.displayName || c.name })
   let xValues = colValues[options.xAxisField];
   let xExtent = [
-    options.xAxisExtents.min || d3.min(xValues),
-    options.xAxisExtents.max || d3.max(xValues)
+    options.xAxisExtents.min == 0 ? 0 : options.xAxisExtents.min || d3.min(xValues),
+    options.xAxisExtents.max == 0 ? 0 : options.xAxisExtents.max || d3.max(xValues)
   ];
 
   let yValues = fieldSets.map(f => { return colValues[f.col] });
   let yExtents = yValues.map(c => { return d3.extent(c) });
   let yExtent = [
-    options.yAxisExtents.min || d3.min(yExtents.map(c => { return c[0] }) as number[]),
-    options.yAxisExtents.max || d3.max(yExtents.map(c => { return c[1] }) as number[])
+    options.yAxisExtents.min == 0 ? 0 : options.yAxisExtents.min || d3.min(yExtents.map(c => { return c[0] }) as number[]),
+    options.yAxisExtents.max == 0 ? 0 : options.yAxisExtents.max || d3.max(yExtents.map(c => { return c[1] }) as number[])
   ];
 
   let margins = new Margins(20, 10, 20, 30);
 
-  let legend = drawLegend(width, height, options, margins);
+  let legend = drawLegend(width, height, options, margins, colNames);
   let yTitle = drawYTitle(width, height, options, margins);
   let xTitle = drawXTitle(width, height, options, margins);
   /*
@@ -124,24 +125,38 @@ function generateContent(width: number, height: number, options: ScatterOptions,
   );
 };
 
-function drawLegend(width: number, height: number, options: ScatterOptions, margins: Margins) {
+function drawLegend(width: number, height: number, options: ScatterOptions, margins: Margins, colNames: string[]) {
   if (options.showLegend) {
-    let dx = 100;
-    let dy = 20 * options.fieldSets.length;
+    let scale = options.legendSize;
+    let fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >=0 && x.col < colNames.length)
 
-    margins.right += dx;
+    let maxLength = d3.max(fieldSets.map(f => colNames[f.col].length)) as number;
 
-    return <g
-      transform={`translate(${width - dx}, ${margins.top})`}
-    >
-      <rect
-        className="ScatterLegendRect"
-        width={dx}
-        height={dy}
-        stroke="white"
-        stroke-width="1"
-      />
-    </g>;
+    if (fieldSets.length > 0){
+
+      let offset = 20;
+      let dx = offset + (8.6 * scale * maxLength);
+  
+      margins.right += dx;
+  
+      let legends = new Array();
+
+      fieldSets.forEach((f, i) => {
+          legends.push(
+            <text
+            transform={`translate(${offset}, ${30 * scale * i}) scale(${scale})`}
+            className="ScatterXTitleRect"
+            alignment-baseline="hanging"
+            text-anchor="left"
+            fill={f.color}
+          >{colNames[f.col]}</text>);
+        }
+      );
+
+      return <g transform={`translate(${width - dx}, ${margins.top})`}>        
+        {legends}
+      </g>;
+    }
   }
 
   return null;
