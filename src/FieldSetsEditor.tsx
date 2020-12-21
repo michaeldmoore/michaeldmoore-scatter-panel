@@ -1,26 +1,24 @@
-import React from 'react';
-import { StandardEditorProps } from '@grafana/data';
-import { Select, Button, ColorPicker, Input } from '@grafana/ui';
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/prop-types */
+import { StandardEditorProps } from '@grafana/data'
+import { Button, ColorPicker, Input, Select } from '@grafana/ui'
+import { FieldSet } from 'types'
+import React from 'react'
 
+interface Props extends StandardEditorProps<FieldSet[]> { };
 
-import './ScatterEditor.css';
-import { FieldSet } from 'types';
-
-interface Props extends StandardEditorProps<FieldSet[]> { }
-
-export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, context }) => {
-
+export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) => {
   if (context.data && context.data.length > 0) {
     const options = context.data
       .flatMap(frame => frame.fields)
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
-        value: index,
-      }));
+        value: index
+      }))
 
-    var selects = new Array();
+    const selects = new Array(0)
 
-    let values = context.options.fieldSets.filter((x: FieldSet) => x.col != null)
+    const values = context.options.fieldSets.filter((x: FieldSet) => x.col != null)
 
     if (values) {
       values.forEach((val: Number, index: number) => {
@@ -32,10 +30,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
                 value={values[index].col}
                 isClearable={values.length > 1}
                 onChange={e => {
-                  if (e)
-                    values[index].col = e.value;
-                  else
-                    values.splice(index, 1);
+                  if (e) { values[index].col = e.value } else { values.splice(index, 1) }
                   onChange(values)
                 }
                 }
@@ -50,7 +45,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
                 max={20}
                 title="Set size of dot"
                 onChange={e => {
-                  values[index].size = (e.target as HTMLInputElement).valueAsNumber;
+                  values[index].size = (e.target as HTMLInputElement).valueAsNumber
                   onChange(values)
                 }
                 }
@@ -60,36 +55,37 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
               <ColorPicker
                 color={values[index].color}
                 onChange={e => {
-                  values[index].color = e;
+                  values[index].color = e
                   onChange(values)
                 }
                 }
               />
             </div>
           </div>)
-      });
+      })
     }
 
-    var addButton = values.some((x: FieldSet) => x.col == -1) ? null :
-      (
+    const addButton = values.some((x: FieldSet) => x.col === -1)
+      ? null
+      : (
         <Button
           variant="secondary"
           size="sm"
           onClick={() => {
-            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, false));
+            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, false))
             onChange(values)
           }}>
-          <i className="fa fa-plus"></i> Add {item.name.replace("(s)", "")}
+          <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}
         </Button>
-      );
+        )
 
     return (
       <div>
         {selects}
         {addButton}
       </div>
-    );
+    )
   }
 
-  return null;
-};
+  return null
+}
