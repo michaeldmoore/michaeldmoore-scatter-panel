@@ -8,11 +8,11 @@
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
-  "repository": "github:grafana/simple-react-panel",
+  "repository": "github:michaeldmoore/michaeldmoore-scatter-panel",
   "author": "Michael D Moore",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/grafana/simple-react-panel/issues",
+    "url": "https://github.com/michaeldmoore-scatter-panel/issues",
     "email": "plugins@grafana.com"
   },
   "devDependencies": {
@@ -23,6 +23,9 @@
     "emotion": "^11.0.0"
   },
   "engines": {
-    "node": ">=12 <13"
+    "node": ">=14 <15"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.5.5"
   }
 }

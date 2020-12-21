@@ -1,9 +1,10 @@
 import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Select, Button, ColorPicker, Input } from '@grafana/ui';
-import { FieldSet } from 'FieldSet';
+
 
 import './ScatterEditor.css';
+import { FieldSet } from 'types';
 
 interface Props extends StandardEditorProps<FieldSet[]> { }
 
@@ -75,7 +76,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
           variant="secondary"
           size="sm"
           onClick={() => {
-            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2));
+            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, false));
             onChange(values)
           }}>
           <i className="fa fa-plus"></i> Add {item.name.replace("(s)", "")}

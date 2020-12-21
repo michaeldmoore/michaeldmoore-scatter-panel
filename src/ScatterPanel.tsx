@@ -10,6 +10,8 @@ interface Props extends PanelProps<ScatterOptions> { }
 export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) => {
   const frame = data.series[0];
 
+  let panelId = data.request?.panelId as number;
+
   let colData = new Array();
   frame.fields.forEach((field, i) => {
     colData.push({
@@ -43,12 +45,13 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
       );
     }
     else {
-      return generateContent(width, height, options, fieldSets, colData);
+      return generateContent(options, /*data, */width, height, fieldSets, colData, panelId);
     }
   }
 }
 
-function generateContent(width: number, height: number, options: ScatterOptions, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[]) {
+function generateContent(options: ScatterOptions, width: number, height: number, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[], panelId: number) {
+  let visibleFieldSets = fieldSets;//.filter(f => { return (!f.hidden)});
 
   let colValues = colData.map(c => { return c.values });
   let colNames = colData.map(c => { return c.displayName || c.name })
@@ -58,7 +61,7 @@ function generateContent(width: number, height: number, options: ScatterOptions,
     options.xAxisExtents.max == 0 ? 0 : options.xAxisExtents.max || d3.max(xValues)
   ];
 
-  let yValues = fieldSets.map(f => { return colValues[f.col] });
+  let yValues = visibleFieldSets.map(f => { return colValues[f.col] });
   let yExtents = yValues.map(c => { return d3.extent(c) });
   let yExtent = [
     options.yAxisExtents.min == 0 ? 0 : options.yAxisExtents.min || d3.min(yExtents.map(c => { return c[0] }) as number[]),
@@ -67,9 +70,9 @@ function generateContent(width: number, height: number, options: ScatterOptions,
 
   let margins = new Margins(20, 10, 20, 30);
 
-  let legend = drawLegend(width, height, options, margins, colNames);
-  let yTitle = drawYTitle(width, height, options, margins);
-  let xTitle = drawXTitle(width, height, options, margins);
+  let legend = drawLegend(options, width, height, margins, colNames, panelId);
+  let yTitle = drawYTitle(options, width, height, margins);
+  let xTitle = drawXTitle(options, width, height, margins);
   /*
   let border = <rect
     transform={`translate(${margins.left}, ${margins.top})`}
@@ -86,7 +89,7 @@ function generateContent(width: number, height: number, options: ScatterOptions,
     .domain(xExtent as [number, number])
     .range([margins.left, width - margins.right]);
 
-  const xAxis = d3.axisBottom(xScale);
+  const xAxis = d3.axisBottom(xScale).tickSize(margins.top + margins.bottom - height);
 
   const yScale = d3
     .scaleLinear()
@@ -94,66 +97,127 @@ function generateContent(width: number, height: number, options: ScatterOptions,
     .domain(yExtent as [number, number])
     .range([height - margins.bottom, margins.top]);
 
-  const yAxis = d3.axisLeft(yScale);
+  const yAxis = d3.axisLeft(yScale).tickSize(margins.left + margins.right - width);
 
   return (
-    <svg width={width} height={height}>
-      {legend}
-      {xTitle}
-      {yTitle}
-      {/*border*/}
-      <g
-        transform={`translate(${margins.left}, 0)`}
-        ref={node => {
-          d3.select(node).call(yAxis as any);
-        }}
-      />
-      <g
-        transform={`translate(0, ${height - margins.bottom})`}
-        ref={node => {
-          d3.select(node).call(xAxis as any);
-        }}
-      />
-      <g>
-        {fieldSets.map((y, i: number) => (
-          xValues.map((x, j) => {
-            return <circle cx={xScale(x)} cy={yScale(yValues[i][j])} r={y.size} fill={y.color} />
-          })
-        ))}
+    <svg
+      width={width}
+      height={height}>
+      <g className={"ScatterPanel-" + panelId}>
+        {legend}
+        {xTitle}
+        {yTitle}
+        {/*border*/}
+        <g
+          transform={`translate(0, ${height - margins.bottom})`}
+          ref={node => {
+            d3.select(node).call(xAxis as any).selectAll("line").attr("stroke", options.gridColor);
+          }}
+        />
+        <g
+          transform={`translate(${margins.left}, 0)`}
+          ref={node => {
+            d3.select(node).call(yAxis as any).selectAll("line").attr("stroke", options.gridColor);
+          }}
+        />
+        <g>
+          {visibleFieldSets.map((y, i: number) => (
+            xValues.map((x, j) => {
+              let className = "ScatterSet-" + i;
+              if (options.showLegend && visibleFieldSets[i].hidden)
+                className += " ScatterSetHidden";
+
+              return <circle
+                cx={xScale(x)}
+                cy={yScale(yValues[i][j])}
+                r={y.size}
+                className={className}
+                fill={y.color} />
+            })
+          ))}
+        </g>
       </g>
     </svg>
   );
 };
 
-function drawLegend(width: number, height: number, options: ScatterOptions, margins: Margins, colNames: string[]) {
+function applySetFieldSetHidden(fieldSet: FieldSet, index: number, hidden: boolean, panelId: number) {
+  fieldSet.hidden = hidden;
+
+  let panelGroup = $(".ScatterPanel-" + panelId)
+  let markers = $(".ScatterSet-" + index, panelGroup);
+  if (hidden)
+    markers.addClass("ScatterSetHidden");
+  else
+    markers.removeClass("ScatterSetHidden");
+}
+
+function onLegendClick(e: React.MouseEvent, index: number, fieldSets: FieldSet[], panelId: number) {
+  let thisLegendTextElement = $(e.currentTarget);
+  let legendGroup = thisLegendTextElement.parent();
+  let legendTextElements = $(".ScatterLegendText", legendGroup);
+
+  let hiddenLegendTextElements = legendTextElements.filter(".ScatterLegendTextHidden");
+
+  if (e.ctrlKey) {
+    // toggle the state of the current item
+    thisLegendTextElement.toggleClass("ScatterLegendTextHidden");
+    applySetFieldSetHidden(fieldSets[index], index, !fieldSets[index].hidden, panelId)
+  }
+  else if (hiddenLegendTextElements.length == 0) {
+    // if none are hidden, hide everything else
+    legendTextElements.addClass("ScatterLegendTextHidden");
+    thisLegendTextElement.toggleClass("ScatterLegendTextHidden");
+    fieldSets.forEach((f, i) => { applySetFieldSetHidden(f, i, index != i, panelId) })
+  }
+  else {
+    // if this item is visible, unhide everything
+    if (!thisLegendTextElement.hasClass("ScatterLegendTextHidden")) {
+      legendTextElements.removeClass("ScatterLegendTextHidden");
+      fieldSets.forEach((f, i) => { applySetFieldSetHidden(f, i, false, panelId) })
+    }
+    else {
+      // hide everything but this one
+      legendTextElements.addClass("ScatterLegendTextHidden");
+      thisLegendTextElement.toggleClass("ScatterLegendTextHidden");
+      fieldSets.forEach((f, i) => { applySetFieldSetHidden(f, i, index != i, panelId) })
+    }
+  }
+};
+
+function drawLegend(options: ScatterOptions, width: number, height: number, margins: Margins, colNames: string[], panelId: number) {
   if (options.showLegend) {
     let scale = options.legendSize;
-    let fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >=0 && x.col < colNames.length)
+    let fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length)
 
     let maxLength = d3.max(fieldSets.map(f => colNames[f.col].length)) as number;
 
-    if (fieldSets.length > 0){
+    if (fieldSets.length > 0) {
 
       let offset = 20;
       let dx = offset + (8.6 * scale * maxLength);
-  
+
       margins.right += dx;
-  
+
       let legends = new Array();
 
       fieldSets.forEach((f, i) => {
-          legends.push(
-            <text
+        let className = f.hidden ? "ScatterLegendText ScatterLegendTextHidden" : "ScatterLegendText"
+        legends.push(
+          <text
             transform={`translate(${offset}, ${30 * scale * i}) scale(${scale})`}
-            className="ScatterXTitleRect"
+            className={className}
             alignment-baseline="hanging"
             text-anchor="left"
             fill={f.color}
+            onClick={e => {
+              onLegendClick(e, i, fieldSets, panelId);
+            }}
           >{colNames[f.col]}</text>);
-        }
+      }
       );
 
-      return <g transform={`translate(${width - dx}, ${margins.top})`}>        
+      return <g transform={`translate(${width - dx}, ${margins.top})`}>
         {legends}
       </g>;
     }
@@ -162,7 +226,7 @@ function drawLegend(width: number, height: number, options: ScatterOptions, marg
   return null;
 }
 
-function drawXTitle(width: number, height: number, options: ScatterOptions, margins: Margins) {
+function drawXTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
   let title = options.xAxisTitle;
   if (title.text) {
     let scale = title.size;
@@ -187,7 +251,7 @@ function drawXTitle(width: number, height: number, options: ScatterOptions, marg
   return null;
 }
 
-function drawYTitle(width: number, height: number, options: ScatterOptions, margins: Margins) {
+function drawYTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
   let title = options.yAxisTitle;
   if (title.text) {
     let scale = title.size;

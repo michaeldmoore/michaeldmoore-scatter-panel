@@ -1,5 +1,5 @@
 export class FieldSet {
-    constructor(public col: number, public color: string, public size: number){}
+    constructor(public col: number, public color: string, public size: number, public hidden: boolean){}
 }
 
 export class Title {
@@ -27,6 +27,7 @@ export interface ScatterOptions {
     legendSize: number,
     xAxisTitle: Title,
     yAxisTitle: Title,
+    gridColor: string,
     rotateYAxisTitle: boolean    
  }
 

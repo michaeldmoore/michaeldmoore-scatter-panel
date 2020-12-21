@@ -51,3 +51,14 @@
     font-size: smaller;
 }
 
+.ScatterLegendText{
+    border: 1px solid rgb(255, 255, 255); 
+}
+
+.ScatterLegendTextHidden{
+    fill:rgba(119, 119, 119, 0.25);
+}
+
+.ScatterSetHidden{
+    fill:rgba(119, 119, 119, 0.25);
+}

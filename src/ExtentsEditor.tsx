@@ -3,7 +3,6 @@ import { Input } from '@grafana/ui';
 import React from 'react';
 import { Extents } from 'types';
 
-
 interface Props extends StandardEditorProps<Extents> { }
 
 export const ExtentsEditor: React.FC<Props> = ({ item, value, onChange, context }) => {

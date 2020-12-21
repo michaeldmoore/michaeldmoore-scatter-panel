@@ -76,6 +76,12 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       defaultValue: new Title("","#777",1)
     });
 
+    builder.addColorPicker({
+      path: 'gridColor',
+      name: 'Grid Color',
+      defaultValue: "rgba(255, 255, 255, 0.25)",
+    });
+
     builder.addBooleanSwitch({
       path: 'rotateYAxisTitle',
       name: 'Rotate Y Axis Title',
