@@ -32,10 +32,10 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
                 value={values[index].col}
                 isClearable={values.length > 1}
                 onChange={e => {
-                  if(e)
+                  if (e)
                     values[index].col = e.value;
                   else
-                    values.splice(index,1);  
+                    values.splice(index, 1);
                   onChange(values)
                 }
                 }
@@ -72,7 +72,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, value, onChange, contex
 
     var addButton = values.some((x: FieldSet) => x.col == -1) ? null :
       (
-        <Button 
+        <Button
           variant="secondary"
           size="sm"
           onClick={() => {

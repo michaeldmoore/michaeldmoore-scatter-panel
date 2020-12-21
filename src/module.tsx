@@ -57,7 +57,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Size',
       category: ['Legend'],
       defaultValue: 1,
-      showIf: config => config.showLegend 
+      showIf: config => config.showLegend
     });
 
     builder.addCustomEditor({
@@ -65,7 +65,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       path: 'xAxisTitle',
       name: 'X Axis Title',
       editor: TitleEditor,
-      defaultValue: new Title("","#777",1)
+      defaultValue: new Title("", "#777", 1)
     });
 
     builder.addCustomEditor({
@@ -73,7 +73,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       path: 'yAxisTitle',
       name: 'Y Axis Title',
       editor: TitleEditor,
-      defaultValue: new Title("","#777",1)
+      defaultValue: new Title("", "#777", 1)
     });
 
     builder.addColorPicker({
@@ -86,8 +86,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       path: 'rotateYAxisTitle',
       name: 'Rotate Y Axis Title',
       defaultValue: false,
-      showIf: config => config.yAxisTitle.text?.length > 0 
+      showIf: config => config.yAxisTitle.text?.length > 0
     });
 
     return builder;
-});
+  });

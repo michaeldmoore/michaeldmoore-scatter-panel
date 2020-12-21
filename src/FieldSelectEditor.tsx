@@ -1,8 +1,8 @@
 import React from 'react';
-import { StandardEditorProps} from '@grafana/data';
+import { StandardEditorProps } from '@grafana/data';
 import { Select } from '@grafana/ui';
 
-interface Props extends StandardEditorProps<number> {}
+interface Props extends StandardEditorProps<number> { }
 
 export const FieldSelectEditor: React.FC<Props> = ({ value, onChange, context }) => {
 
@@ -14,12 +14,12 @@ export const FieldSelectEditor: React.FC<Props> = ({ value, onChange, context })
         value: index,
       }));
 
-    return <Select<number> 
-      isLoading={false} 
-      value={value} 
-      onChange={e => onChange(e.value)} 
+    return <Select<number>
+      isLoading={false}
+      value={value}
+      onChange={e => onChange(e.value)}
       options={options} />;
   }
 
-  return <Select onChange={() => {}} disabled={true} />;
+  return <Select onChange={() => { }} disabled={true} />;
 };
