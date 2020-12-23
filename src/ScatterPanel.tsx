@@ -8,42 +8,52 @@ import './ScatterEditor.css'
 interface Props extends PanelProps<ScatterOptions> { };
 
 export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) => {
-  const frame = data.series[0]
+  if (data.series?.length > 0) {
+    const frame = data.series[0]
 
-  const panelId = data.request?.panelId as number
+    const panelId = data.request?.panelId as number
 
-  const colData = new Array(0)
-  frame.fields.forEach((field, i) => {
-    colData.push({
-      name: field.name,
-      displayName: field.config?.displayName || field.name,
-      values: field.values.toArray().map(Number)
+    const colData = new Array(0)
+    frame.fields.forEach((field, i) => {
+      colData.push({
+        name: field.name,
+        displayName: field.config?.displayName || field.name,
+        values: field.values.toArray().map(Number)
+      })
     })
-  })
 
-  if (colData.length < 2) {
-    return (
-      <div style={{ overflow: 'hidden', height: '100%' }}>
-        <p>To get started, create a table query that returns 2 or more numeric columns</p>
-      </div>
-    )
-  } else if (options.xAxisField >= colData.length) {
-    return (
-      <div style={{ overflow: 'hidden', height: '100%' }}>
-        <p>X Axis field setting not found in current query</p>
-      </div>
-    )
-  } else {
-    const fieldSets = options.fieldSets.filter(x => x != null && x?.col >= 0 && x?.col < colData.length)
-    if (fieldSets.length === 0) {
+    if (colData.length < 2) {
       return (
         <div style={{ overflow: 'hidden', height: '100%' }}>
-          <p>No Y Axis(s) data found in current query</p>
+          <p>To get started, create a table query that returns 2 or more numeric columns</p>
+        </div>
+      )
+    } else if (options.xAxisField >= colData.length) {
+      return (
+        <div style={{ overflow: 'hidden', height: '100%' }}>
+          <p>X Axis field setting not found in current query</p>
         </div>
       )
     } else {
-      return generateContent(options, /* data, */width, height, fieldSets, colData, panelId)
+      const fieldSets = options.fieldSets.filter(x => x != null && x?.col >= 0 && x?.col < colData.length)
+      if (fieldSets.length === 0) {
+        return (
+          <div style={{ overflow: 'hidden', height: '100%' }}>
+            <p>No Y Axis(s) data found in current query</p>
+          </div>
+        )
+      } else {
+        return generateContent(options, /* data, */width, height, fieldSets, colData, panelId)
+      }
     }
+  }
+  else {
+    return (
+      <div style={{ overflow: 'hidden', height: '100%' }}>
+        <p>No data</p>
+        <p>To get started, create a table query that returns 2 or more numeric columns</p>
+      </div>
+    )
   }
 }
 
@@ -118,29 +128,10 @@ function generateContent (options: ScatterOptions, width: number, height: number
           }}
         />
         <g>
-          { drawLines(visibleFieldSets, xValues, yValues, xScale, yScale) }
+          { drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale) }
         </g>
         <g>
-          {visibleFieldSets.map((y, i: number) => (
-            xValues.map((x, j) => {
-              if (y.dotSize > 0) {
-                let className = 'ScatterSet-' + i
-                if (options.showLegend && visibleFieldSets[i].hidden) { 
-                  className += ' ScatterSetHidden' 
-                }
-  
-                return <circle
-                  key={'circle-[' + y + '][' + i + ']'}
-                  cx={xScale(x)}
-                  cy={yScale(yValues[i][j])}
-                  r={y.dotSize}
-                  className={className}
-                  fill={y.color} />
-              }
-              else
-                return null;
-            })
-          ))}
+          { drawDots(options, visibleFieldSets, xValues, yValues, xScale, yScale) }
         </g>
       </g>
     </svg>
@@ -189,8 +180,8 @@ function onLegendClick (e: React.MouseEvent, index: number, fieldSets: FieldSet[
 };
 
 function drawLegend (options: ScatterOptions, width: number, height: number, margins: Margins, colNames: string[], panelId: number) {
-  if (options.showLegend) {
-    const scale = options.legendSize
+  if (options.legend.size) {
+    const scale = options.legend.size / 2;
     const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length)
 
     const maxLength = d3.max(fieldSets.map(f => colNames[f.col].length)) as number
@@ -294,7 +285,7 @@ function drawYTitle (options: ScatterOptions, width: number, height: number, mar
   return null
 }
 
-function drawLines(fieldSets: FieldSet[], xValues: number[], yValues:number[][], xScale: Function, yScale: Function){
+function drawLines(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues:number[][], xScale: Function, yScale: Function){
   let lines = new Array(0);
 
   fieldSets.forEach((f, index) => {
@@ -306,7 +297,7 @@ function drawLines(fieldSets: FieldSet[], xValues: number[], yValues:number[][],
       `;
 
       let className = "ScatterLine ScatterLine-" + index;
-      if (fieldSets[index].hidden)
+      if (options.legend.size && fieldSets[index].hidden)
             className += " ScatterLineHidden";
 
       lines.push(<path className={className} d={path} stroke={fieldSets[index].color} strokeWidth={fieldSets[index].lineSize} fill="none"/>);
@@ -314,4 +305,27 @@ function drawLines(fieldSets: FieldSet[], xValues: number[], yValues:number[][],
   })
 
   return lines;
+}
+
+function drawDots(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues:number[][], xScale: Function, yScale: Function){
+  return fieldSets.map((y, i: number) => (
+    xValues.map((x, j) => {
+      if (y.dotSize > 0) {
+        let className = 'ScatterSet-' + i
+        if (options.legend.size && fieldSets[i].hidden) { 
+          className += ' ScatterSetHidden' 
+        }
+
+        return <circle
+          key={'circle-[' + y + '][' + i + ']'}
+          cx={xScale(x)}
+          cy={yScale(yValues[i][j])}
+          r={y.dotSize}
+          className={className}
+          fill={y.color} />
+      }
+      else
+        return null;
+    })
+  ))
 }

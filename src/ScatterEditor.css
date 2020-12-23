@@ -1,14 +1,22 @@
 .FieldSetsEditor{
-    display:flex;
-    margin-bottom: 15px;
+  margin-bottom: 25px;
 }
 
-.ScatterDotSize{
-    width:65px;
-    padding-right:5px;
+.ScatterFlex{
+  display:flex;
+  flex-wrap: nowrap;
+  padding:1px;
 }
 
-.ScatterDot{
+.ScatterSize{
+  width: 115px;
+}
+
+.ScatterSize input{
+  width: 55px;
+}
+
+.ScatterDotColor{
     padding-top:7px;
 }
 
@@ -24,13 +32,11 @@
     padding-right:20px;
 }
 
-.ScatterLegendRect{
-    border:1px solid rgba(255, 255, 255, 0.25);
-}
-
-
-.ScatterSet{
-
+.ScatterLabel{
+  padding-top: 6px;
+  width: 90px;
+  color: rgb(159, 167, 179);
+  font-size: 12px;
 }
 
 .ScatterSetHidden{
@@ -39,7 +45,6 @@
 
 .ScatterLine{
   fill: none;
-  stroke-width: 3px;
 }
 
 .ScatterLineHidden{
@@ -68,6 +73,10 @@
     padding-top:8px;
     color:#777;
     font-size: smaller;
+}
+
+.ScatterLegend input {
+  width: 50px;
 }
 
 .ScatterLegendText{

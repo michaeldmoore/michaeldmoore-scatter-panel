@@ -16,6 +16,13 @@ export class Title {
   };
 }
 
+export class Legend {
+  constructor (
+//    public show: boolean,
+    public size: number) {
+  };
+}
+
 export class Margins {
   constructor (
     public top: number, 
@@ -38,8 +45,7 @@ export interface ScatterOptions {
   fieldSets: FieldSet[],
   xAxisExtents: Extents,
   yAxisExtents: Extents,
-  showLegend: boolean,
-  legendSize: number,
+  legend: Legend,
   xAxisTitle: Title,
   yAxisTitle: Title,
   gridColor: string,

@@ -1,10 +1,11 @@
 import { PanelPlugin } from '@grafana/data'
-import { Extents, ScatterOptions, Title } from './types'
+import { Extents, Legend, ScatterOptions, Title } from './types'
 import { ScatterPanel } from './ScatterPanel'
 import { FieldSelectEditor } from './FieldSelectEditor'
 import { FieldSetsEditor } from './FieldSetsEditor'
 import { ExtentsEditor } from 'ExtentsEditor'
 import { TitleEditor } from 'TitleEditor'
+import { LegendEditor } from 'LegendEditor'
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions(builder => {
@@ -44,6 +45,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       defaultValue: new Extents(NaN, NaN)
     })
 
+/*
     builder.addBooleanSwitch({
       path: 'showLegend',
       name: 'Show legend',
@@ -53,11 +55,23 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
 
     builder.addNumberInput({
       path: 'legendSize',
-      name: 'Size',
+      name: 'Legend Size',
       category: ['Legend'],
       defaultValue: 1,
-      showIf: config => config.showLegend
     })
+*/
+
+
+    builder.addCustomEditor({
+      id: 'legend',
+      path: 'legend',
+      name: 'Legend',
+      category: ['Display'],
+      editor: LegendEditor,
+      defaultValue: new Legend(1)
+    })
+
+
 
     builder.addCustomEditor({
       id: 'xAxisTitle',
