@@ -1,20 +1,34 @@
 export class FieldSet {
-  constructor (public col: number, public color: string, public size: number, public hidden: boolean) {
+  constructor (
+    public col: number, 
+    public color: string, 
+    public dotSize: number, 
+    public lineSize: number, 
+    public hidden: boolean) {
   }
 }
 
 export class Title {
-  constructor (public text: string, public color: string, public size: number) {
+  constructor (
+    public text: string, 
+    public color: string, 
+    public textSize: number) {
   };
 }
 
 export class Margins {
-  constructor (public top: number, public right: number, public bottom: number, public left: number) {
+  constructor (
+    public top: number, 
+    public right: number, 
+    public bottom: number, 
+    public left: number) {
   };
 }
 
 export class Extents {
-  constructor (public min: number, public max: number) {
+  constructor (
+    public min: number, 
+    public max: number) {
   };
 }
 

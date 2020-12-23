@@ -118,18 +118,27 @@ function generateContent (options: ScatterOptions, width: number, height: number
           }}
         />
         <g>
+          { drawLines(visibleFieldSets, xValues, yValues, xScale, yScale) }
+        </g>
+        <g>
           {visibleFieldSets.map((y, i: number) => (
             xValues.map((x, j) => {
-              let className = 'ScatterSet-' + i
-              if (options.showLegend && visibleFieldSets[i].hidden) { className += ' ScatterSetHidden' }
-
-              return <circle
-                key={'circle-[' + y + '][' + i + ']'}
-                cx={xScale(x)}
-                cy={yScale(yValues[i][j])}
-                r={y.size}
-                className={className}
-                fill={y.color} />
+              if (y.dotSize > 0) {
+                let className = 'ScatterSet-' + i
+                if (options.showLegend && visibleFieldSets[i].hidden) { 
+                  className += ' ScatterSetHidden' 
+                }
+  
+                return <circle
+                  key={'circle-[' + y + '][' + i + ']'}
+                  cx={xScale(x)}
+                  cy={yScale(yValues[i][j])}
+                  r={y.dotSize}
+                  className={className}
+                  fill={y.color} />
+              }
+              else
+                return null;
             })
           ))}
         </g>
@@ -144,6 +153,9 @@ function applySetFieldSetHidden (fieldSet: FieldSet, index: number, hidden: bool
   const panelGroup = $('.ScatterPanel-' + panelId)
   const markers = $('.ScatterSet-' + index, panelGroup)
   if (hidden) { markers.addClass('ScatterSetHidden') } else { markers.removeClass('ScatterSetHidden') }
+
+  const lines = $('.ScatterLine-' + index, panelGroup)
+    if (hidden) { lines.addClass('ScatterLineHidden') } else { lines.removeClass('ScatterLineHidden') }
 }
 
 function onLegendClick (e: React.MouseEvent, index: number, fieldSets: FieldSet[], panelId: number) {
@@ -219,7 +231,7 @@ function drawLegend (options: ScatterOptions, width: number, height: number, mar
 function drawXTitle (options: ScatterOptions, width: number, height: number, margins: Margins) {
   const title = options.xAxisTitle
   if (title.text) {
-    const scale = title.size
+    const scale = title.textSize
     const dx = 8.2 * scale * title.text.length
     const dy = 14
 
@@ -244,10 +256,10 @@ function drawXTitle (options: ScatterOptions, width: number, height: number, mar
 function drawYTitle (options: ScatterOptions, width: number, height: number, margins: Margins) {
   const title = options.yAxisTitle
   if (title.text) {
-    const scale = title.size
+    const scale = title.textSize
     const dx = 8.2 * title.text.length
     const dy = 14
-
+ 
     if (options.rotateYAxisTitle) {
       margins.left += dy * scale
 
@@ -280,4 +292,26 @@ function drawYTitle (options: ScatterOptions, width: number, height: number, mar
     }
   }
   return null
+}
+
+function drawLines(fieldSets: FieldSet[], xValues: number[], yValues:number[][], xScale: Function, yScale: Function){
+  let lines = new Array(0);
+
+  fieldSets.forEach((f, index) => {
+    if (fieldSets[index].lineSize > 0){
+      let path = `
+        ${xValues.map((d, i) => {
+            return `${i === 0 ? 'M' : 'L'} ${xScale(d)} ${yScale(yValues[index][i])}`;
+        }).join(' ')}
+      `;
+
+      let className = "ScatterLine ScatterLine-" + index;
+      if (fieldSets[index].hidden)
+            className += " ScatterLineHidden";
+
+      lines.push(<path className={className} d={path} stroke={fieldSets[index].color} strokeWidth={fieldSets[index].lineSize} fill="none"/>);
+    }
+  })
+
+  return lines;
 }

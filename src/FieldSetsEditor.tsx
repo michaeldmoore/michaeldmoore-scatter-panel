@@ -38,12 +38,12 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) =>
               <Input
                 type="number"
                 label="Size"
-                value={values[index].size}
-                min={1}
+                value={values[index].dotSize}
+                min={0}
                 max={20}
                 title="Set size of dot"
                 onChange={e => {
-                  values[index].size = (e.target as HTMLInputElement).valueAsNumber
+                  values[index].dotSize = (e.target as HTMLInputElement).valueAsNumber
                   onChange(values)
                 }
                 }
@@ -70,7 +70,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) =>
           variant="secondary"
           size="sm"
           onClick={() => {
-            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, false))
+            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, 0, false))
             onChange(values)
           }}>
           <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}

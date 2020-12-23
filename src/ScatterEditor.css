@@ -28,6 +28,25 @@
     border:1px solid rgba(255, 255, 255, 0.25);
 }
 
+
+.ScatterSet{
+
+}
+
+.ScatterSetHidden{
+  fill:rgba(119, 119, 119, 0.25);
+}
+
+.ScatterLine{
+  fill: none;
+  stroke-width: 3px;
+}
+
+.ScatterLineHidden{
+  opacity: 0.25;
+  stroke-width: 1px;
+}
+
 .TitleEditor{
     display:flex;
 }
@@ -56,9 +75,5 @@
 }
 
 .ScatterLegendTextHidden{
-    fill:rgba(119, 119, 119, 0.25);
-}
-
-.ScatterSetHidden{
     fill:rgba(119, 119, 119, 0.25);
 }

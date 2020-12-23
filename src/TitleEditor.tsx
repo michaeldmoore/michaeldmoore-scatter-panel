@@ -24,9 +24,9 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
         <Input
           type="number"
           label="Size"
-          value={value.size}
+          value={value.textSize}
           onChange={e => {
-            value.size = (e.target as HTMLInputElement).valueAsNumber
+            value.textSize = (e.target as HTMLInputElement).valueAsNumber
             onChange(value)
           }
           }
