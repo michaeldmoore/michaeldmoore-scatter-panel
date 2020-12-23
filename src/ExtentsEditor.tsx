@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-use-before-define */
 import { StandardEditorProps } from '@grafana/data'
 import { Input } from '@grafana/ui'
 import React from 'react'

@@ -1,5 +1,3 @@
-/* eslint-disable no-use-before-define */
-/* eslint-disable react/prop-types */
 import { StandardEditorProps } from '@grafana/data'
 import { Button, ColorPicker, Input, Select } from '@grafana/ui'
 import { FieldSet } from 'types'

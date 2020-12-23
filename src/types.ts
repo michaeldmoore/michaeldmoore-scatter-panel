@@ -1,4 +1,3 @@
-/* eslint-disable no-useless-constructor */
 export class FieldSet {
   constructor (public col: number, public color: string, public size: number, public hidden: boolean) {
   }
