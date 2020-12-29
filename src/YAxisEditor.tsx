@@ -5,7 +5,7 @@ import React from 'react'
 
 interface Props extends StandardEditorProps<FieldSet[]> { };
 
-export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) => {
+export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
   if (context.data && context.data.length > 0) {
     const options = context.data
       .flatMap(frame => frame.fields)
@@ -21,7 +21,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) =>
     if (values) {
       values.forEach((val: Number, index: number) => {
         selects.push(
-          <div className="FieldSetsEditor">
+          <div className="YAxisEditor">
             <div className="ScatterFlex">
               <div className="ScatterSelect">
                 <Select<number>
@@ -80,7 +80,7 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) =>
                 />
               </div>
             </div>
-            <hr/>
+            <hr />
           </div>)
       })
     }
@@ -88,15 +88,18 @@ export const FieldSetsEditor: React.FC<Props> = ({ item, onChange, context }) =>
     const addButton = values.some((x: FieldSet) => x.col === -1)
       ? null
       : (
-        <Button
-          variant="secondary"
-          size="sm"
-          onClick={() => {
-            values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, 0, false))
-            onChange(values)
-          }}>
-          <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}
-        </Button>
+        <div>
+          <Button
+            variant="secondary"
+            size="sm"
+            onClick={() => {
+              values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, 0, false))
+              onChange(values)
+            }}>
+            <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}
+          </Button>
+          <hr />
+        </div>
       )
 
     return (

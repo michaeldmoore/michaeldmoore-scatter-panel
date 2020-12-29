@@ -1,4 +1,4 @@
-.FieldSetsEditor{
+.YAxisEditor{
   margin-bottom: 25px;
 }
 
@@ -37,6 +37,19 @@
   width: 90px;
   color: rgb(159, 167, 179);
   font-size: 12px;
+  text-align: center;
+}
+
+.ScatterCheckbox {
+  padding-top: 6px;
+  padding-left: 5px;
+  width: 55px;
+  color: rgb(159, 167, 179);
+  font-size: 12px;
+}
+
+.ScatterFlex label {
+  margin-top: 5px;
 }
 
 .ScatterSetHidden{

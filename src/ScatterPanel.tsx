@@ -28,7 +28,7 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
           <p>To get started, create a table query that returns 2 or more numeric columns</p>
         </div>
       )
-    } else if (options.xAxisField >= colData.length) {
+    } else if (options.xAxis.col >= colData.length) {
       return (
         <div style={{ overflow: 'hidden', height: '100%' }}>
           <p>X Axis field setting not found in current query</p>
@@ -62,7 +62,7 @@ function generateContent (options: ScatterOptions, width: number, height: number
 
   const colValues = colData.map(c => { return c.values })
   const colNames = colData.map(c => { return c.displayName || c.name })
-  const xValues = colValues[options.xAxisField]
+  const xValues = colValues[options.xAxis.col]
   const xExtent = [
     options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3.min(xValues),
     options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3.max(xValues)
@@ -94,7 +94,8 @@ function generateContent (options: ScatterOptions, width: number, height: number
     .scaleLinear()
     .nice()
     .domain(xExtent as [number, number])
-    .range([margins.left, width - margins.right])
+//    .range([margins.left, width - margins.right])
+    .range([options.xAxis.inverted ? (width - margins.right) : margins.left, options.xAxis.inverted ? margins.left : (width - margins.right)])
 
   const xAxis = d3.axisBottom(xScale).tickSize(margins.top + margins.bottom - height)
 
@@ -180,7 +181,7 @@ function onLegendClick (e: React.MouseEvent, index: number, fieldSets: FieldSet[
 };
 
 function drawLegend (options: ScatterOptions, width: number, height: number, margins: Margins, colNames: string[], panelId: number) {
-  if (options.legend.size) {
+  if (options.legend.show) {
     const scale = options.legend.size / 2;
     const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length)
 

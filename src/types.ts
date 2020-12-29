@@ -1,3 +1,10 @@
+export class XAxis {
+  constructor(
+    public col: number,
+    public inverted: boolean) {
+  }
+}
+
 export class FieldSet {
   constructor (
     public col: number, 
@@ -18,7 +25,7 @@ export class Title {
 
 export class Legend {
   constructor (
-//    public show: boolean,
+    public show: boolean,
     public size: number) {
   };
 }
@@ -40,7 +47,7 @@ export class Extents {
 }
 
 export interface ScatterOptions {
-  xAxisField: number,
+  xAxis: XAxis,
   yAxisFields: number[],
   fieldSets: FieldSet[],
   xAxisExtents: Extents,
