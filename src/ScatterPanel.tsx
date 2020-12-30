@@ -81,15 +81,15 @@ function generateContent(options: ScatterOptions, width: number, height: number,
   const legend = drawLegend(options, width, height, margins, colNames, panelId)
   const yTitle = drawYTitle(options, width, height, margins)
   const xTitle = drawXTitle(options, width, height, margins)
-  /*
-  let border = <rect
+
+  let border = options.border.show ? <rect
     transform={`translate(${margins.left}, ${margins.top})`}
     width={width - margins.left - margins.right}
     height={height - margins.top - margins.bottom}
-    stroke="yellow"
-    strokeWidth="1"
-  />
-*/
+    stroke={options.border.color}
+    stroke-width={options.border.size}
+    fill="none"
+  /> : null;
 
   let clippath =
     <defs>
@@ -129,8 +129,6 @@ function generateContent(options: ScatterOptions, width: number, height: number,
         {legend}
         {xTitle}
         {yTitle}
-        {clippath}
-        {/* border */}
         <g
           transform={`translate(0, ${height - margins.bottom})`}
           ref={node => {
@@ -143,6 +141,8 @@ function generateContent(options: ScatterOptions, width: number, height: number,
             d3.select(node).call(yAxis as any).selectAll('line').attr('stroke', options.gridColor)
           }}
         />
+        {clippath}
+        {border}
         <g>
           {drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
         </g>
@@ -405,6 +405,8 @@ function drawLines(options: ScatterOptions, fieldSets: FieldSet[], xValues: numb
         let reg = regression.power(xyData);
 
         let x0 = xExtent[0];
+        if (x0 < 0)
+          x0 = 0; // Domain for power regressions MUST be positive
         //        let y0 = evaluateYPower(reg, x0);
 
         let x1 = xExtent[1];

@@ -24,6 +24,14 @@ export class Title {
   };
 }
 
+export class Border {
+  constructor (
+    public show: boolean,
+    public color: string, 
+    public size: number) {
+  };
+}
+
 export class Legend {
   constructor (
     public show: boolean,
@@ -56,6 +64,7 @@ export interface ScatterOptions {
   legend: Legend,
   xAxisTitle: Title,
   yAxisTitle: Title,
-  gridColor: string,
-  rotateYAxisTitle: boolean
+  rotateYAxisTitle: boolean,
+  gridColor: string, 
+  border: Border
 }

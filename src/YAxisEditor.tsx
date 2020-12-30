@@ -57,6 +57,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
               <div className="ScatterDotColor">
                 <ColorPicker
                   color={values[index].color}
+                  enableNamedColors={false}
                   onChange={e => {
                     values[index].color = e
                     onChange(values)

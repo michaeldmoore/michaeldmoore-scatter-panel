@@ -37,6 +37,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
       <div className="TitleColor">
         <ColorPicker
           color={value.color}
+          enableNamedColors={false}
           onChange={e => {
             value.color = e
             onChange(value)

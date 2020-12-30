@@ -16,7 +16,7 @@ export const LegendEditor: React.FC<Props> = ({ value, onChange }) => {
       value={value.size}
       min={1}
       max={10}
-      title="Legend Text Size (or 0 to turn off legends)"
+      title="Legend Text Size"
       onChange={e => {
         value.size = (e.target as HTMLInputElement).valueAsNumber
         onChange(value)
