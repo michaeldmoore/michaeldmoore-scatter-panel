@@ -88,13 +88,17 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                 <Select<string>
                   isLoading={false}
                   value={values[index].lineType}
-                  onChange={e => {
+                  onChange={(e: { value: any }) => {
                     values[index].lineType = e.value
                     onChange(values)
                   }
                   }
-                  options={[{label:'None',value:'none'}, {label:'Simple',value:'simple'}, {label:'Linear',value:'linear'}]}/>
-
+                  options={[
+                    {label:'None',value:'none'}, 
+                    {label:'Simple',value:'simple'}, 
+                    {label:'Linear',value:'linear'}, 
+                    {label:'Exponential',value:'exponential'},
+                    {label:'Power',value:'power'}]}/>
               </div>
               {lineSize}
             </div>

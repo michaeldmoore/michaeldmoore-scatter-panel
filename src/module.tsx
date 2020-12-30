@@ -69,7 +69,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Rotate Y Axis Title',
       category: ['Y Axis'],
       defaultValue: false,
-      showIf: config => config.yAxisTitle.text?.length > 0
+      showIf: (config: { yAxisTitle: { text: string | any[] } }) => config.yAxisTitle.text?.length > 0
     })
 
     builder.addCustomEditor({
