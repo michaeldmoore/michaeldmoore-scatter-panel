@@ -20,6 +20,25 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
 
     if (values) {
       values.forEach((val: Number, index: number) => {
+
+        let lineSize = values[index].lineType == 'none' ? null : (
+          <div className="ScatterFlex ScatterSize">
+          <div className="ScatterLabel">Size</div>
+          <Input
+            type="number"
+            label="Line Size"
+            value={values[index].lineSize}
+            min={1}
+            max={10}
+            title="Set size of line"
+            onChange={e => {
+              values[index].lineSize = (e.target as HTMLInputElement).valueAsNumber
+              onChange(values)
+            }
+            }
+          />
+        </div>);
+
         selects.push(
           <div className="YAxisEditor">
             <div className="ScatterFlex">
@@ -45,10 +64,9 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                   }
                 />
               </div>
-            </div>
-            <div className="ScatterFlex">
+
               <div className="ScatterFlex ScatterSize">
-                <div className="ScatterLabel">Dot Size</div>
+                <div className="ScatterLabel">Size</div>
                 <Input
                   type="number"
                   label="Dot Size"
@@ -63,22 +81,22 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                   }
                 />
               </div>
-              <div className="ScatterFlex ScatterSize">
-                <div className="ScatterLabel">Line Size</div>
-                <Input
-                  type="number"
-                  label="Line Size"
-                  value={values[index].lineSize}
-                  min={0}
-                  max={10}
-                  title="Set size of line"
+            </div>
+            <div className="ScatterFlex">
+              <div className="ScatterFlex ScatterLineType">
+                <div className="ScatterLabel">Line</div>
+                <Select<string>
+                  isLoading={false}
+                  value={values[index].lineType}
                   onChange={e => {
-                    values[index].lineSize = (e.target as HTMLInputElement).valueAsNumber
+                    values[index].lineType = e.value
                     onChange(values)
                   }
                   }
-                />
+                  options={[{label:'None',value:'none'}, {label:'Simple',value:'simple'}, {label:'Linear',value:'linear'}]}/>
+
               </div>
+              {lineSize}
             </div>
             <hr />
           </div>)
@@ -93,7 +111,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
             variant="secondary"
             size="sm"
             onClick={() => {
-              values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, 0, false))
+              values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, 0, 'none', false))
               onChange(values)
             }}>
             <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}

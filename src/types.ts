@@ -10,7 +10,8 @@ export class FieldSet {
     public col: number, 
     public color: string, 
     public dotSize: number, 
-    public lineSize: number, 
+    public lineSize: number,
+    public lineType: string, 
     public hidden: boolean) {
   }
 }

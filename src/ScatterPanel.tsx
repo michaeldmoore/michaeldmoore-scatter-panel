@@ -3,6 +3,7 @@ import $ from 'jquery'
 import * as d3 from 'd3'
 import React from 'react'
 import { FieldSet, Margins, ScatterOptions } from 'types'
+import regression, { DataPoint } from 'regression'
 import './ScatterEditor.css'
 
 interface Props extends PanelProps<ScatterOptions> { };
@@ -66,14 +67,14 @@ function generateContent (options: ScatterOptions, width: number, height: number
   const xExtent = [
     options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3.min(xValues),
     options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3.max(xValues)
-  ]
+  ] as number[];
 
   const yValues = visibleFieldSets.map(f => { return colValues[f.col] })
   const yExtents = yValues.map(c => { return d3.extent(c) })
   const yExtent = [
     options.yAxisExtents.min === 0 ? 0 : options.yAxisExtents.min || d3.min(yExtents.map(c => { return c[0] }) as number[]),
     options.yAxisExtents.max === 0 ? 0 : options.yAxisExtents.max || d3.max(yExtents.map(c => { return c[1] }) as number[])
-  ]
+  ] as number[];
 
   const margins = new Margins(20, 10, 20, 30)
 
@@ -129,7 +130,7 @@ function generateContent (options: ScatterOptions, width: number, height: number
           }}
         />
         <g>
-          { drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale) }
+          { drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent) }
         </g>
         <g>
           { drawDots(options, visibleFieldSets, xValues, yValues, xScale, yScale) }
@@ -286,22 +287,57 @@ function drawYTitle (options: ScatterOptions, width: number, height: number, mar
   return null
 }
 
-function drawLines(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues:number[][], xScale: Function, yScale: Function){
+function drawLines(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues:number[][], xScale: Function, yScale: Function, xExtent: number[], yExtent: number[]){
   let lines = new Array(0);
 
   fieldSets.forEach((f, index) => {
-    if (fieldSets[index].lineSize > 0){
-      let path = `
+    let fieldSet = fieldSets[index];
+    if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0){
+      let path = '';
+
+      if (fieldSet.lineType === 'simple') {
+        path = `
         ${xValues.map((d, i) => {
             return `${i === 0 ? 'M' : 'L'} ${xScale(d)} ${yScale(yValues[index][i])}`;
         }).join(' ')}
       `;
+      }
+      else if (fieldSet.lineType === 'linear') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        let xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
 
-      let className = "ScatterLine ScatterLine-" + index;
-      if (options.legend.size && fieldSets[index].hidden)
-            className += " ScatterLineHidden";
+        let reg = regression.linear(xyData);
+        let x0 = xExtent[0];
+        let y0 = x0 * reg.equation[0] + reg.equation[1];
+        if (y0 < yExtent[0]){
+          y0 = yExtent[0];
+          x0 = (y0 - reg.equation[1]) / reg.equation[0];
+        }
+        if (y0 > yExtent[1]){
+          y0 = yExtent[1];
+          x0 = (y0 - reg.equation[1]) / reg.equation[0];
+        }
+        let x1 = xExtent[1];  
+        let y1 = x1 * reg.equation[0] + reg.equation[1];
+        if (y1 < yExtent[0]){
+          y1 = yExtent[0];
+          x1 = (y1 - reg.equation[1]) / reg.equation[0];
+        }
+        if (y1 > yExtent[1]){
+          y1 = yExtent[1];
+          x1 = (y1 - reg.equation[1]) / reg.equation[0];
+        }
 
-      lines.push(<path className={className} d={path} stroke={fieldSets[index].color} strokeWidth={fieldSets[index].lineSize} fill="none"/>);
+        path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
+      }
+
+      if (path.length) {
+        let className = "ScatterLine ScatterLine-" + index;
+        if (options.legend.size && fieldSet.hidden)
+              className += " ScatterLineHidden";
+
+        lines.push(<path className={className} d={path} stroke={fieldSet.color} strokeWidth={fieldSet.lineSize} fill="none"/>);
+      }
     }
   })
 
