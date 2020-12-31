@@ -2,9 +2,11 @@ import { PanelProps } from '@grafana/data'
 import $ from 'jquery'
 import * as d3 from 'd3'
 import React from 'react'
-import { FieldSet, Margins, ScatterOptions } from 'types'
+import { ColData, FieldSet, Margins, ScatterOptions, Title, XAxis } from 'types'
 import regression, { DataPoint } from 'regression'
 import './ScatterEditor.css'
+
+var randomColor = require('randomcolor');
 
 interface Props extends PanelProps<ScatterOptions> { };
 
@@ -16,11 +18,11 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
 
     const colData = new Array(0)
     frame.fields.forEach((field, i) => {
-      colData.push({
-        name: field.name,
-        displayName: field.config?.displayName || field.name,
-        values: field.values.toArray().map(Number)
-      })
+      colData.push(new ColData(
+        field.name,
+        field.config?.displayName || field.name,
+        field.values.toArray().map(Number))
+      )
     })
 
     if (colData.length < 2) {
@@ -29,7 +31,14 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
           <p>To get started, create a table query that returns 2 or more numeric columns</p>
         </div>
       )
-    } else if (options.xAxis.col >= colData.length) {
+    } 
+    
+    if (options.xAxis.col === -1 || options.fieldSets.length === 0) {
+      // Nothing has been setup - call auto-config
+      autoConfigure(options, colData);      
+    } 
+    
+    if (options.xAxis.col >= colData.length) {
       return (
         <div style={{ overflow: 'hidden', height: '100%' }}>
           <p>X Axis field setting not found in current query</p>
@@ -44,7 +53,7 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
           </div>
         )
       } else {
-        return generateContent(options, /* data, */width, height, fieldSets, colData, panelId)
+        return generateContent(options, width, height, fieldSets, colData, panelId)
       }
     }
   }
@@ -57,6 +66,26 @@ export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) 
     )
   }
 }
+
+function autoConfigure(options: ScatterOptions, colData: ColData[]) {
+  if (options.xAxis.col == -1 || options.xAxis.col >= colData.length) {
+    options.xAxis = new XAxis(0, false);
+  }
+
+  if (options.xAxisTitle.text.length == 0)
+    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2);
+
+  options.fieldSets = options.fieldSets.filter(f => {return f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col});
+
+  if (options.fieldSets.length === 0){
+    let fieldSets = colData.map((f,i) => {
+      return new FieldSet(i, randomColor(), 3, 1, 'none', false);
+    })
+
+    options.fieldSets = fieldSets.filter((c) => { return c.col != options.xAxis.col });
+  }
+}
+
 
 function generateContent(options: ScatterOptions, width: number, height: number, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[], panelId: number) {
   const visibleFieldSets = fieldSets// .filter(f => { return (!f.hidden)});
@@ -108,7 +137,6 @@ function generateContent(options: ScatterOptions, width: number, height: number,
     .scaleLinear()
     .nice()
     .domain(xExtent as [number, number])
-    //    .range([margins.left, width - margins.right])
     .range([options.xAxis.inverted ? (width - margins.right) : margins.left, options.xAxis.inverted ? margins.left : (width - margins.right)])
 
   const xAxis = d3.axisBottom(xScale).tickSize(margins.top + margins.bottom - height)
@@ -132,13 +160,13 @@ function generateContent(options: ScatterOptions, width: number, height: number,
         <g
           transform={`translate(0, ${height - margins.bottom})`}
           ref={node => {
-            d3.select(node).call(xAxis as any).selectAll('line').attr('stroke', options.gridColor)
+            d3.select(node).call(xAxis as any).selectAll('line').attr('stroke', options.grid.color)
           }}
         />
         <g
           transform={`translate(${margins.left}, 0)`}
           ref={node => {
-            d3.select(node).call(yAxis as any).selectAll('line').attr('stroke', options.gridColor)
+            d3.select(node).call(yAxis as any).selectAll('line').attr('stroke', options.grid.color)
           }}
         />
         {clippath}

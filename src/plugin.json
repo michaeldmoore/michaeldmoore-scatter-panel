@@ -3,9 +3,9 @@
   "name": "Scatter",
   "id": "michaeldmoore-scatter-panel",
   "info": {
-    "description": "A simple scatter-plot plugin panel table formatted data in Grafana using the react panel template",
+    "description": "A really easy-to-use scatter-plot plugin panel for table formatted Grafana data",
     "author": {
-      "name": "michaeldmoore",
+      "name": "Michael Moore<mdmoore@gmail.com>",
       "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel"
     },
     "keywords": [
@@ -21,7 +21,7 @@
     },
     "links": [
       {
-        "name": "Website",
+        "name": "Project Site",
         "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel"
       },
       {
@@ -29,12 +29,18 @@
         "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel/LICENSE"
       }
     ],
-    "screenshots": [],
+    "screenshots": [
+      {
+        "name": "Scatter",
+        "path": "img/screenshot.png"
+      }
+    ],
     "version": "%VERSION%",
     "updated": "%TODAY%"
   },
   "dependencies": {
-    "grafanaVersion": "7.0.x",
+    "grafanaDependency": ">=7.3.0",
+    "grafanaVersion": "7.3.x",
     "plugins": []
   }
 }

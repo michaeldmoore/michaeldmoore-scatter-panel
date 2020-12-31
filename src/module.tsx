@@ -1,5 +1,5 @@
 import { PanelPlugin } from '@grafana/data'
-import { Extents, Border, Legend, ScatterOptions, Title } from './types'
+import { Extents, Border, Legend, ScatterOptions, Title, Grid, XAxis } from './types'
 import { ScatterPanel } from './ScatterPanel'
 import { XAxisEditor } from './XAxisEditor'
 import { YAxisEditor } from './YAxisEditor'
@@ -7,6 +7,7 @@ import { ExtentsEditor } from 'ExtentsEditor'
 import { TitleEditor } from 'TitleEditor'
 import { LegendEditor } from 'LegendEditor'
 import { BorderEditor } from 'BorderEditor'
+import { GridEditor } from 'GridEditor'
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions(builder => {
@@ -16,7 +17,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'X Axis Field',
       category: ['X Axis'],
       editor: XAxisEditor,
-      defaultValue: 0
+      defaultValue: new XAxis(-1, false)
     })
 
     builder.addCustomEditor({
@@ -79,15 +80,17 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Legend',
       category: ['Legend'],
       editor: LegendEditor,
-      defaultValue: new Legend(false, 1)
+      defaultValue: new Legend(false, 3)
     })
 
-    builder.addColorPicker({
-      path: 'gridColor',
-      name: 'Grid Color',
+    
+    builder.addCustomEditor({
+      id: 'grid',
+      path: 'grid',
+      name: 'Grid',
       category: ['Display'],
-      enableNamedColors: false,
-      defaultValue: 'rgba(255, 255, 255, 0.25)'
+      editor: GridEditor,
+      defaultValue: new Grid("gray")
     })
 
     builder.addCustomEditor({

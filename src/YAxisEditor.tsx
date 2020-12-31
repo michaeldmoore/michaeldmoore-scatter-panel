@@ -3,6 +3,8 @@ import { Button, ColorPicker, Input, Select } from '@grafana/ui'
 import { FieldSet } from 'types'
 import React from 'react'
 
+var randomColor = require('randomcolor');
+
 interface Props extends StandardEditorProps<FieldSet[]> { };
 
 export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
@@ -89,7 +91,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                 <Select<string>
                   isLoading={false}
                   value={values[index].lineType}
-                  onChange={(e: { value: any }) => {
+                  onChange={e => {
                     values[index].lineType = e.value
                     onChange(values)
                   }
@@ -116,7 +118,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
             variant="secondary"
             size="sm"
             onClick={() => {
-              values.push(new FieldSet(-1, '#' + Math.floor(Math.random() * 16777215).toString(16), 2, 0, 'none', false))
+              values.push(new FieldSet(-1, randomColor(), 2, 0, 'none', false))
               onChange(values)
             }}>
             <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}

@@ -20,6 +20,7 @@
     "@grafana/toolkit": "^7.0.0",
     "@grafana/ui": "^7.0.0",
     "@types/d3": "^6.2.0",
+    "@types/randomcolor": "^0.5.5",
     "@types/regression": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
@@ -36,6 +37,7 @@
   },
   "dependencies": {
     "@types/jquery": "^3.5.5",
+    "randomcolor": "^0.6.2",
     "regression": "^2.0.1"
   }
 }

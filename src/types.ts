@@ -1,3 +1,11 @@
+export class ColData {
+  constructor(
+    public name: string,
+    public displayName: string,
+    public values: number[]){
+  }
+}
+
 export class XAxis {
   constructor(
     public col: number,
@@ -29,6 +37,12 @@ export class Border {
     public show: boolean,
     public color: string, 
     public size: number) {
+  };
+}
+
+export class Grid {
+  constructor (
+    public color: string) {
   };
 }
 
@@ -65,6 +79,6 @@ export interface ScatterOptions {
   xAxisTitle: Title,
   yAxisTitle: Title,
   rotateYAxisTitle: boolean,
-  gridColor: string, 
+  grid: Grid, 
   border: Border
 }
