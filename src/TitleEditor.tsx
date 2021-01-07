@@ -10,6 +10,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="TitleEditor">
       <div className="TitleText">
         <Input
+          css={''}
           type="string"
           value={value.text}
           onChange={e => {
@@ -22,6 +23,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
       <div className="TitleLabel">Size</div>
       <div className="TitleSize">
         <Input
+          css={''}
           type="number"
           label="Size"
           min={0}

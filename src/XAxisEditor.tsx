@@ -16,30 +16,31 @@ export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
       }))
 
     return (
-    <div className="XAxisEditor">
-      <div className="ScatterFlex">
-        <div className="ScatterSelect">
-          <Select<number>
-            isLoading={false}
-            value={xAxis.col}
-            onChange={e => {
-              xAxis.col = e.value as number
-              onChange(xAxis)
-            }}
-            options={options} />
-        </div>
+      <div className="XAxisEditor">
         <div className="ScatterFlex">
-          <div className="ScatterCheckbox" title="Draw X axis right to left">Inverted</div>
-          <Checkbox
-            value={xAxis.inverted}
-            onChange={e => {
-              xAxis.inverted = e.currentTarget.checked;
-              onChange(xAxis)
-            }}
-          />
+          <div className="ScatterSelect">
+            <Select<number>
+              isLoading={false}
+              value={xAxis.col}
+              onChange={e => {
+                xAxis.col = e.value as number
+                onChange(xAxis)
+              }}
+              options={options} />
+          </div>
+          <div className="ScatterFlex">
+            <div className="ScatterCheckbox" title="Draw X axis right to left">Inverted</div>
+            <Checkbox
+              css={''}
+              value={xAxis.inverted}
+              onChange={e => {
+                xAxis.inverted = e.currentTarget.checked;
+                onChange(xAxis)
+              }}
+            />
+          </div>
         </div>
-      </div>
-    </div>)
+      </div>)
   }
 
   return <Select onChange={() => { }} disabled={true} />

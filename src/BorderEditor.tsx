@@ -11,6 +11,7 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="ScatterFlex">
       <div className="ScatterLabel">Size</div>
       <Input
+        css={''}
         className="ScatterLegendSize"
         type="number"
         value={value.size}
@@ -39,6 +40,7 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="ScatterFlex">
       <div className="ScatterCheckbox">Show</div>
       <Checkbox
+        css={''}
         value={value.show}
         onChange={(e: { currentTarget: { checked: boolean } }) => {
           value.show = e.currentTarget.checked;

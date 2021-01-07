@@ -83,7 +83,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       defaultValue: new Legend(false, 3)
     })
 
-    
+
     builder.addCustomEditor({
       id: 'grid',
       path: 'grid',

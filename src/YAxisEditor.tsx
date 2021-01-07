@@ -25,21 +25,22 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
 
         let lineSize = values[index].lineType == 'none' ? null : (
           <div className="ScatterFlex ScatterSize">
-          <div className="ScatterLabel">Size</div>
-          <Input
-            type="number"
-            label="Line Size"
-            value={values[index].lineSize}
-            min={1}
-            max={10}
-            title="Set size of line"
-            onChange={e => {
-              values[index].lineSize = (e.target as HTMLInputElement).valueAsNumber
-              onChange(values)
-            }
-            }
-          />
-        </div>);
+            <div className="ScatterLabel">Size</div>
+            <Input
+              css={''}
+              type="number"
+              label="Line Size"
+              value={values[index].lineSize}
+              min={1}
+              max={10}
+              title="Set size of line"
+              onChange={e => {
+                values[index].lineSize = (e.target as HTMLInputElement).valueAsNumber
+                onChange(values)
+              }
+              }
+            />
+          </div>);
 
         selects.push(
           <div className="YAxisEditor">
@@ -71,6 +72,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
               <div className="ScatterFlex ScatterSize">
                 <div className="ScatterLabel">Size</div>
                 <Input
+                  css={''}
                   type="number"
                   label="Dot Size"
                   value={values[index].dotSize}
@@ -97,11 +99,11 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                   }
                   }
                   options={[
-                    {label:'None',value:'none'}, 
-                    {label:'Simple',value:'simple'}, 
-                    {label:'Linear',value:'linear'}, 
-                    {label:'Exponential',value:'exponential'},
-                    {label:'Power',value:'power'}]}/>
+                    { label: 'None', value: 'none' },
+                    { label: 'Simple', value: 'simple' },
+                    { label: 'Linear', value: 'linear' },
+                    { label: 'Exponential', value: 'exponential' },
+                    { label: 'Power', value: 'power' }]} />
               </div>
               {lineSize}
             </div>
