@@ -1,0 +1,33 @@
+
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+{
+  "manifestVersion": "2.0.0",
+  "signatureType": "community",
+  "signedByOrg": "michaeldmoore",
+  "signedByOrgName": "michaeldmoore",
+  "plugin": "michaeldmoore-scatter-panel",
+  "version": "1.0.0",
+  "time": 1611152362996,
+  "keyId": "7e4d0c6a708866e7",
+  "files": {
+    "CHANGELOG.md": "16ac69adbc5c5724a86874ee945ec0813bc888c1f7d18bfc7af9a997a830471b",
+    "img\\logo.svg": "1ebabac67031b933be87f03efde9e41b5142e6ca1aea272aa110cfcc5ce8ecb6",
+    "LICENSE": "e03ba41d7fab20700769fe4118bab50d800cb74f990353a05d2f5fff1c228363",
+    "module.js": "4b1cdc15aaeaee1527594c6a9435aae9b68a1ddc9b5042f0cd7af800c208c3bc",
+    "module.js.map": "ab7fda041b744bf6a8e217353db20f2bd4063dd3a9d423b44a45093ae0ab4a12",
+    "plugin.json": "302897badfd1f807d7351f9f7bf9393cf0d4efcb4e9c6440f735064b7e533a75",
+    "README.md": "cb0098cdf9cc344b2d089bf17cd1753b433e70b2fbc05fc471f8f6e4e2d49ef0"
+  }
+}
+-----BEGIN PGP SIGNATURE-----
+Version: OpenPGP.js v4.10.1
+Comment: https://openpgpjs.org
+
+wqEEARMKAAYFAmAIO+sACgkQfk0ManCIZue+MwIJAdQZjoB81e9sC8vArkQs
+00rO7WwOD9xJSwPA7ZUylxpmxYldWJ5LiffuQtgf9c+tCO1d67bPOhE1f4lA
+/B7WJlUWAgisc5Wd+XairtlUB9XXeOvVtZY3I6wyBmJFhDAlEa/rkBN0QMzr
+Rtue+pEZUZo6Lch9m0xwyk4Fk96c9nDCVXxg6g==
+=RTEQ
+-----END PGP SIGNATURE-----
