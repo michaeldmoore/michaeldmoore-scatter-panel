@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Checkbox, ColorPicker, Input } from '@grafana/ui';
 import { Border } from 'types';
@@ -10,7 +10,7 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="ScatterFlex">
       <div className="ScatterLabel">Size</div>
       <Input
-        css=''
+        css=""
         className="ScatterLegendSize"
         type="number"
         value={value.size}
@@ -20,7 +20,8 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
         onChange={(e) => {
           value.size = (e.target as HTMLInputElement).valueAsNumber;
           onChange(value);
-        }} />
+        }} 
+      />
       <div className="ScatterDotColor">
         <ColorPicker
           color={value.color}
@@ -33,12 +34,13 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
     </div>
   ) : null;
 
-  return (
+  return 
+  (
     <div className="ScatterBorder ScatterFlex">
       <div className="ScatterFlex">
         <div className="ScatterCheckbox">Show</div>
         <Checkbox
-          css=''
+          css=""
           value={value.show}
           onChange={(e: { currentTarget: { checked: boolean } }) => {
             value.show = e.currentTarget.checked;
@@ -47,5 +49,6 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
         />
       </div>
       {colorandsize}
-    </div>);
+    </div>
+  );
 }

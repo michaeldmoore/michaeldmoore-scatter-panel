@@ -10,7 +10,7 @@ export const LegendEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="ScatterFlex">
       <div className="ScatterLabel">Text Size</div>
       <Input
-        css=''
+        css=""
         className="ScatterLegendSize"
         type="number"
         value={value.size}
@@ -20,11 +20,13 @@ export const LegendEditor: React.FC<Props> = ({ value, onChange }) => {
         onChange={(e) => {
           value.size = (e.target as HTMLInputElement).valueAsNumber;
           onChange(value);
-        }} />
+        }} 
+      />
     </div>
   ) : null;
 
-  return (
+  return 
+  (
     <div className="ScatterLegend ScatterFlex">
       <div className="ScatterFlex">
         <div className="ScatterCheckbox">Show</div>
@@ -34,8 +36,10 @@ export const LegendEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange={(e) => {
             value.show = e.currentTarget.checked;
             onChange(value);
-          }} />
+          }} 
+        />
       </div>
       {textsize}
-    </div>);
+    </div>
+  );
 }

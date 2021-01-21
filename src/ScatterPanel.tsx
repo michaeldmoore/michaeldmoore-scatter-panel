@@ -2,7 +2,14 @@ import React from 'react';
 import { PanelProps } from '@grafana/data';
 import $ from 'jquery';
 import * as d3 from 'd3';
-import { ColData, FieldSet, Margins, ScatterOptions, Title, XAxis } from 'types';
+import {
+  ColData, 
+  FieldSet, 
+  Margins, 
+  ScatterOptions, 
+  Title, 
+  XAxis 
+} from 'types';
 import regression, { DataPoint } from 'regression';
 import './ScatterEditor.css';
 
@@ -11,16 +18,19 @@ const randomColor = require('randomcolor');
 interface Props extends PanelProps<ScatterOptions> { }
 
 function autoConfigure(options: ScatterOptions, colData: ColData[]) {
-  if (options.xAxis.col == -1 || options.xAxis.col >= colData.length) {
+  if (options.xAxis.col === -1 || options.xAxis.col >= colData.length) {
     options.xAxis = new XAxis(0, false);
   }
 
   if (options.xAxisTitle.text.length == 0)
     options.xAxisTitle = new Title(colData[0].displayName, 'white', 2);
 
-  options.fieldSets = options.fieldSets.filter(f => {return f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col});
+  options.fieldSets = options.fieldSets.filter((f) => 
+    {
+      return f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col
+    });
 
-  if (options.fieldSets.length === 0){
+  if (options.fieldSets.length === 0) {
     const fieldSets = colData.map((f,i) => {
       return new FieldSet(i, randomColor(), 3, 1, 'none', false);
     })
@@ -29,8 +39,162 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   }
 }
 
+function drawLines(
+  options: ScatterOptions, 
+  fieldSets: FieldSet[], 
+  xValues: number[], 
+  yValues: number[][], 
+  xScale: Function, 
+  yScale: Function, 
+  xExtent: number[], 
+  yExtent: number[]) {
+  const lines = new Array(0);
 
-function generateContent(options: ScatterOptions, width: number, height: number, fieldSets: FieldSet[], colData: { name: string, displayName: string, values: number[] }[], panelId: number) {
+  fieldSets.forEach((f, index) => {
+    const fieldSet = fieldSets[index];
+    if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
+      let path = '';
+
+      if (fieldSet.lineType === 'simple') {
+        path = `
+        ${xValues.map((d, i) => {
+          return `${i === 0 ? 'M' : 'L'} ${xScale(d)} ${yScale(yValues[index][i])}`;
+        }).join(' ')}
+      `;
+      }
+      else if (fieldSet.lineType === 'linear') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
+
+        const reg = regression.linear(xyData);
+
+        // check for start and end points inside the plotted area
+        let x0 = xExtent[0];
+        let y0 = evaluateYLinear(reg, x0);
+        if (y0 < yExtent[0]) {
+          y0 = yExtent[0];
+          x0 = evaluateXLinear(reg, y0);
+        }
+        if (y0 > yExtent[1]) {
+          y0 = yExtent[1];
+          x0 = evaluateXLinear(reg, y0);
+        }
+
+        let x1 = xExtent[1];
+        let y1 = evaluateYLinear(reg, x1);
+        if (y1 < yExtent[0]) {
+          y1 = yExtent[0];
+          x1 = evaluateXLinear(reg, y1);
+        }
+        if (y1 > yExtent[1]) {
+          y1 = yExtent[1];
+          x1 = evaluateXLinear(reg, y1);
+        }
+
+        path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
+      }
+      else if (fieldSet.lineType === 'exponential') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
+
+        const reg = regression.exponential(xyData);
+
+        const x0 = xExtent[0];
+        //        let y0 = evaluateYExponential(reg, x0);
+
+        const x1 = xExtent[1];
+        //        let y1 = evaluateYExponential(reg, x1);
+
+        const steps = 50;
+        const dx = x0 + (x1 - x0) / steps;
+        let xys = new Array(0);
+        for (let i = 0; i < steps; i++) {
+          const x = x0 + i * dx;
+          const y = evaluateYExponential(reg, x);
+          xys.push([x, y]);
+        }
+        path = `
+        ${xys.map((d, i) => {
+          return `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`;
+        }).join(' ')}
+      `;
+      }
+      else if (fieldSet.lineType === 'power') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
+
+        const reg = regression.power(xyData);
+
+        let x0 = xExtent[0];
+        if (x0 < 0)
+          x0 = 0; // Domain for power regressions MUST be positive
+
+        let x1 = xExtent[1];
+
+        const steps = 100;
+        const dx = x0 + (x1 - x0) / steps;
+        let xys = new Array(0);
+        for (let i = 0; i < steps; i++) {
+          const x = x0 + i * dx;
+          const y = evaluateYPower(reg, x);
+          xys.push([x, y]);
+        }
+        path = `
+        ${xys.map((d, i) => {
+          return `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`;
+        }).join(' ')}
+      `;
+      }
+
+      if (path.length) {
+        let className = "ScatterLine ScatterLine-" + index;
+        if (options.legend.size && fieldSet.hidden)
+          className += " ScatterLineHidden";
+
+        lines.push(<path className={className} d={path} stroke={fieldSet.color} strokeWidth={fieldSet.lineSize} fill="none" />);
+      }
+    }
+  })
+
+  return <g clip-path="url(#grid)">
+    {lines}
+  </g>
+}
+
+function drawDots(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues: number[][], xScale: Function, yScale: Function) {
+  return fieldSets.map((y, i: number) => (
+    xValues.map((x, j) => {
+      if (y.dotSize > 0) {
+        let className = 'ScatterSet-' + i
+        if (options.legend.size && fieldSets[i].hidden) {
+          className += ' ScatterSetHidden'
+        }
+
+        return <circle
+          key={'circle-[' + y + '][' + i + ']'}
+          cx={xScale(x)}
+          cy={yScale(yValues[i][j])}
+          r={y.dotSize}
+          className={className}
+          fill={y.color} />
+      }
+      else
+        return null;
+    })
+  ))
+}
+
+function generateContent(
+  options: ScatterOptions, 
+  width: number, 
+  height: number, 
+  fieldSets: FieldSet[], 
+  colData: { 
+    name: string, 
+    displayName: string, 
+    values: number[] 
+  }[], 
+  panelId: number) {
   const visibleFieldSets = fieldSets;// .filter(f => { return (!f.hidden)});
 
   const colValues = colData.map(c => { return c.values });
@@ -79,7 +243,10 @@ function generateContent(options: ScatterOptions, width: number, height: number,
     .scaleLinear()
     .nice()
     .domain(xExtent as [number, number])
-    .range([options.xAxis.inverted ? (width - margins.right) : margins.left, options.xAxis.inverted ? margins.left : (width - margins.right)]);
+    .range([
+      options.xAxis.inverted ? (width - margins.right) : margins.left, 
+      options.xAxis.inverted ? margins.left : (width - margins.right)
+    ]);
 
   const xAxis = d3.axisBottom(xScale).tickSize(margins.top + margins.bottom - height);
 
@@ -143,16 +310,16 @@ function onLegendClick(e: React.MouseEvent, index: number, fieldSets: FieldSet[]
   const hiddenLegendTextElements = legendTextElements.filter('.ScatterLegendTextHidden');
 
   if (e.ctrlKey) {
-    // toggle the state of the current item
+    //toggle the state of the current item
     thisLegendTextElement.toggleClass('ScatterLegendTextHidden');
     applySetFieldSetHidden(fieldSets[index], index, !fieldSets[index].hidden, panelId);
   } else if (hiddenLegendTextElements.length === 0) {
-    // if none are hidden, hide everything else
+    //if none are hidden, hide everything else
     legendTextElements.addClass('ScatterLegendTextHidden');
     thisLegendTextElement.toggleClass('ScatterLegendTextHidden');
     fieldSets.forEach((f, i) => { applySetFieldSetHidden(f, i, index !== i, panelId) });
   } else {
-    // if this item is visible, unhide everything
+    //if this item is visible, unhide everything
     if (!thisLegendTextElement.hasClass('ScatterLegendTextHidden')) {
       legendTextElements.removeClass('ScatterLegendTextHidden');
       fieldSets.forEach((f, i) => { applySetFieldSetHidden(f, i, false, panelId) });
@@ -170,7 +337,8 @@ function drawLegend(options: ScatterOptions, width: number, height: number, marg
     const scale = options.legend.size / 2;
     const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length);
 
-    const maxLength = d3.max(fieldSets.map(f => colNames[f.col].length)) as number;
+    const maxLength = d3.max(fieldSets.map((f) => 
+      colNames[f.col].length)) as number;
 
     if (fieldSets.length > 0) {
       const offset = 20;
@@ -223,7 +391,9 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, marg
         width={dx}
         height={dy}
         fill={title.color}
-      >{title.text}</text>
+      >
+        {title.text}
+      </text>
     </g>
   }
   return null;
@@ -249,7 +419,9 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, marg
           width={dx}
           height={dy}
           fill={title.color}
-        >{title.text}</text>
+        >
+          {title.text}
+        </text>
       </g>
     } else {
       margins.left += dx * scale;
@@ -263,7 +435,9 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, marg
           width={dx}
           height={dy}
           fill={title.color}
-        >{title.text}</text>
+        >
+          {title.text}
+        </text>
       </g>
     }
   }
@@ -294,145 +468,6 @@ function evaluateYPower(reg: regression.Result, x: number) {
 //  return Math.log(y / reg.equation[0]) / reg.equation[1];
 //}
 
-
-function drawLines(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues: number[][], xScale: Function, yScale: Function, xExtent: number[], yExtent: number[]) {
-  const lines = new Array(0);
-
-  fieldSets.forEach((f, index) => {
-    const fieldSet = fieldSets[index];
-    if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
-      let path = '';
-
-      if (fieldSet.lineType === 'simple') {
-        path = `
-        ${xValues.map((d, i) => {
-          return `${i === 0 ? 'M' : 'L'} ${xScale(d)} ${yScale(yValues[index][i])}`;
-        }).join(' ')}
-      `;
-      }
-      else if (fieldSet.lineType === 'linear') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
-
-        const reg = regression.linear(xyData);
-
-        // check for start and end points inside the plotted area
-        let x0 = xExtent[0];
-        let y0 = evaluateYLinear(reg, x0);
-        if (y0 < yExtent[0]) {
-          y0 = yExtent[0];
-          x0 = evaluateXLinear(reg, y0);
-        }
-        if (y0 > yExtent[1]) {
-          y0 = yExtent[1];
-          x0 = evaluateXLinear(reg, y0);
-        }
-
-        let x1 = xExtent[1];
-        let y1 = evaluateYLinear(reg, x1);
-        if (y1 < yExtent[0]) {
-          y1 = yExtent[0];
-          x1 = evaluateXLinear(reg, y1);
-        }
-        if (y1 > yExtent[1]) {
-          y1 = yExtent[1];
-          x1 = evaluateXLinear(reg, y1);
-        }
-
-        path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
-      }
-      else if (fieldSet.lineType === 'exponential') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
-
-        const reg = regression.exponential(xyData);
-
-        let x0 = xExtent[0];
-        //        let y0 = evaluateYExponential(reg, x0);
-
-        let x1 = xExtent[1];
-        //        let y1 = evaluateYExponential(reg, x1);
-
-        const steps = 50;
-        const dx = x0 + (x1 - x0) / steps;
-        let xys = new Array(0);
-        for (let i = 0; i < steps; i++) {
-          const x = x0 + i * dx;
-          const y = evaluateYExponential(reg, x);
-          xys.push([x, y]);
-        }
-        path = `
-        ${xys.map((d, i) => {
-          return `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`;
-        }).join(' ')}
-      `;
-      }
-      else if (fieldSet.lineType === 'power') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
-
-        const reg = regression.power(xyData);
-
-        let x0 = xExtent[0];
-        if (x0 < 0)
-          x0 = 0; // Domain for power regressions MUST be positive
-        //        let y0 = evaluateYPower(reg, x0);
-
-        let x1 = xExtent[1];
-        //        let y1 = evaluateYPower(reg, x1);
-
-        const steps = 100;
-        const dx = x0 + (x1 - x0) / steps;
-        let xys = new Array(0);
-        for (let i = 0; i < steps; i++) {
-          const x = x0 + i * dx;
-          const y = evaluateYPower(reg, x);
-          xys.push([x, y]);
-        }
-        path = `
-        ${xys.map((d, i) => {
-          return `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`;
-        }).join(' ')}
-      `;
-      }
-
-      if (path.length) {
-        let className = "ScatterLine ScatterLine-" + index;
-        if (options.legend.size && fieldSet.hidden)
-          className += " ScatterLineHidden";
-
-        lines.push(<path className={className} d={path} stroke={fieldSet.color} strokeWidth={fieldSet.lineSize} fill="none" />);
-      }
-    }
-  })
-
-  return <g clip-path="url(#grid)">
-    {lines}
-  </g>
-}
-
-function drawDots(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues: number[][], xScale: Function, yScale: Function) {
-  return fieldSets.map((y, i: number) => (
-    xValues.map((x, j) => {
-      if (y.dotSize > 0) {
-        let className = 'ScatterSet-' + i
-        if (options.legend.size && fieldSets[i].hidden) {
-          className += ' ScatterSetHidden'
-        }
-
-        return <circle
-          key={'circle-[' + y + '][' + i + ']'}
-          cx={xScale(x)}
-          cy={yScale(yValues[i][j])}
-          r={y.dotSize}
-          className={className}
-          fill={y.color} />
-      }
-      else
-        return null;
-    })
-  ))
-}
 
 export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) => {
   if (data.series?.length > 0) {

@@ -1,13 +1,13 @@
-import { PanelPlugin } from '@grafana/data'
-import { Extents, Border, Legend, ScatterOptions, Title, Grid, XAxis } from './types'
-import { ScatterPanel } from './ScatterPanel'
-import { XAxisEditor } from './XAxisEditor'
-import { YAxisEditor } from './YAxisEditor'
-import { ExtentsEditor } from 'ExtentsEditor'
-import { TitleEditor } from 'TitleEditor'
-import { LegendEditor } from 'LegendEditor'
-import { BorderEditor } from 'BorderEditor'
-import { GridEditor } from 'GridEditor'
+import { PanelPlugin } from '@grafana/data';
+import { Extents, Border, Legend, ScatterOptions, Title, Grid, XAxis } from './types';
+import { ScatterPanel } from './ScatterPanel';
+import { XAxisEditor } from './XAxisEditor';
+import { YAxisEditor } from './YAxisEditor';
+import { ExtentsEditor } from 'ExtentsEditor';
+import { TitleEditor } from 'TitleEditor';
+import { LegendEditor } from 'LegendEditor';
+import { BorderEditor } from 'BorderEditor';
+import { GridEditor } from 'GridEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions(builder => {

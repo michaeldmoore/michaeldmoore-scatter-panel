@@ -10,18 +10,19 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="TitleEditor">
       <div className="TitleText">
         <Input
-          css=''
+          css=""
           type="string"
           value={value.text}
           onChange={(e) => {
             value.text = (e.target as HTMLInputElement).value;
             onChange(value);
-          }} />
+          }} 
+        />
       </div>
       <div className="TitleLabel">Size</div>
       <div className="TitleSize">
         <Input
-          css=''
+          css=""
           type="number"
           label="Size"
           min={0}
@@ -30,7 +31,8 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange={(e) => {
             value.textSize = (e.target as HTMLInputElement).valueAsNumber;
             onChange(value);
-          }} />
+          }} 
+        />
       </div>
       <div className="TitleColor">
         <ColorPicker
@@ -39,7 +41,8 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange={(e) => {
             value.color = e;
             onChange(value);
-          }} />
+          }} 
+        />
       </div>
     </div>)
 }

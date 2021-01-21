@@ -41,6 +41,7 @@
     "@grafana/ui": "^7.3.6",
     "@types/jquery": "^3.5.5",
     "d3": "^6.3.1",
+    "jquery": "^3.5.1",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1",
     "regression": "^2.0.1"

@@ -13,20 +13,20 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
       .flatMap(frame => frame.fields)
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
-        value: index
+        value: index,
       }))
 
-    const selects = new Array(0)
+    const selects = new Array(0);
 
-    const values = context.options.fieldSets.filter((x: FieldSet) => x.col != null)
+    const values = context.options.fieldSets.filter((x: FieldSet) => x.col != null);
 
     if (values) {
       values.forEach((val: Number, index: number) => {
-        const lineSize = values[index].lineType == 'none' ? null : (
+        const lineSize = values[index].lineType === 'none' ? null : (
           <div className="ScatterFlex ScatterSize">
             <div className="ScatterLabel">Size</div>
             <Input
-              css=''
+              css=""
               type="number"
               label="Line Size"
               value={values[index].lineSize}
@@ -36,7 +36,8 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
               onChange={(e) => {
                 values[index].lineSize = (e.target as HTMLInputElement).valueAsNumber;
                 onChange(values);
-              }} />
+              }} 
+            />
           </div>);
 
         selects.push(
@@ -60,12 +61,13 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                   onChange={(e) => {
                     values[index].color = e;
                     onChange(values);
-                  }} />
+                  }} 
+                />
               </div>
               <div className="ScatterFlex ScatterSize">
                 <div className="ScatterLabel">Size</div>
                 <Input
-                  css=''
+                  css=""
                   type="number"
                   label="Dot Size"
                   value={values[index].dotSize}
@@ -75,7 +77,8 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                   onChange={(e) => {
                     values[index].dotSize = (e.target as HTMLInputElement).valueAsNumber;
                     onChange(values);
-                  }} />
+                  }} 
+                />
               </div>
             </div>
             <div className="ScatterFlex">
@@ -113,7 +116,8 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
               values.push(new FieldSet(-1, randomColor(), 2, 0, 'none', false));
               onChange(values);
             }}>
-            <i className="fa fa-plus"></i> Add {item.name.replace('(s)', '')}
+            <i className="fa fa-plus"></i> Add 
+              {item.name.replace('(s)', '')}
           </Button>
           <hr />
         </div>
@@ -125,7 +129,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
         {addButton}
       </div>
     );
-  }
+  };
 
   return null;
 }

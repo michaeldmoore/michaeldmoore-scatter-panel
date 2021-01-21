@@ -6,8 +6,10 @@ import { XAxis } from 'types';
 interface Props extends StandardEditorProps<XAxis> { }
 
 export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
-  if (context.data && context.data.length > 0) {
-    let xAxis = context.options.xAxis;
+  if (
+    context.data && 
+    context.data.length > 0) {
+    const xAxis = context.options.xAxis;
     const options = context.data
       .flatMap(frame => frame.fields)
       .map((field, index) => ({
@@ -26,17 +28,19 @@ export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                 xAxis.col = e.value as number;
                 onChange(xAxis);
               }}
-              options={options} />
+              options={options} 
+            />
           </div>
           <div className="ScatterFlex">
             <div className="ScatterCheckbox" title="Draw X axis right to left">Inverted</div>
             <Checkbox
-              css=''
+              css=""
               value={xAxis.inverted}
               onChange={(e) => {
                 xAxis.inverted = e.currentTarget.checked;
                 onChange(xAxis);
-              }} />
+              }} 
+            />
           </div>
         </div>
       </div>);
