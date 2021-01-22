@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Checkbox, Select } from '@grafana/ui';
-import { XAxis } from 'types';
+import { XAxis } from '../types/XAxis';
 
 interface Props extends StandardEditorProps<XAxis> { }
 

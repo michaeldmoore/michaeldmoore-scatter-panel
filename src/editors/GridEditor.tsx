@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { ColorPicker } from '@grafana/ui';
-import { Grid } from 'types';
+import { Grid } from '../types/Grid';
 
 interface Props extends StandardEditorProps<Grid> { }
 

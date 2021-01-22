@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Checkbox, Input } from '@grafana/ui';
-import { Legend } from 'types';
+import { Legend } from '../types/Legend';
 
 interface Props extends StandardEditorProps<Legend> { }
 
@@ -25,8 +25,7 @@ export const LegendEditor: React.FC<Props> = ({ value, onChange }) => {
     </div>
   ) : null;
 
-  return 
-  (
+  return (
     <div className="ScatterLegend ScatterFlex">
       <div className="ScatterFlex">
         <div className="ScatterCheckbox">Show</div>

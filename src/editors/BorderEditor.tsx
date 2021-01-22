@@ -1,12 +1,12 @@
-import React from 'react';
+import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Checkbox, ColorPicker, Input } from '@grafana/ui';
-import { Border } from 'types';
+import { Border } from '../types/Border';
 
 interface Props extends StandardEditorProps<Border> { }
 
 export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
-  const colorandsize = value.show ? (
+  let colorandsize = value.show ? (
     <div className="ScatterFlex">
       <div className="ScatterLabel">Size</div>
       <Input
@@ -34,8 +34,7 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
     </div>
   ) : null;
 
-  return 
-  (
+  return (
     <div className="ScatterBorder ScatterFlex">
       <div className="ScatterFlex">
         <div className="ScatterCheckbox">Show</div>

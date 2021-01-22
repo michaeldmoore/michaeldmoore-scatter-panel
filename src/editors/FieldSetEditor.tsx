@@ -1,13 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Button, ColorPicker, Input, Select } from '@grafana/ui';
-import { FieldSet } from 'types';
+import { FieldSet } from '../types/FieldSet';
 
 var randomColor = require('randomcolor');
 
 interface Props extends StandardEditorProps<FieldSet[]> { }
 
-export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
+export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => {
   if (context.data && context.data.length > 0) {
     const options = context.data
       .flatMap(frame => frame.fields)
@@ -41,7 +41,7 @@ export const YAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
           </div>);
 
         selects.push(
-          <div className="YAxisEditor">
+          <div className="FieldSetEditor">
             <div className="ScatterFlex">
               <div className="ScatterSelect">
                 <Select<number>

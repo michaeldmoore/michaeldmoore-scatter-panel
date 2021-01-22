@@ -1,17 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import { PanelProps } from '@grafana/data';
 import $ from 'jquery';
 import * as d3 from 'd3';
-import {
-  ColData, 
-  FieldSet, 
-  Margins, 
-  ScatterOptions, 
-  Title, 
-  XAxis 
-} from 'types';
+import { ColData } from './types/ColData';
+import { Margins } from './types/Margins';
+import { XAxis } from './types/XAxis';
+import { FieldSet } from './types/FieldSet';
+import { Title } from './types/Title';
+import { ScatterOptions } from './types/ScatterOptions';
 import regression, { DataPoint } from 'regression';
-import './ScatterEditor.css';
+import './ScatterPanel.css';
 
 const randomColor = require('randomcolor');
 

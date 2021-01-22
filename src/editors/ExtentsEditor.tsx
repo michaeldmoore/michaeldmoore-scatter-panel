@@ -1,7 +1,7 @@
-import React from 'react';
+import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Input } from '@grafana/ui';
-import { Extents } from 'types';
+import { Extents } from '../types/Extents';
 
 interface Props extends StandardEditorProps<Extents> { }
 

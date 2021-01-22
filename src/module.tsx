@@ -1,13 +1,19 @@
 import { PanelPlugin } from '@grafana/data';
-import { Extents, Border, Legend, ScatterOptions, Title, Grid, XAxis } from './types';
+import { Border } from './types/Border';
+import { XAxis } from './types/XAxis';
+import { Title } from './types/Title';
+import { Grid } from './types/Grid';
+import { Legend } from './types/Legend';
+import { Extents } from './types/Extents';
+import { ScatterOptions } from './types/ScatterOptions';
 import { ScatterPanel } from './ScatterPanel';
-import { XAxisEditor } from './XAxisEditor';
-import { YAxisEditor } from './YAxisEditor';
-import { ExtentsEditor } from 'ExtentsEditor';
-import { TitleEditor } from 'TitleEditor';
-import { LegendEditor } from 'LegendEditor';
-import { BorderEditor } from 'BorderEditor';
-import { GridEditor } from 'GridEditor';
+import { XAxisEditor } from './editors/XAxisEditor';
+import { FieldSetEditor } from './editors/FieldSetEditor';
+import { ExtentsEditor } from 'editors/ExtentsEditor';
+import { TitleEditor } from 'editors/TitleEditor';
+import { LegendEditor } from 'editors/LegendEditor';
+import { BorderEditor } from 'editors/BorderEditor';
+import { GridEditor } from 'editors/GridEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions(builder => {
@@ -44,7 +50,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       path: 'fieldSets',
       name: 'Field(s)',
       category: ['Y Axis'],
-      editor: YAxisEditor,
+      editor: FieldSetEditor,
       defaultValue: []
     })
 
