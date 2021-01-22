@@ -16,6 +16,6 @@ export interface ScatterOptions {
   xAxisTitle: Title,
   yAxisTitle: Title,
   rotateYAxisTitle: boolean,
-  grid: Grid, 
+  grid: Grid,
   border: Border
 }

@@ -1,11 +1,11 @@
 import { PanelPlugin } from '@grafana/data';
-import { Border } from './types/Border';
-import { XAxis } from './types/XAxis';
-import { Title } from './types/Title';
-import { Grid } from './types/Grid';
-import { Legend } from './types/Legend';
-import { Extents } from './types/Extents';
-import { ScatterOptions } from './types/ScatterOptions';
+import { Border } from '../src/types/Border';
+import { XAxis } from '../src/types/XAxis';
+import { Title } from '../src/types/Title';
+import { Grid } from '../src/types/Grid';
+import { Legend } from '../src/types/Legend';
+import { Extents } from '../src/types/Extents';
+import { ScatterOptions } from '../src/types/ScatterOptions';
 import { ScatterPanel } from './ScatterPanel';
 import { XAxisEditor } from './editors/XAxisEditor';
 import { FieldSetEditor } from './editors/FieldSetEditor';
@@ -16,7 +16,7 @@ import { BorderEditor } from 'editors/BorderEditor';
 import { GridEditor } from 'editors/GridEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
-  .setPanelOptions(builder => {
+  .setPanelOptions((builder) => {
     builder.addCustomEditor({
       id: 'xAxis',
       path: 'xAxis',
@@ -43,7 +43,6 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       editor: TitleEditor,
       defaultValue: new Title('', '#777', 1)
     })
-
 
     builder.addCustomEditor({
       id: 'fieldSets',
@@ -77,7 +76,9 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Rotate Y Axis Title',
       category: ['Y Axis'],
       defaultValue: false,
-      showIf: (config: { yAxisTitle: { text: string | any[] } }) => config.yAxisTitle.text?.length > 0
+      showIf: (config: { yAxisTitle: { text: string | any[] } }) => (
+        config.yAxisTitle.text?.length > 0
+      )
     })
 
     builder.addCustomEditor({

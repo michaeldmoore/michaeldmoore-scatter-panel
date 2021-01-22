@@ -2,13 +2,13 @@ import * as React from 'react';
 import { PanelProps } from '@grafana/data';
 import $ from 'jquery';
 import * as d3 from 'd3';
-import { ColData } from './types/ColData';
-import { Margins } from './types/Margins';
-import { XAxis } from './types/XAxis';
-import { FieldSet } from './types/FieldSet';
-import { Title } from './types/Title';
-import { ScatterOptions } from './types/ScatterOptions';
 import regression, { DataPoint } from 'regression';
+import { ColData } from '../src/types/ColData';
+import { Margins } from '../src/types/Margins';
+import { XAxis } from '../src/types/XAxis';
+import { FieldSet } from '../src/types/FieldSet';
+import { Title } from '../src/types/Title';
+import { ScatterOptions } from '../src/types/ScatterOptions';
 import './ScatterPanel.css';
 
 const randomColor = require('randomcolor');
@@ -20,22 +20,48 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
     options.xAxis = new XAxis(0, false);
   }
 
-  if (options.xAxisTitle.text.length == 0)
+  if (options.xAxisTitle.text.length === 0) {
     options.xAxisTitle = new Title(colData[0].displayName, 'white', 2);
+  }
 
-  options.fieldSets = options.fieldSets.filter((f) => 
-    {
-      return f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col
-    });
+  options.fieldSets = options.fieldSets.filter((f) => {
+      return f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col;
+  });
 
   if (options.fieldSets.length === 0) {
-    const fieldSets = colData.map((f,i) => {
+    const fieldSets = colData.map((f, i) => {
       return new FieldSet(i, randomColor(), 3, 1, 'none', false);
-    })
+    });
 
-    options.fieldSets = fieldSets.filter((c) => { return c.col != options.xAxis.col });
+    options.fieldSets = fieldSets.filter((c) => {
+      return c.col !== options.xAxis.col;
+    });
   }
 }
+
+function evaluateYLinear(reg: regression.Result, x: number) {
+  return (reg.equation[0] * x) + reg.equation[1];
+}
+
+function evaluateXLinear(reg: regression.Result, y: number) {
+  return (y - reg.equation[1]) / reg.equation[0];
+}
+
+function evaluateYExponential(reg: regression.Result, x: number) {
+  return reg.equation[0] * Math.exp(reg.equation[1] * x);
+}
+
+//function evaluateXExponential(reg: regression.Result, y: number){
+//  return Math.log(y / reg.equation[0]) / reg.equation[1];
+//}
+
+function evaluateYPower(reg: regression.Result, x: number) {
+  return reg.equation[0] * Math.pow(x, reg.equation[1]);
+}
+
+//function evaluateXPower(reg: regression.Result, y: number){
+//  return Math.log(y / reg.equation[0]) / reg.equation[1];
+//}
 
 function drawLines(
   options: ScatterOptions, 
@@ -62,7 +88,9 @@ function drawLines(
       }
       else if (fieldSet.lineType === 'linear') {
         // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => { return [d, yValues[index][i]]; }) as DataPoint[];
+        const xyData = xValues.map((d, i) => { 
+          return [d, yValues[index][i]]; 
+        }) as DataPoint[];
 
         const reg = regression.linear(xyData);
 
@@ -105,7 +133,7 @@ function drawLines(
 
         const steps = 50;
         const dx = x0 + (x1 - x0) / steps;
-        let xys = new Array(0);
+        const xys = new Array(0);
         for (let i = 0; i < steps; i++) {
           const x = x0 + i * dx;
           const y = evaluateYExponential(reg, x);
@@ -127,11 +155,11 @@ function drawLines(
         if (x0 < 0)
           x0 = 0; // Domain for power regressions MUST be positive
 
-        let x1 = xExtent[1];
+        const x1 = xExtent[1];
 
         const steps = 100;
         const dx = x0 + (x1 - x0) / steps;
-        let xys = new Array(0);
+        const xys = new Array(0);
         for (let i = 0; i < steps; i++) {
           const x = x0 + i * dx;
           const y = evaluateYPower(reg, x);
@@ -145,21 +173,32 @@ function drawLines(
       }
 
       if (path.length) {
-        let className = "ScatterLine ScatterLine-" + index;
+        let className = 'ScatterLine ScatterLine-' + index;
         if (options.legend.size && fieldSet.hidden)
-          className += " ScatterLineHidden";
+          className += ' ScatterLineHidden';
 
-        lines.push(<path className={className} d={path} stroke={fieldSet.color} strokeWidth={fieldSet.lineSize} fill="none" />);
+        lines.push(
+          <path className={className} 
+          d={path} 
+          stroke={fieldSet.color} 
+          strokeWidth={fieldSet.lineSize} 
+          fill='none' />
+        );
       }
     }
   })
 
-  return <g clip-path="url(#grid)">
+  return <g clip-path='url(#grid)'>
     {lines}
   </g>
 }
 
-function drawDots(options: ScatterOptions, fieldSets: FieldSet[], xValues: number[], yValues: number[][], xScale: Function, yScale: Function) {
+function drawDots(options: ScatterOptions, 
+  fieldSets: FieldSet[], 
+  xValues: number[], 
+  yValues: number[][], 
+  xScale: Function, 
+  yScale: Function) {
   return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
       if (y.dotSize > 0) {
@@ -176,10 +215,121 @@ function drawDots(options: ScatterOptions, fieldSets: FieldSet[], xValues: numbe
           className={className}
           fill={y.color} />
       }
-      else
-        return null;
+      return null;
     })
   ))
+}
+
+function drawLegend(options: ScatterOptions, width: number, height: number, margins: Margins, colNames: string[], panelId: number) {
+  if (options.legend.show) {
+    const scale = options.legend.size / 2;
+    const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length);
+
+    const maxLength = d3.max(fieldSets.map((f) => 
+      colNames[f.col].length)) as number;
+
+    if (fieldSets.length > 0) {
+      const offset = 20;
+      const dx = offset + (8.6 * scale * maxLength);
+
+      margins.right += dx;
+
+      const legends = new Array(0);
+
+      fieldSets.forEach((f, i) => {
+        const className = f.hidden ? 'ScatterLegendText ScatterLegendTextHidden' : 'ScatterLegendText';
+        legends.push(
+          <text
+            transform={`translate(${offset}, ${30 * scale * i}) scale(${scale})`}
+            className={className}
+            alignmentBaseline='hanging'
+            textAnchor='left'
+            fill={f.color}
+            onClick={(e) => {
+              onLegendClick(e, i, fieldSets, panelId);
+            }}
+          >{colNames[f.col]}</text>)
+      });
+
+      return <g transform={`translate(${width - dx}, ${margins.top})`}>
+        {legends}
+      </g>
+    }
+  }
+
+  return null;
+}
+
+function drawXTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
+  const title = options.xAxisTitle;
+  if (title.text) {
+    const scale = title.textSize;
+    const dx = 8.2 * scale * title.text.length;
+    const dy = 14;
+
+    margins.bottom += dy * scale;
+
+    return <g
+      transform={`translate(${(width + margins.left - margins.right) / 2.0}, ${height - dy * scale}) scale(${scale})`}
+    >
+      <text
+        className='ScatterXTitleRect'
+        alignmentBaseline='hanging'
+        textAnchor='middle'
+        width={dx}
+        height={dy}
+        fill={title.color}
+      >
+        {title.text}
+      </text>
+    </g>
+  }
+  return null;
+}
+
+function drawYTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
+  const title = options.yAxisTitle;
+  if (title.text) {
+    const scale = title.textSize;
+    const dx = 8.2 * title.text.length;
+    const dy = 14;
+
+    if (options.rotateYAxisTitle) {
+      margins.left += dy * scale;
+
+      return <g
+        transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) rotate(-90) scale(${scale})`}
+      >
+        <text
+          className='ScatterXTitleRect'
+          alignmentBaseline='hanging'
+          textAnchor='middle'
+          width={dx}
+          height={dy}
+          fill={title.color}
+        >
+          {title.text}
+        </text>
+      </g>
+    } else {
+      margins.left += dx * scale;
+
+      return <g
+        transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) scale(${scale})`}
+      >
+        <text
+          className='ScatterXTitleRect'
+          textAnchor='left'
+          width={dx}
+          height={dy}
+          fill={title.color}
+        >
+          {title.text}
+        </text>
+      </g>
+    }
+  }
+  return null;
 }
 
 function generateContent(
@@ -222,12 +372,12 @@ function generateContent(
     height={height - margins.top - margins.bottom}
     stroke={options.border.color}
     stroke-width={options.border.size}
-    fill="none"
+    fill='none'
   /> : null;
 
   const clippath =
     <defs>
-      <clipPath id="grid">
+      <clipPath id='grid'>
         <rect
           x={margins.left}
           y={margins.top}
@@ -329,143 +479,6 @@ function onLegendClick(e: React.MouseEvent, index: number, fieldSets: FieldSet[]
     }
   }
 };
-
-function drawLegend(options: ScatterOptions, width: number, height: number, margins: Margins, colNames: string[], panelId: number) {
-  if (options.legend.show) {
-    const scale = options.legend.size / 2;
-    const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length);
-
-    const maxLength = d3.max(fieldSets.map((f) => 
-      colNames[f.col].length)) as number;
-
-    if (fieldSets.length > 0) {
-      const offset = 20;
-      const dx = offset + (8.6 * scale * maxLength);
-
-      margins.right += dx;
-
-      const legends = new Array(0);
-
-      fieldSets.forEach((f, i) => {
-        const className = f.hidden ? 'ScatterLegendText ScatterLegendTextHidden' : 'ScatterLegendText';
-        legends.push(
-          <text
-            transform={`translate(${offset}, ${30 * scale * i}) scale(${scale})`}
-            className={className}
-            alignmentBaseline="hanging"
-            textAnchor="left"
-            fill={f.color}
-            onClick={(e) => {
-              onLegendClick(e, i, fieldSets, panelId);
-            }}
-          >{colNames[f.col]}</text>)
-      });
-
-      return <g transform={`translate(${width - dx}, ${margins.top})`}>
-        {legends}
-      </g>
-    }
-  }
-
-  return null;
-}
-
-function drawXTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
-  const title = options.xAxisTitle;
-  if (title.text) {
-    const scale = title.textSize;
-    const dx = 8.2 * scale * title.text.length;
-    const dy = 14;
-
-    margins.bottom += dy * scale;
-
-    return <g
-      transform={`translate(${(width + margins.left - margins.right) / 2.0}, ${height - dy * scale}) scale(${scale})`}
-    >
-      <text
-        className="ScatterXTitleRect"
-        alignmentBaseline="hanging"
-        textAnchor="middle"
-        width={dx}
-        height={dy}
-        fill={title.color}
-      >
-        {title.text}
-      </text>
-    </g>
-  }
-  return null;
-}
-
-function drawYTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
-  const title = options.yAxisTitle;
-  if (title.text) {
-    const scale = title.textSize;
-    const dx = 8.2 * title.text.length;
-    const dy = 14;
-
-    if (options.rotateYAxisTitle) {
-      margins.left += dy * scale;
-
-      return <g
-        transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) rotate(-90) scale(${scale})`}
-      >
-        <text
-          className="ScatterXTitleRect"
-          alignmentBaseline="hanging"
-          textAnchor="middle"
-          width={dx}
-          height={dy}
-          fill={title.color}
-        >
-          {title.text}
-        </text>
-      </g>
-    } else {
-      margins.left += dx * scale;
-
-      return <g
-        transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) scale(${scale})`}
-      >
-        <text
-          className="ScatterXTitleRect"
-          textAnchor="left"
-          width={dx}
-          height={dy}
-          fill={title.color}
-        >
-          {title.text}
-        </text>
-      </g>
-    }
-  }
-  return null;
-}
-
-function evaluateYLinear(reg: regression.Result, x: number) {
-  return (reg.equation[0] * x) + reg.equation[1];
-}
-
-function evaluateXLinear(reg: regression.Result, y: number) {
-  return (y - reg.equation[1]) / reg.equation[0];
-}
-
-function evaluateYExponential(reg: regression.Result, x: number) {
-  return reg.equation[0] * Math.exp(reg.equation[1] * x);
-}
-
-//function evaluateXExponential(reg: regression.Result, y: number){
-//  return Math.log(y / reg.equation[0]) / reg.equation[1];
-//}
-
-function evaluateYPower(reg: regression.Result, x: number) {
-  return reg.equation[0] * Math.pow(x, reg.equation[1]);
-}
-
-//function evaluateXPower(reg: regression.Result, y: number){
-//  return Math.log(y / reg.equation[0]) / reg.equation[1];
-//}
-
 
 export const ScatterPanel: React.FC<Props> = ({ options, data, width, height }) => {
   if (data.series?.length > 0) {

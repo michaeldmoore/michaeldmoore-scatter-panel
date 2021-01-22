@@ -5,6 +5,7 @@ export class FieldSet {
       public dotSize: number, 
       public lineSize: number,
       public lineType: string, 
-      public hidden: boolean) {
-    }
+      public hidden: boolean
+    ) {
   }
+}

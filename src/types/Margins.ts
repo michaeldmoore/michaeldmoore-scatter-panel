@@ -3,6 +3,7 @@ export class Margins {
       public top: number, 
       public right: number, 
       public bottom: number, 
-      public left: number) {
-    };
-  }
+      public left: number
+    ) {
+  };
+}

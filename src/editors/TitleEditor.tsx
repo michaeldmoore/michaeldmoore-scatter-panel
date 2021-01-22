@@ -44,5 +44,5 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           }} 
         />
       </div>
-    </div>)
-}
+    </div>);
+};

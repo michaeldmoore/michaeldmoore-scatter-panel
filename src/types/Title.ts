@@ -2,6 +2,7 @@ export class Title {
     constructor (
       public text: string, 
       public color: string, 
-      public textSize: number) {
-    };
+      public textSize: number
+    ) {
   }
+}

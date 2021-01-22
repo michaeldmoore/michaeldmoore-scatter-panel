@@ -10,11 +10,11 @@ interface Props extends StandardEditorProps<FieldSet[]> { }
 export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => {
   if (context.data && context.data.length > 0) {
     const options = context.data
-      .flatMap(frame => frame.fields)
+      .flatMap((frame) => frame.fields)
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-      }))
+      }));
 
     const selects = new Array(0);
 
@@ -36,7 +36,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
               onChange={(e) => {
                 values[index].lineSize = (e.target as HTMLInputElement).valueAsNumber;
                 onChange(values);
-              }} 
+              }}
             />
           </div>);
 
@@ -48,11 +48,12 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   isLoading={false}
                   value={values[index].col}
                   isClearable={values.length > 1}
-                  onChange={e => {
+                  onChange={(e) => {
                     if (e) { values[index].col = e.value; } else { values.splice(index, 1); }
                     onChange(values);
                   }}
-                  options={options} />
+                  options={options}
+                />
               </div>
               <div className="ScatterDotColor">
                 <ColorPicker
@@ -77,7 +78,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   onChange={(e) => {
                     values[index].dotSize = (e.target as HTMLInputElement).valueAsNumber;
                     onChange(values);
-                  }} 
+                  }}
                 />
               </div>
             </div>
@@ -129,7 +130,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
         {addButton}
       </div>
     );
-  };
+  }
 
   return null;
 }
