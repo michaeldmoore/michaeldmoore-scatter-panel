@@ -7,15 +7,15 @@ interface Props extends StandardEditorProps<XAxis> { }
 
 export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
   if (
-    context.data && 
-    context.data.length > 0) {
+    context.data
+    && context.data.length > 0) {
     const xAxis = context.options.xAxis;
     const options = context.data
-      .flatMap(frame => frame.fields)
+      .flatMap((frame) => frame.fields)
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
-        value: index
-      }))
+        value: index,
+      }));
 
     return (
       <div className="XAxisEditor">
@@ -28,7 +28,7 @@ export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
                 xAxis.col = e.value as number;
                 onChange(xAxis);
               }}
-              options={options} 
+              options={options}
             />
           </div>
           <div className="ScatterFlex">
@@ -39,12 +39,12 @@ export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
               onChange={(e) => {
                 xAxis.inverted = e.currentTarget.checked;
                 onChange(xAxis);
-              }} 
+              }}
             />
           </div>
         </div>
       </div>);
   }
 
-  return <Select onChange={() => { }} disabled={true} />
-}
+  return <Select onChange={() => { }} disabled={true} />;
+};

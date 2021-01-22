@@ -3,7 +3,7 @@ import { StandardEditorProps } from '@grafana/data';
 import { Button, ColorPicker, Input, Select } from '@grafana/ui';
 import { FieldSet } from '../types/FieldSet';
 
-var randomColor = require('randomcolor');
+const randomColor = require('randomcolor');
 
 interface Props extends StandardEditorProps<FieldSet[]> { }
 
@@ -62,7 +62,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   onChange={(e) => {
                     values[index].color = e;
                     onChange(values);
-                  }} 
+                  }}
                 />
               </div>
               <div className="ScatterFlex ScatterSize">
@@ -117,7 +117,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
               values.push(new FieldSet(-1, randomColor(), 2, 0, 'none', false));
               onChange(values);
             }}>
-            <i className="fa fa-plus"></i> Add 
+            <i className="fa fa-plus"></i> Add
               {item.name.replace('(s)', '')}
           </Button>
           <hr />
@@ -133,4 +133,4 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
   }
 
   return null;
-}
+};

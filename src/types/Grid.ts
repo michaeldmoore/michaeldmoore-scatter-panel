@@ -1,6 +1,6 @@
 export class Grid {
-    constructor (
-      public color: string
-    ) {
-  };
+  constructor (
+    public color: string,
+  ) {
+  }
 }

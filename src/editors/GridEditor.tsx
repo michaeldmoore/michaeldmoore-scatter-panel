@@ -17,10 +17,10 @@ export const GridEditor: React.FC<Props> = ({ value, onChange }) => {
             onChange={(e: string) => {
               value.color = e;
               onChange(value);
-            }} 
+            }}
           />
         </div>
       </div>
     </div>
   );
-}
+};

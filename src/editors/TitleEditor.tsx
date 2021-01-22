@@ -16,7 +16,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange={(e) => {
             value.text = (e.target as HTMLInputElement).value;
             onChange(value);
-          }} 
+          }}
         />
       </div>
       <div className="TitleLabel">Size</div>
@@ -31,7 +31,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange={(e) => {
             value.textSize = (e.target as HTMLInputElement).valueAsNumber;
             onChange(value);
-          }} 
+          }}
         />
       </div>
       <div className="TitleColor">
@@ -41,7 +41,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange={(e) => {
             value.color = e;
             onChange(value);
-          }} 
+          }}
         />
       </div>
     </div>);
