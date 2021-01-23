@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
-import { Button, ColorPicker, Input, Select } from '@grafana/ui';
+import {
+  Button, ColorPicker, Input, Select,
+} from '@grafana/ui';
 import { FieldSet } from '../types/FieldSet';
 
 const randomColor = require('randomcolor');
@@ -38,7 +40,8 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                 onChange(values);
               }}
             />
-          </div>);
+          </div>
+        );
 
         selects.push(
           <div className="FieldSetEditor">
@@ -97,12 +100,14 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                     { label: 'Simple', value: 'simple' },
                     { label: 'Linear', value: 'linear' },
                     { label: 'Exponential', value: 'exponential' },
-                    { label: 'Power', value: 'power' }]} />
+                    { label: 'Power', value: 'power' }]}
+                />
               </div>
               {lineSize}
             </div>
             <hr />
-          </div>);
+          </div>,
+        );
       });
     }
 
@@ -116,9 +121,12 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
             onClick={() => {
               values.push(new FieldSet(-1, randomColor(), 2, 0, 'none', false));
               onChange(values);
-            }}>
-            <i className="fa fa-plus"></i> Add
-              {item.name.replace('(s)', '')}
+            }}
+          >
+            <i className="fa fa-plus" />
+            {' '}
+            Add
+            {item.name.replace('(s)', '')}
           </Button>
           <hr />
         </div>

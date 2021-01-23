@@ -16,7 +16,7 @@ export const ExtentsEditor: React.FC<Props> = ({ value, onChange }) => (
         onChange={(e) => {
           value.min = (e.target as HTMLInputElement).valueAsNumber;
           onChange(value);
-        }} 
+        }}
       />
     </div>
     <div className="ScatterExtentLimit">
@@ -29,8 +29,8 @@ export const ExtentsEditor: React.FC<Props> = ({ value, onChange }) => (
         onChange={(e) => {
           value.max = (e.target as HTMLInputElement).valueAsNumber;
           onChange(value);
-        }} 
+        }}
       />
     </div>
   </div>
-)
+);

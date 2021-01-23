@@ -5,11 +5,11 @@ import { XAxis } from '../types/XAxis';
 
 interface Props extends StandardEditorProps<XAxis> { }
 
-export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
+export const XAxisEditor: React.FC<Props> = ({ onChange, context }) => {
   if (
     context.data
     && context.data.length > 0) {
-    const xAxis = context.options.xAxis;
+    const { xAxis } = context.options;
     const options = context.data
       .flatMap((frame) => frame.fields)
       .map((field, index) => ({
@@ -43,8 +43,9 @@ export const XAxisEditor: React.FC<Props> = ({ item, onChange, context }) => {
             />
           </div>
         </div>
-      </div>);
+      </div>
+    );
   }
 
-  return <Select onChange={() => { }} disabled={true} />;
+  return <Select onChange={() => { }} disabled />;
 };

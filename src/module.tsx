@@ -1,19 +1,19 @@
 import { PanelPlugin } from '@grafana/data';
-import { Border } from '../src/types/Border';
-import { XAxis } from '../src/types/XAxis';
-import { Title } from '../src/types/Title';
-import { Grid } from '../src/types/Grid';
-import { Legend } from '../src/types/Legend';
-import { Extents } from '../src/types/Extents';
-import { ScatterOptions } from '../src/types/ScatterOptions';
-import { ScatterPanel } from './ScatterPanel';
-import { XAxisEditor } from './editors/XAxisEditor';
-import { FieldSetEditor } from './editors/FieldSetEditor';
 import { ExtentsEditor } from 'editors/ExtentsEditor';
 import { TitleEditor } from 'editors/TitleEditor';
 import { LegendEditor } from 'editors/LegendEditor';
 import { BorderEditor } from 'editors/BorderEditor';
 import { GridEditor } from 'editors/GridEditor';
+import { Border } from 'types/Border';
+import { XAxis } from 'types/XAxis';
+import { Title } from 'types/Title';
+import { Grid } from 'types/Grid';
+import { Legend } from 'types/Legend';
+import { Extents } from 'types/Extents';
+import { ScatterOptions } from 'types/ScatterOptions';
+import { ScatterPanel } from 'ScatterPanel';
+import { XAxisEditor } from 'editors/XAxisEditor';
+import { FieldSetEditor } from 'editors/FieldSetEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions((builder) => {
@@ -23,8 +23,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'X Axis Field',
       category: ['X Axis'],
       editor: XAxisEditor,
-      defaultValue: new XAxis(-1, false)
-    })
+      defaultValue: new XAxis(-1, false),
+    });
 
     builder.addCustomEditor({
       id: 'xAxisExtents',
@@ -32,8 +32,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'X Axis Extent (Min & Max)',
       category: ['X Axis'],
       editor: ExtentsEditor,
-      defaultValue: new Extents(NaN, NaN)
-    })
+      defaultValue: new Extents(NaN, NaN),
+    });
 
     builder.addCustomEditor({
       id: 'xAxisTitle',
@@ -41,8 +41,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'X Axis Title',
       category: ['X Axis'],
       editor: TitleEditor,
-      defaultValue: new Title('', '#777', 1)
-    })
+      defaultValue: new Title('', '#777', 1),
+    });
 
     builder.addCustomEditor({
       id: 'fieldSets',
@@ -50,8 +50,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Field(s)',
       category: ['Y Axis'],
       editor: FieldSetEditor,
-      defaultValue: []
-    })
+      defaultValue: [],
+    });
 
     builder.addCustomEditor({
       id: 'yAxisExtents',
@@ -59,8 +59,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Y Axis Extent (Min & Max)',
       category: ['Y Axis'],
       editor: ExtentsEditor,
-      defaultValue: new Extents(NaN, NaN)
-    })
+      defaultValue: new Extents(NaN, NaN),
+    });
 
     builder.addCustomEditor({
       id: 'yAxisTitle',
@@ -68,8 +68,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Y Axis Title',
       category: ['Y Axis'],
       editor: TitleEditor,
-      defaultValue: new Title('', '#777', 1)
-    })
+      defaultValue: new Title('', '#777', 1),
+    });
 
     builder.addBooleanSwitch({
       path: 'rotateYAxisTitle',
@@ -78,8 +78,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       defaultValue: false,
       showIf: (config: { yAxisTitle: { text: string | any[] } }) => (
         config.yAxisTitle.text?.length > 0
-      )
-    })
+      ),
+    });
 
     builder.addCustomEditor({
       id: 'legend',
@@ -87,9 +87,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Legend',
       category: ['Legend'],
       editor: LegendEditor,
-      defaultValue: new Legend(false, 3)
-    })
-
+      defaultValue: new Legend(false, 3),
+    });
 
     builder.addCustomEditor({
       id: 'grid',
@@ -97,8 +96,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Grid',
       category: ['Display'],
       editor: GridEditor,
-      defaultValue: new Grid("gray")
-    })
+      defaultValue: new Grid('gray'),
+    });
 
     builder.addCustomEditor({
       id: 'border',
@@ -106,8 +105,8 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Border',
       category: ['Display'],
       editor: BorderEditor,
-      defaultValue: new Border(false, "yellow", 1)
-    })
+      defaultValue: new Border(false, 'yellow', 1),
+    });
 
-    return builder
-  })
+    return builder;
+  });

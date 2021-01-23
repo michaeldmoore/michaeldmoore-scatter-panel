@@ -1,3 +1,4 @@
+/* eslint import/extensions: off */
 import { Border } from './Border';
 import { XAxis } from './XAxis';
 import { FieldSet } from './FieldSet';

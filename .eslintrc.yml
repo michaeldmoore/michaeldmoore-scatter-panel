@@ -15,4 +15,16 @@ plugins:
 rules: {
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': ['error', {variables: false}],
+        'linebreak-style': 'off',
+        'max-len': 'off',
+        'no-plusplus': 'off',
+        'import/prefer-default-export': 'off',
+        'react/jsx-filename-extension': 'off',
+        'react/no-array-index-key': 'off',
+        'import/no-unresolved': 'off',
+        'import/extensions': 'off',
+        'prefer-destructuring': 'off',
+        'no-param-reassign': 'off',
+        'react/prop-types': 'off',
+        'react/destructuring-assignment': 'off',
     }
