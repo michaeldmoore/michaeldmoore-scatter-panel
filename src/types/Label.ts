@@ -1,8 +1,7 @@
 /* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
-export class Border {
+export class Label {
   constructor(
-    public color: string,
-    public size: number,
+    public col: number,
   ) {
   }
 }

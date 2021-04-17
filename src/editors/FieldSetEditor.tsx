@@ -18,6 +18,8 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
         value: index,
       }));
 
+    const sizeOptions = options;
+
     const selects = new Array(0);
 
     const values = context.options.fieldSets.filter((x: FieldSet) => x.col != null);
@@ -58,28 +60,42 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   options={options}
                 />
               </div>
-              <div className="ScatterDotColor">
-                <ColorPicker
-                  color={values[index].color}
-                  enableNamedColors={false}
-                  onChange={(e) => {
-                    values[index].color = e;
-                    onChange(values);
-                  }}
-                />
-              </div>
               <div className="ScatterFlex ScatterSize">
                 <div className="ScatterLabel">Size</div>
+
+                <div className="ScatterSelect">
+                  <Select<number>
+                    isLoading={false}
+                    value={values[index].sizeCol}
+                    isClearable={true}  //  NB.  Add 1 thru 10 as negative numbers etc.
+                    onChange={(e) => {
+                      values[index].sizeCol = e ? e.value as number : -1;
+                      onChange(values);
+                    }}
+                    options={sizeOptions}
+                  />
+                </div>
+
+
                 <Input
                   css=""
                   type="number"
-                  label="Dot Size"
                   value={values[index].dotSize}
                   min={1}
                   max={20}
                   title="Set size of dot"
                   onChange={(e) => {
                     values[index].dotSize = (e.target as HTMLInputElement).valueAsNumber;
+                    onChange(values);
+                  }}
+                />
+              </div>
+              <div className="ScatterDotColor">
+                <ColorPicker
+                  color={values[index].color}
+                  enableNamedColors={false}
+                  onChange={(e) => {
+                    values[index].color = e;
                     onChange(values);
                   }}
                 />
@@ -119,7 +135,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
             variant="secondary"
             size="sm"
             onClick={() => {
-              values.push(new FieldSet(-1, randomColor(), 2, 0, 'none', false));
+              values.push(new FieldSet(-1, -1, randomColor(), 2, 0, 'none', false));
               onChange(values);
             }}
           >

@@ -5,7 +5,7 @@ import * as d3 from 'd3';
 import regression, { DataPoint } from 'regression';
 import { ScatterOptions } from 'types/ScatterOptions';
 import { ColData } from 'types/ColData';
-import { Margins } from 'types/Margins';
+import { MarginPair } from 'types/MarginPair';
 import { XAxis } from 'types/XAxis';
 import { FieldSet } from 'types/FieldSet';
 import { Title } from 'types/Title';
@@ -27,10 +27,15 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
 
   if (options.fieldSets.length === 0) {
-    const fieldSets = colData.map((f, i) => new FieldSet(i, randomColor(), 3, 1, 'none', false));
+    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', false));
 
     options.fieldSets = fieldSets.filter((c) => c.col !== options.xAxis.col);
   }
+
+  options.xMargins.lower = 30;
+  options.xMargins.upper = 10;
+  options.yMargins.lower = 20;
+  options.yMargins.upper = 20;
 }
 
 function evaluateYLinear(reg: regression.Result, x: number) {
@@ -70,18 +75,18 @@ function drawLines(
 ) {
   const lines = new Array(0);
 
-  fieldSets.forEach((f, index) => {
-    const fieldSet = fieldSets[index];
+  fieldSets.forEach((fieldSet, index) => {
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
       let path = '';
 
+      const xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter(xy => xy[1] != null) as DataPoint[];
       if (fieldSet.lineType === 'simple') {
         path = `
-        ${xValues.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d)} ${yScale(yValues[index][i])}`).join(' ')}
+        ${xyData.map((xy, i) => `${i === 0 ? 'M' : 'L'} ${xScale(xy[0])} ${yScale(xy[1])}`).join(' ')}
       `;
       } else if (fieldSet.lineType === 'linear') {
         // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
         const reg = regression.linear(xyData);
 
@@ -111,7 +116,7 @@ function drawLines(
         path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
       } else if (fieldSet.lineType === 'exponential') {
         // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
         const reg = regression.exponential(xyData);
 
@@ -134,7 +139,7 @@ function drawLines(
       `;
       } else if (fieldSet.lineType === 'power') {
         // using the regression package, first create an array of arrays for the X/Y values
-        const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
         const reg = regression.power(xyData);
 
@@ -186,13 +191,18 @@ function drawDots(options: ScatterOptions,
   fieldSets: FieldSet[],
   xValues: number[],
   yValues: number[][],
+  colValues: number[][],
   xScale: Function,
   yScale: Function) {
   return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
-      if (y.dotSize > 0) {
+      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
+
+      const yValue = yValues[i][j];
+
+      if (dotSize > 0 && yValue != null) {
         let className = `ScatterSet-${i}`;
-        if (options.legend.size && fieldSets[i].hidden) {
+        if (options.legend.size && y.hidden) {
           className += ' ScatterSetHidden';
         }
 
@@ -200,14 +210,14 @@ function drawDots(options: ScatterOptions,
           <circle
             key={`circle-[${y}][${i}]`}
             cx={xScale(x)}
-            cy={yScale(yValues[i][j])}
-            r={y.dotSize}
+            cy={yScale(yValue)}
+            r={dotSize}
             className={className}
             fill={y.color}
           />
         );
       }
-      return null;
+      return <div key={`circle-[${y}][${i}]`}></div>;
     })
   ));
 }
@@ -256,9 +266,9 @@ function onLegendClick(e: React.MouseEvent, index: number, fieldSets: FieldSet[]
   }
 }
 
-function drawLegend(options: ScatterOptions, width: number, height: number, margins: Margins, colNames: string[], panelId: number) {
-  if (options.legend.show) {
-    const scale = options.legend.size / 2;
+function drawLegend(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair, colNames: string[], panelId: number) {
+  if (options.legend.size) {
+    const scale = options.legend.size / 3;
     const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length);
 
     const maxLength = d3.max(fieldSets.map((f) => colNames[f.col].length)) as number;
@@ -267,7 +277,7 @@ function drawLegend(options: ScatterOptions, width: number, height: number, marg
       const offset = 20;
       const dx = offset + (8.6 * scale * maxLength);
 
-      margins.right += dx;
+      xMargins.upper += dx;
 
       const legends = new Array(0);
 
@@ -290,7 +300,7 @@ function drawLegend(options: ScatterOptions, width: number, height: number, marg
       });
 
       return (
-        <g transform={`translate(${width - dx}, ${margins.top})`}>
+        <g transform={`translate(${width - dx}, ${yMargins.upper})`}>
           {legends}
         </g>
       );
@@ -300,18 +310,18 @@ function drawLegend(options: ScatterOptions, width: number, height: number, marg
   return null;
 }
 
-function drawXTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
+function drawXTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair) {
   const title = options.xAxisTitle;
   if (title.text) {
     const scale = title.textSize;
     const dx = 8.2 * scale * title.text.length;
     const dy = 14;
 
-    margins.bottom += dy * scale;
+    yMargins.lower += dy * scale;
 
     return (
       <g
-        transform={`translate(${(width + margins.left - margins.right) / 2.0}, ${height - dy * scale}) scale(${scale})`}
+        transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height - dy * scale}) scale(${scale})`}
       >
         <text
           className="ScatterXTitleRect"
@@ -329,7 +339,7 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, marg
   return null;
 }
 
-function drawYTitle(options: ScatterOptions, width: number, height: number, margins: Margins) {
+function drawYTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair) {
   const title = options.yAxisTitle;
   if (title.text) {
     const scale = title.textSize;
@@ -337,11 +347,11 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, marg
     const dy = 14;
 
     if (options.rotateYAxisTitle) {
-      margins.left += dy * scale;
+      xMargins.lower += dy * scale;
 
       return (
         <g
-          transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) rotate(-90) scale(${scale})`}
+          transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) rotate(-90) scale(${scale})`}
         >
           <text
             className="ScatterXTitleRect"
@@ -356,11 +366,11 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, marg
         </g>
       );
     }
-    margins.left += dx * scale;
+    xMargins.lower += dx * scale;
 
     return (
       <g
-        transform={`translate(0, ${(height - margins.top - margins.bottom) / 2.0}) scale(${scale})`}
+        transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) scale(${scale})`}
       >
         <text
           className="ScatterXTitleRect"
@@ -408,17 +418,17 @@ function generateContent(
       || d3.max(yExtents.map((c) => c[1]) as number[]),
   ] as number[];
 
-  const margins = new Margins(20, 10, 20, 30);
+  const xMargins = new MarginPair(options.xMargins.lower || 0, options.xMargins.upper || 0);
+  const yMargins = new MarginPair(options.yMargins.lower || 0, options.yMargins.upper || 0);
+  const legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
+  const yTitle = drawYTitle(options, width, height, xMargins, yMargins);
+  const xTitle = drawXTitle(options, width, height, xMargins, yMargins);
 
-  const legend = drawLegend(options, width, height, margins, colNames, panelId);
-  const yTitle = drawYTitle(options, width, height, margins);
-  const xTitle = drawXTitle(options, width, height, margins);
-
-  const border = options.border.show ? (
+  const border = options.border.size > 0 ? (
     <rect
-      transform={`translate(${margins.left}, ${margins.top})`}
-      width={width - margins.left - margins.right}
-      height={height - margins.top - margins.bottom}
+      transform={`translate(${xMargins.lower}, ${yMargins.upper})`}
+      width={width - xMargins.lower - xMargins.upper}
+      height={height - yMargins.upper - yMargins.lower}
       stroke={options.border.color}
       strokeWidth={options.border.size}
       fill="none"
@@ -429,10 +439,9 @@ function generateContent(
     <defs>
       <clipPath id="grid">
         <rect
-          x={margins.left}
-          y={margins.top}
-          width={width - margins.left - margins.right}
-          height={height - margins.top - margins.bottom}
+          transform={`translate(${xMargins.lower}, ${yMargins.upper})`}
+          width={width - xMargins.lower - xMargins.upper}
+          height={height - yMargins.upper - yMargins.lower}
         />
       </clipPath>
     </defs>
@@ -443,20 +452,25 @@ function generateContent(
     .nice()
     .domain(xExtent as [number, number])
     .range([
-      options.xAxis.inverted ? (width - margins.right) : margins.left,
-      options.xAxis.inverted ? margins.left : (width - margins.right),
+      options.xAxis.inverted ? (width - xMargins.upper) : xMargins.lower,
+      options.xAxis.inverted ? xMargins.lower : (width - xMargins.upper),
     ]);
 
-  const xAxis = d3.axisBottom(xScale).tickSize(margins.top + margins.bottom - height);
+  let xAxis = d3.axisBottom(xScale);
+  
+  if (options.label.col >= 0)
+    xAxis = xAxis.ticks(0);
+  else
+    xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
 
   const yScale = d3
     .scaleLinear()
     .nice()
     .domain(yExtent as [number, number])
-    .range([height - margins.bottom, margins.top]);
+    .range([height - yMargins.lower, yMargins.upper]);
 
-  const yAxis = d3.axisLeft(yScale).tickSize(margins.left + margins.right - width);
-
+  let yAxis = d3.axisLeft(yScale).tickSize(xMargins.lower + xMargins.upper - width);
+  
   return (
     <svg
       width={width}
@@ -467,16 +481,16 @@ function generateContent(
         {xTitle}
         {yTitle}
         <g
-          transform={`translate(0, ${height - margins.bottom})`}
+          transform={`translate(0, ${height - yMargins.lower})`}
           ref={(node) => {
-            d3.select(node)
+            d3.select(node)  
               .call(xAxis as any)
               .selectAll('line')
               .attr('stroke', options.grid.color);
           }}
         />
         <g
-          transform={`translate(${margins.left}, 0)`}
+          transform={`translate(${xMargins.lower}, 0)`}
           ref={(node) => {
             d3.select(node)
               .call(yAxis as any)
@@ -490,7 +504,7 @@ function generateContent(
           {drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
         </g>
         <g>
-          {drawDots(options, visibleFieldSets, xValues, yValues, xScale, yScale)}
+          {drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale)}
         </g>
       </g>
     </svg>
@@ -510,7 +524,7 @@ export const ScatterPanel: React.FC<Props> = ({
       colData.push(new ColData(
         field.name,
         field.config?.displayName || field.name,
-        field.values.toArray().map(Number),
+        field.values.toArray().map(v => v as number),
       ));
     });
 

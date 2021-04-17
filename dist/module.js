@@ -1,2 +1,3082 @@
-define(["react","@grafana/ui","d3","jquery","@grafana/data"],(function(e,t,n,r,a){return function(e){var t={};function n(r){if(t[r])return t[r].exports;var a=t[r]={i:r,l:!1,exports:{}};return e[r].call(a.exports,a,a.exports,n),a.l=!0,a.exports}return n.m=e,n.c=t,n.d=function(e,t,r){n.o(e,t)||Object.defineProperty(e,t,{enumerable:!0,get:r})},n.r=function(e){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},n.t=function(e,t){if(1&t&&(e=n(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var r=Object.create(null);if(n.r(r),Object.defineProperty(r,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var a in e)n.d(r,a,function(t){return e[t]}.bind(null,a));return r},n.n=function(e){var t=e&&e.__esModule?function(){return e.default}:function(){return e};return n.d(t,"a",t),t},n.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},n.p="/",n(n.s=12)}([function(t,n){t.exports=e},function(e,n){e.exports=t},function(e,t){e.exports=n},function(e,t){e.exports=r},function(e,t,n){var r,a,i;a=[e],void 0===(i="function"==typeof(r=function(e){"use strict";var t=Object.assign||function(e){for(var t=1;t<arguments.length;t++){var n=arguments[t];for(var r in n)Object.prototype.hasOwnProperty.call(n,r)&&(e[r]=n[r])}return e};function n(e){if(Array.isArray(e)){for(var t=0,n=Array(e.length);t<e.length;t++)n[t]=e[t];return n}return Array.from(e)}var r={order:2,precision:2,period:null};function a(e,t){var n=[],r=[];e.forEach((function(e,a){null!==e[1]&&(r.push(e),n.push(t[a]))}));var a=r.reduce((function(e,t){return e+t[1]}),0)/r.length,i=r.reduce((function(e,t){var n=t[1]-a;return e+n*n}),0);return 1-r.reduce((function(e,t,r){var a=n[r],i=t[1]-a[1];return e+i*i}),0)/i}function i(e,t){var n=Math.pow(10,t);return Math.round(e*n)/n}var o={linear:function(e,t){for(var n=[0,0,0,0,0],r=0,o=0;o<e.length;o++)null!==e[o][1]&&(r++,n[0]+=e[o][0],n[1]+=e[o][1],n[2]+=e[o][0]*e[o][0],n[3]+=e[o][0]*e[o][1],n[4]+=e[o][1]*e[o][1]);var l=r*n[2]-n[0]*n[0],c=r*n[3]-n[0]*n[1],s=0===l?0:i(c/l,t.precision),u=i(n[1]/r-s*n[0]/r,t.precision),d=function(e){return[i(e,t.precision),i(s*e+u,t.precision)]},f=e.map((function(e){return d(e[0])}));return{points:f,predict:d,equation:[s,u],r2:i(a(e,f),t.precision),string:0===u?"y = "+s+"x":"y = "+s+"x + "+u}},exponential:function(e,t){for(var n=[0,0,0,0,0,0],r=0;r<e.length;r++)null!==e[r][1]&&(n[0]+=e[r][0],n[1]+=e[r][1],n[2]+=e[r][0]*e[r][0]*e[r][1],n[3]+=e[r][1]*Math.log(e[r][1]),n[4]+=e[r][0]*e[r][1]*Math.log(e[r][1]),n[5]+=e[r][0]*e[r][1]);var o=n[1]*n[2]-n[5]*n[5],l=Math.exp((n[2]*n[3]-n[5]*n[4])/o),c=(n[1]*n[4]-n[5]*n[3])/o,s=i(l,t.precision),u=i(c,t.precision),d=function(e){return[i(e,t.precision),i(s*Math.exp(u*e),t.precision)]},f=e.map((function(e){return d(e[0])}));return{points:f,predict:d,equation:[s,u],string:"y = "+s+"e^("+u+"x)",r2:i(a(e,f),t.precision)}},logarithmic:function(e,t){for(var n=[0,0,0,0],r=e.length,o=0;o<r;o++)null!==e[o][1]&&(n[0]+=Math.log(e[o][0]),n[1]+=e[o][1]*Math.log(e[o][0]),n[2]+=e[o][1],n[3]+=Math.pow(Math.log(e[o][0]),2));var l=i((r*n[1]-n[2]*n[0])/(r*n[3]-n[0]*n[0]),t.precision),c=i((n[2]-l*n[0])/r,t.precision),s=function(e){return[i(e,t.precision),i(i(c+l*Math.log(e),t.precision),t.precision)]},u=e.map((function(e){return s(e[0])}));return{points:u,predict:s,equation:[c,l],string:"y = "+c+" + "+l+" ln(x)",r2:i(a(e,u),t.precision)}},power:function(e,t){for(var n=[0,0,0,0,0],r=e.length,o=0;o<r;o++)null!==e[o][1]&&(n[0]+=Math.log(e[o][0]),n[1]+=Math.log(e[o][1])*Math.log(e[o][0]),n[2]+=Math.log(e[o][1]),n[3]+=Math.pow(Math.log(e[o][0]),2));var l=(r*n[1]-n[0]*n[2])/(r*n[3]-Math.pow(n[0],2)),c=(n[2]-l*n[0])/r,s=i(Math.exp(c),t.precision),u=i(l,t.precision),d=function(e){return[i(e,t.precision),i(i(s*Math.pow(e,u),t.precision),t.precision)]},f=e.map((function(e){return d(e[0])}));return{points:f,predict:d,equation:[s,u],string:"y = "+s+"x^"+u,r2:i(a(e,f),t.precision)}},polynomial:function(e,t){for(var r=[],o=[],l=0,c=0,s=e.length,u=t.order+1,d=0;d<u;d++){for(var f=0;f<s;f++)null!==e[f][1]&&(l+=Math.pow(e[f][0],d)*e[f][1]);r.push(l),l=0;for(var p=[],m=0;m<u;m++){for(var h=0;h<s;h++)null!==e[h][1]&&(c+=Math.pow(e[h][0],d+m));p.push(c),c=0}o.push(p)}o.push(r);for(var g=function(e,t){for(var n=e,r=e.length-1,a=[t],i=0;i<r;i++){for(var o=i,l=i+1;l<r;l++)Math.abs(n[i][l])>Math.abs(n[i][o])&&(o=l);for(var c=i;c<r+1;c++){var s=n[c][i];n[c][i]=n[c][o],n[c][o]=s}for(var u=i+1;u<r;u++)for(var d=r;d>=i;d--)n[d][u]-=n[d][i]*n[i][u]/n[i][i]}for(var f=r-1;f>=0;f--){for(var p=0,m=f+1;m<r;m++)p+=n[m][f]*a[m];a[f]=(n[r][f]-p)/n[f][f]}return a}(o,u).map((function(e){return i(e,t.precision)})),x=function(e){return[i(e,t.precision),i(g.reduce((function(t,n,r){return t+n*Math.pow(e,r)}),0),t.precision)]},v=e.map((function(e){return x(e[0])})),A="y = ",S=g.length-1;S>=0;S--)A+=S>1?g[S]+"x^"+S+" + ":1===S?g[S]+"x + ":g[S];return{string:A,points:v,predict:x,equation:[].concat(n(g)).reverse(),r2:i(a(e,v),t.precision)}}};e.exports=Object.keys(o).reduce((function(e,n){return t({_round:i},e,(c=function(e,a){return o[n](e,t({},r,a))},(l=n)in(a={})?Object.defineProperty(a,l,{value:c,enumerable:!0,configurable:!0,writable:!0}):a[l]=c,a));var a,l,c}),{})})?r.apply(t,a):r)||(e.exports=i)},function(e,t,n){(function(e){var n;n=function(){var e=null,t={};o("monochrome",null,[[0,0],[100,0]]),o("red",[-26,18],[[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]),o("orange",[18,46],[[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]),o("yellow",[46,62],[[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]),o("green",[62,178],[[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]),o("blue",[178,257],[[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]),o("purple",[257,282],[[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]),o("pink",[282,334],[[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]);var n=[],r=function(o){if(void 0!==(o=o||{}).seed&&null!==o.seed&&o.seed===parseInt(o.seed,10))e=o.seed;else if("string"==typeof o.seed)e=function(e){for(var t=0,n=0;n!==e.length&&!(t>=Number.MAX_SAFE_INTEGER);n++)t+=e.charCodeAt(n);return t}(o.seed);else{if(void 0!==o.seed&&null!==o.seed)throw new TypeError("The seed value must be an integer or string");e=null}var u,d;if(null!==o.count&&void 0!==o.count){for(var f=o.count,p=[],m=0;m<o.count;m++)n.push(!1);for(o.count=null;f>p.length;){var h=r(o);null!==e&&(o.seed=e),p.push(h)}return o.count=f,p}return function(e,t){switch(t.format){case"hsvArray":return e;case"hslArray":return s(e);case"hsl":var n=s(e);return"hsl("+n[0]+", "+n[1]+"%, "+n[2]+"%)";case"hsla":var r=s(e),a=t.alpha||Math.random();return"hsla("+r[0]+", "+r[1]+"%, "+r[2]+"%, "+a+")";case"rgbArray":return l(e);case"rgb":return"rgb("+l(e).join(", ")+")";case"rgba":var i=l(e);return a=t.alpha||Math.random(),"rgba("+i.join(", ")+", "+a+")";default:return function(e){var t=l(e);function n(e){var t=e.toString(16);return 1==t.length?"0"+t:t}return"#"+n(t[0])+n(t[1])+n(t[2])}(e)}}([u=function(e){if(n.length>0){var r=i(d=function(e){if(isNaN(e)){if("string"==typeof e)if(t[e]){var n=t[e];if(n.hueRange)return n.hueRange}else if(e.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i))return a(c(e)[0]).hueRange}else{var r=parseInt(e);if(r<360&&r>0)return a(e).hueRange}return[0,360]}(e.hue)),o=(d[1]-d[0])/n.length,l=parseInt((r-d[0])/o);!0===n[l]?l=(l+2)%n.length:n[l]=!0;var s=(d[0]+l*o)%359,u=(d[0]+(l+1)*o)%359;return(r=i(d=[s,u]))<0&&(r=360+r),r}var d=function(e){if("number"==typeof parseInt(e)){var n=parseInt(e);if(n<360&&n>0)return[n,n]}if("string"==typeof e)if(t[e]){var r=t[e];if(r.hueRange)return r.hueRange}else if(e.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)){var a=c(e)[0];return[a,a]}return[0,360]}(e.hue);return(r=i(d))<0&&(r=360+r),r}(o),d=function(e,t){if("monochrome"===t.hue)return 0;if("random"===t.luminosity)return i([0,100]);var n=function(e){return a(e).saturationRange}(e),r=n[0],o=n[1];switch(t.luminosity){case"bright":r=55;break;case"dark":r=o-10;break;case"light":o=55}return i([r,o])}(u,o),function(e,t,n){var r=function(e,t){for(var n=a(e).lowerBounds,r=0;r<n.length-1;r++){var i=n[r][0],o=n[r][1],l=n[r+1][0],c=n[r+1][1];if(t>=i&&t<=l){var s=(c-o)/(l-i);return s*t+(o-s*i)}}return 0}(e,t),o=100;switch(n.luminosity){case"dark":o=r+20;break;case"light":r=(o+r)/2;break;case"random":r=0,o=100}return i([r,o])}(u,d,o)],o)};function a(e){for(var n in e>=334&&e<=360&&(e-=360),t){var r=t[n];if(r.hueRange&&e>=r.hueRange[0]&&e<=r.hueRange[1])return t[n]}return"Color not found"}function i(t){if(null===e){var n=Math.random();return n+=.618033988749895,n%=1,Math.floor(t[0]+n*(t[1]+1-t[0]))}var r=t[1]||1,a=t[0]||0,i=(e=(9301*e+49297)%233280)/233280;return Math.floor(a+i*(r-a))}function o(e,n,r){var a=r[0][0],i=r[r.length-1][0],o=r[r.length-1][1],l=r[0][1];t[e]={hueRange:n,lowerBounds:r,saturationRange:[a,i],brightnessRange:[o,l]}}function l(e){var t=e[0];0===t&&(t=1),360===t&&(t=359),t/=360;var n=e[1]/100,r=e[2]/100,a=Math.floor(6*t),i=6*t-a,o=r*(1-n),l=r*(1-i*n),c=r*(1-(1-i)*n),s=256,u=256,d=256;switch(a){case 0:s=r,u=c,d=o;break;case 1:s=l,u=r,d=o;break;case 2:s=o,u=r,d=c;break;case 3:s=o,u=l,d=r;break;case 4:s=c,u=o,d=r;break;case 5:s=r,u=o,d=l}return[Math.floor(255*s),Math.floor(255*u),Math.floor(255*d)]}function c(e){e=3===(e=e.replace(/^#/,"")).length?e.replace(/(.)/g,"$1$1"):e;var t=parseInt(e.substr(0,2),16)/255,n=parseInt(e.substr(2,2),16)/255,r=parseInt(e.substr(4,2),16)/255,a=Math.max(t,n,r),i=a-Math.min(t,n,r),o=a?i/a:0;switch(a){case t:return[(n-r)/i%6*60||0,o,a];case n:return[60*((r-t)/i+2)||0,o,a];case r:return[60*((t-n)/i+4)||0,o,a]}}function s(e){var t=e[0],n=e[1]/100,r=e[2]/100,a=(2-n)*r;return[t,Math.round(n*r/(a<1?a:2-a)*1e4)/100,a/2*100]}return r}(),e&&e.exports&&(t=e.exports=n),t.randomColor=n}).call(this,n(11)(e))},function(e,t){e.exports=a},function(e,t,n){var r=n(8),a=n(9);"string"==typeof(a=a.__esModule?a.default:a)&&(a=[[e.i,a,""]]);var i={insert:"head",singleton:!1},o=(r(a,i),a.locals?a.locals:{});e.exports=o},function(e,t,n){"use strict";var r,a=function(){return void 0===r&&(r=Boolean(window&&document&&document.all&&!window.atob)),r},i=function(){var e={};return function(t){if(void 0===e[t]){var n=document.querySelector(t);if(window.HTMLIFrameElement&&n instanceof window.HTMLIFrameElement)try{n=n.contentDocument.head}catch(e){n=null}e[t]=n}return e[t]}}(),o=[];function l(e){for(var t=-1,n=0;n<o.length;n++)if(o[n].identifier===e){t=n;break}return t}function c(e,t){for(var n={},r=[],a=0;a<e.length;a++){var i=e[a],c=t.base?i[0]+t.base:i[0],s=n[c]||0,u="".concat(c," ").concat(s);n[c]=s+1;var d=l(u),f={css:i[1],media:i[2],sourceMap:i[3]};-1!==d?(o[d].references++,o[d].updater(f)):o.push({identifier:u,updater:g(f,t),references:1}),r.push(u)}return r}function s(e){var t=document.createElement("style"),r=e.attributes||{};if(void 0===r.nonce){var a=n.nc;a&&(r.nonce=a)}if(Object.keys(r).forEach((function(e){t.setAttribute(e,r[e])})),"function"==typeof e.insert)e.insert(t);else{var o=i(e.insert||"head");if(!o)throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");o.appendChild(t)}return t}var u,d=(u=[],function(e,t){return u[e]=t,u.filter(Boolean).join("\n")});function f(e,t,n,r){var a=n?"":r.media?"@media ".concat(r.media," {").concat(r.css,"}"):r.css;if(e.styleSheet)e.styleSheet.cssText=d(t,a);else{var i=document.createTextNode(a),o=e.childNodes;o[t]&&e.removeChild(o[t]),o.length?e.insertBefore(i,o[t]):e.appendChild(i)}}function p(e,t,n){var r=n.css,a=n.media,i=n.sourceMap;if(a?e.setAttribute("media",a):e.removeAttribute("media"),i&&btoa&&(r+="\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(i))))," */")),e.styleSheet)e.styleSheet.cssText=r;else{for(;e.firstChild;)e.removeChild(e.firstChild);e.appendChild(document.createTextNode(r))}}var m=null,h=0;function g(e,t){var n,r,a;if(t.singleton){var i=h++;n=m||(m=s(t)),r=f.bind(null,n,i,!1),a=f.bind(null,n,i,!0)}else n=s(t),r=p.bind(null,n,t),a=function(){!function(e){if(null===e.parentNode)return!1;e.parentNode.removeChild(e)}(n)};return r(e),function(t){if(t){if(t.css===e.css&&t.media===e.media&&t.sourceMap===e.sourceMap)return;r(e=t)}else a()}}e.exports=function(e,t){(t=t||{}).singleton||"boolean"==typeof t.singleton||(t.singleton=a());var n=c(e=e||[],t);return function(e){if(e=e||[],"[object Array]"===Object.prototype.toString.call(e)){for(var r=0;r<n.length;r++){var a=l(n[r]);o[a].references--}for(var i=c(e,t),s=0;s<n.length;s++){var u=l(n[s]);0===o[u].references&&(o[u].updater(),o.splice(u,1))}n=i}}}},function(e,t,n){(t=n(10)(!0)).push([e.i,".FieldSetEditor{margin-bottom:25px}.ScatterFlex{display:flex;flex-wrap:nowrap;padding:1px}.ScatterSize{width:115px}.ScatterSize input{width:55px}.ScatterLineType{width:190px}.ScatterDotColor{padding-top:7px}.ScatterSelect{width:100%}.ScatterExtents{display:flex}.ScatterExtentLimit{padding-right:20px}.ScatterLabel{padding-top:6px;width:90px;color:#9fa7b3;font-size:12px;text-align:center}.ScatterCheckbox{padding-top:6px;padding-left:5px;width:55px;color:#9fa7b3;font-size:12px}.ScatterFlex label{margin-top:5px}.ScatterSetHidden{fill:rgba(119,119,119,0.25)}.ScatterLine{fill:none}.ScatterLineHidden{opacity:0.25;stroke-width:1px}.TitleEditor{display:flex}.TitleText{padding-right:20px}.TitleSize{padding-right:20px;max-width:70px}.TitleColor{padding-top:7px}.TitleLabel{padding-top:8px;color:#777;font-size:smaller}.ScatterLegend input{width:50px}.ScatterLegendText{border:1px solid #fff}.ScatterLegendTextHidden{fill:rgba(119,119,119,0.25)}\n","",{version:3,sources:["ScatterPanel.css"],names:[],mappings:"AAAA,gBAAgB,kBAAkB,CAAC,aAAa,YAAY,CAAC,gBAAgB,CAAC,WAAW,CAAC,aAAa,WAAW,CAAC,mBAAmB,UAAU,CAAC,iBAAiB,WAAW,CAAC,iBAAiB,eAAe,CAAC,eAAe,UAAU,CAAC,gBAAgB,YAAY,CAAC,oBAAoB,kBAAkB,CAAC,cAAc,eAAe,CAAC,UAAU,CAAC,aAAa,CAAC,cAAc,CAAC,iBAAiB,CAAC,iBAAiB,eAAe,CAAC,gBAAgB,CAAC,UAAU,CAAC,aAAa,CAAC,cAAc,CAAC,mBAAmB,cAAc,CAAC,kBAAkB,2BAA2B,CAAC,aAAa,SAAS,CAAC,mBAAmB,YAAY,CAAC,gBAAgB,CAAC,aAAa,YAAY,CAAC,WAAW,kBAAkB,CAAC,WAAW,kBAAkB,CAAC,cAAc,CAAC,YAAY,eAAe,CAAC,YAAY,eAAe,CAAC,UAAU,CAAC,iBAAiB,CAAC,qBAAqB,UAAU,CAAC,mBAAmB,qBAAqB,CAAC,yBAAyB,2BAA2B",file:"ScatterPanel.css",sourcesContent:[".FieldSetEditor{margin-bottom:25px}.ScatterFlex{display:flex;flex-wrap:nowrap;padding:1px}.ScatterSize{width:115px}.ScatterSize input{width:55px}.ScatterLineType{width:190px}.ScatterDotColor{padding-top:7px}.ScatterSelect{width:100%}.ScatterExtents{display:flex}.ScatterExtentLimit{padding-right:20px}.ScatterLabel{padding-top:6px;width:90px;color:#9fa7b3;font-size:12px;text-align:center}.ScatterCheckbox{padding-top:6px;padding-left:5px;width:55px;color:#9fa7b3;font-size:12px}.ScatterFlex label{margin-top:5px}.ScatterSetHidden{fill:rgba(119,119,119,0.25)}.ScatterLine{fill:none}.ScatterLineHidden{opacity:0.25;stroke-width:1px}.TitleEditor{display:flex}.TitleText{padding-right:20px}.TitleSize{padding-right:20px;max-width:70px}.TitleColor{padding-top:7px}.TitleLabel{padding-top:8px;color:#777;font-size:smaller}.ScatterLegend input{width:50px}.ScatterLegendText{border:1px solid #fff}.ScatterLegendTextHidden{fill:rgba(119,119,119,0.25)}\n"]}]),e.exports=t},function(e,t,n){"use strict";e.exports=function(e){var t=[];return t.toString=function(){return this.map((function(t){var n=function(e,t){var n=e[1]||"",r=e[3];if(!r)return n;if(t&&"function"==typeof btoa){var a=(o=r,l=btoa(unescape(encodeURIComponent(JSON.stringify(o)))),c="sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(l),"/*# ".concat(c," */")),i=r.sources.map((function(e){return"/*# sourceURL=".concat(r.sourceRoot||"").concat(e," */")}));return[n].concat(i).concat([a]).join("\n")}var o,l,c;return[n].join("\n")}(t,e);return t[2]?"@media ".concat(t[2]," {").concat(n,"}"):n})).join("")},t.i=function(e,n,r){"string"==typeof e&&(e=[[null,e,""]]);var a={};if(r)for(var i=0;i<this.length;i++){var o=this[i][0];null!=o&&(a[o]=!0)}for(var l=0;l<e.length;l++){var c=[].concat(e[l]);r&&a[c[0]]||(n&&(c[2]?c[2]="".concat(n," and ").concat(c[2]):c[2]=n),t.push(c))}},t}},function(e,t){e.exports=function(e){return e.webpackPolyfill||(e.deprecate=function(){},e.paths=[],e.children||(e.children=[]),Object.defineProperty(e,"loaded",{enumerable:!0,get:function(){return e.l}}),Object.defineProperty(e,"id",{enumerable:!0,get:function(){return e.i}}),e.webpackPolyfill=1),e}},function(e,t,n){"use strict";n.r(t);var r=n(6),a=n(0),i=n(1),o=function(e){var t=e.value,n=e.onChange;return a.createElement("div",{className:"ScatterExtents"},a.createElement("div",{className:"ScatterExtentLimit"},a.createElement(i.Input,{css:"",type:"number",value:t.min,title:"Axis Min (leave blank for auto)",onChange:function(e){t.min=e.target.valueAsNumber,n(t)}})),a.createElement("div",{className:"ScatterExtentLimit"},a.createElement(i.Input,{css:"",className:"ScatterExtentLimit",type:"number",value:t.max,title:"Axis Max (leave blank for auto)",onChange:function(e){t.max=e.target.valueAsNumber,n(t)}})))},l=function(e){var t=e.value,n=e.onChange;return a.createElement("div",{className:"TitleEditor"},a.createElement("div",{className:"TitleText"},a.createElement(i.Input,{css:"",type:"string",value:t.text,onChange:function(e){t.text=e.target.value,n(t)}})),a.createElement("div",{className:"TitleLabel"},"Size"),a.createElement("div",{className:"TitleSize"},a.createElement(i.Input,{css:"",type:"number",label:"Size",min:0,max:10,value:t.textSize,onChange:function(e){t.textSize=e.target.valueAsNumber,n(t)}})),a.createElement("div",{className:"TitleColor"},a.createElement(i.ColorPicker,{color:t.color,enableNamedColors:!1,onChange:function(e){t.color=e,n(t)}})))},c=function(e){var t=e.value,n=e.onChange,r=t.show?a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterLabel"},"Text Size"),a.createElement(i.Input,{css:"",className:"ScatterLegendSize",type:"number",value:t.size,min:1,max:10,title:"Legend Text Size",onChange:function(e){t.size=e.target.valueAsNumber,n(t)}})):null;return a.createElement("div",{className:"ScatterLegend ScatterFlex"},a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterCheckbox"},"Show"),a.createElement(i.Checkbox,{css:"",value:t.show,onChange:function(e){t.show=e.currentTarget.checked,n(t)}})),r)},s=function(e){var t=e.value,n=e.onChange,r=t.show?a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterLabel"},"Size"),a.createElement(i.Input,{css:"",className:"ScatterLegendSize",type:"number",value:t.size,min:1,max:10,title:"Legend Text Size",onChange:function(e){t.size=e.target.valueAsNumber,n(t)}}),a.createElement("div",{className:"ScatterDotColor"},a.createElement(i.ColorPicker,{color:t.color,enableNamedColors:!1,onChange:function(e){t.color=e,n(t)}}))):null;return a.createElement("div",{className:"ScatterBorder ScatterFlex"},a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterCheckbox"},"Show"),a.createElement(i.Checkbox,{css:"",value:t.show,onChange:function(e){t.show=e.currentTarget.checked,n(t)}})),r)},u=function(e){var t=e.value,n=e.onChange;return a.createElement("div",{className:"ScatterBorder ScatterFlex"},a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterCheckbox"},"Color"),a.createElement("div",{className:"ScatterDotColor"},a.createElement(i.ColorPicker,{color:t.color,enableNamedColors:!1,onChange:function(e){t.color=e,n(t)}}))))},d=function(e,t,n){this.show=e,this.color=t,this.size=n},f=function(e,t){this.col=e,this.inverted=t},p=function(e,t,n){this.text=e,this.color=t,this.textSize=n},m=function(e){this.color=e},h=function(e,t){this.show=e,this.size=t},g=function(e,t){this.min=e,this.max=t},x=n(3),v=n.n(x),A=n(2),S=n(4),C=n.n(S),b=function(e,t,n){this.name=e,this.displayName=t,this.values=n},E=function(e,t,n,r){this.top=e,this.right=t,this.bottom=n,this.left=r},y=function(e,t,n,r,a,i){this.col=e,this.color=t,this.dotSize=n,this.lineSize=r,this.lineType=a,this.hidden=i},w=(n(7),n(5));function N(e,t){return e.equation[0]*t+e.equation[1]}function T(e,t){return(t-e.equation[1])/e.equation[0]}function L(e,t){return e.equation[0]*Math.exp(e.equation[1]*t)}function M(e,t){return e.equation[0]*Math.pow(t,e.equation[1])}function B(e,t,n,r){e.hidden=n;var a=v()(".ScatterPanel-"+r),i=v()(".ScatterSet-"+t,a);n?i.addClass("ScatterSetHidden"):i.removeClass("ScatterSetHidden");var o=v()(".ScatterLine-"+t,a);n?o.addClass("ScatterLineHidden"):o.removeClass("ScatterLineHidden")}function k(e,t,n,r,i,o){if(e.legend.show){var l=e.legend.size/2,c=e.fieldSets.filter((function(e){return e.col>=0&&e.col<i.length})),s=A.max(c.map((function(e){return i[e.col].length})));if(c.length>0){var u=20+8.6*l*s;r.right+=u;var d=new Array(0);return c.forEach((function(e,t){var n=e.hidden?"ScatterLegendText ScatterLegendTextHidden":"ScatterLegendText";d.push(a.createElement("text",{transform:"translate(20, "+30*l*t+") scale("+l+")",className:n,alignmentBaseline:"hanging",textAnchor:"left",fill:e.color,onClick:function(e){!function(e,t,n,r){var a=v()(e.currentTarget),i=a.parent(),o=v()(".ScatterLegendText",i),l=o.filter(".ScatterLegendTextHidden");e.ctrlKey?(a.toggleClass("ScatterLegendTextHidden"),B(n[t],t,!n[t].hidden,r)):0===l.length||a.hasClass("ScatterLegendTextHidden")?(o.addClass("ScatterLegendTextHidden"),a.toggleClass("ScatterLegendTextHidden"),n.forEach((function(e,n){B(e,n,t!==n,r)}))):(o.removeClass("ScatterLegendTextHidden"),n.forEach((function(e,t){B(e,t,!1,r)})))}(e,t,c,o)}},i[e.col]))})),a.createElement("g",{transform:"translate("+(t-u)+", "+r.top+")"},d)}}return null}function z(e,t,n,r,i,o){var l=r,c=i.map((function(e){return e.values})),s=i.map((function(e){return e.displayName||e.name})),u=c[e.xAxis.col],d=[0===e.xAxisExtents.min?0:e.xAxisExtents.min||A.min(u),0===e.xAxisExtents.max?0:e.xAxisExtents.max||A.max(u)],f=l.map((function(e){return c[e.col]})),p=f.map((function(e){return A.extent(e)})),m=[0===e.yAxisExtents.min?0:e.yAxisExtents.min||A.min(p.map((function(e){return e[0]}))),0===e.yAxisExtents.max?0:e.yAxisExtents.max||A.max(p.map((function(e){return e[1]})))],h=new E(20,10,20,30),g=k(e,t,0,h,s,o),x=function(e,t,n,r){var i=e.yAxisTitle;if(i.text){var o=i.textSize,l=8.2*i.text.length;return e.rotateYAxisTitle?(r.left+=14*o,a.createElement("g",{transform:"translate(0, "+(n-r.top-r.bottom)/2+") rotate(-90) scale("+o+")"},a.createElement("text",{className:"ScatterXTitleRect",alignmentBaseline:"hanging",textAnchor:"middle",width:l,height:14,fill:i.color},i.text))):(r.left+=l*o,a.createElement("g",{transform:"translate(0, "+(n-r.top-r.bottom)/2+") scale("+o+")"},a.createElement("text",{className:"ScatterXTitleRect",textAnchor:"left",width:l,height:14,fill:i.color},i.text)))}return null}(e,0,n,h),v=function(e,t,n,r){var i=e.xAxisTitle;if(i.text){var o=i.textSize,l=8.2*o*i.text.length;return r.bottom+=14*o,a.createElement("g",{transform:"translate("+(t+r.left-r.right)/2+", "+(n-14*o)+") scale("+o+")"},a.createElement("text",{className:"ScatterXTitleRect",alignmentBaseline:"hanging",textAnchor:"middle",width:l,height:14,fill:i.color},i.text))}return null}(e,t,n,h),S=e.border.show?a.createElement("rect",{transform:"translate("+h.left+", "+h.top+")",width:t-h.left-h.right,height:n-h.top-h.bottom,stroke:e.border.color,strokeWidth:e.border.size,fill:"none"}):null,b=a.createElement("defs",null,a.createElement("clipPath",{id:"grid"},a.createElement("rect",{x:h.left,y:h.top,width:t-h.left-h.right,height:n-h.top-h.bottom}))),y=A.scaleLinear().nice().domain(d).range([e.xAxis.inverted?t-h.right:h.left,e.xAxis.inverted?h.left:t-h.right]),w=A.axisBottom(y).tickSize(h.top+h.bottom-n),B=A.scaleLinear().nice().domain(m).range([n-h.bottom,h.top]),z=A.axisLeft(B).tickSize(h.left+h.right-t);return a.createElement("svg",{width:t,height:n},a.createElement("g",{className:"ScatterPanel-"+o},g,v,x,a.createElement("g",{transform:"translate(0, "+(n-h.bottom)+")",ref:function(t){A.select(t).call(w).selectAll("line").attr("stroke",e.grid.color)}}),a.createElement("g",{transform:"translate("+h.left+", 0)",ref:function(t){A.select(t).call(z).selectAll("line").attr("stroke",e.grid.color)}}),b,S,a.createElement("g",null,function(e,t,n,r,i,o,l,c){var s=new Array(0);return t.forEach((function(u,d){var f=t[d];if("none"!==f.lineType&&f.lineSize>0){var p="";if("simple"===f.lineType)p="\n        "+n.map((function(e,t){return(0===t?"M":"L")+" "+i(e)+" "+o(r[d][t])})).join(" ")+"\n      ";else if("linear"===f.lineType){var m=n.map((function(e,t){return[e,r[d][t]]})),h=N(x=C.a.linear(m),E=l[0]);h<c[0]&&(E=T(x,h=c[0])),h>c[1]&&(E=T(x,h=c[1]));var g=N(x,y=l[1]);g<c[0]&&(y=T(x,g=c[0])),g>c[1]&&(y=T(x,g=c[1])),p="M "+i(E)+" "+o(h)+" L "+i(y)+" "+o(g)}else if("exponential"===f.lineType){m=n.map((function(e,t){return[e,r[d][t]]}));for(var x=C.a.exponential(m),v=(E=l[0])+((y=l[1])-E)/(w=50),A=new Array(0),S=0;S<w;S++){var b=L(x,B=E+S*v);A.push([B,b])}p="\n        "+A.map((function(e,t){return(0===t?"M":"L")+" "+i(e[0])+" "+o(e[1])})).join(" ")+"\n      "}else if("power"===f.lineType){var E;m=n.map((function(e,t){return[e,r[d][t]]})),x=C.a.power(m);(E=l[0])<0&&(E=0);var y,w;for(v=E+((y=l[1])-E)/(w=100),A=new Array(0),S=0;S<w;S++){var B;b=M(x,B=E+S*v);A.push([B,b])}p="\n        "+A.map((function(e,t){return(0===t?"M":"L")+" "+i(e[0])+" "+o(e[1])})).join(" ")+"\n      "}if(p.length){var k="ScatterLine ScatterLine-"+d;e.legend.size&&f.hidden&&(k+=" ScatterLineHidden"),s.push(a.createElement("path",{className:k,d:p,stroke:f.color,strokeWidth:f.lineSize,fill:"none"}))}}})),a.createElement("g",{clipPath:"url(#grid)"},s)}(e,l,u,f,y,B,d,m)),a.createElement("g",null,function(e,t,n,r,i,o){return t.map((function(l,c){return n.map((function(n,s){if(l.dotSize>0){var u="ScatterSet-"+c;return e.legend.size&&t[c].hidden&&(u+=" ScatterSetHidden"),a.createElement("circle",{key:"circle-["+l+"]["+c+"]",cx:i(n),cy:o(r[c][s]),r:l.dotSize,className:u,fill:l.color})}return null}))}))}(e,l,u,f,y,B))))}var F=function(e){var t=e.onChange,n=e.context;if(n.data&&n.data.length>0){var r=n.options.xAxis,o=n.data.flatMap((function(e){return e.fields})).map((function(e,t){var n;return{label:(null===(n=e.config)||void 0===n?void 0:n.displayName)?e.config.displayName:e.name,value:t}}));return a.createElement("div",{className:"XAxisEditor"},a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterSelect"},a.createElement(i.Select,{isLoading:!1,value:r.col,onChange:function(e){r.col=e.value,t(r)},options:o})),a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterCheckbox",title:"Draw X axis right to left"},"Inverted"),a.createElement(i.Checkbox,{css:"",value:r.inverted,onChange:function(e){r.inverted=e.currentTarget.checked,t(r)}}))))}return a.createElement(i.Select,{onChange:function(){},disabled:!0})},j=n(5),P=function(e){var t=e.item,n=e.onChange,r=e.context;if(r.data&&r.data.length>0){var o=r.data.flatMap((function(e){return e.fields})).map((function(e,t){var n;return{label:(null===(n=e.config)||void 0===n?void 0:n.displayName)?e.config.displayName:e.name,value:t}})),l=new Array(0),c=r.options.fieldSets.filter((function(e){return null!=e.col}));c&&c.forEach((function(e,t){var r="none"===c[t].lineType?null:a.createElement("div",{className:"ScatterFlex ScatterSize"},a.createElement("div",{className:"ScatterLabel"},"Size"),a.createElement(i.Input,{css:"",type:"number",label:"Line Size",value:c[t].lineSize,min:1,max:10,title:"Set size of line",onChange:function(e){c[t].lineSize=e.target.valueAsNumber,n(c)}}));l.push(a.createElement("div",{className:"FieldSetEditor"},a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterSelect"},a.createElement(i.Select,{isLoading:!1,value:c[t].col,isClearable:c.length>1,onChange:function(e){e?c[t].col=e.value:c.splice(t,1),n(c)},options:o})),a.createElement("div",{className:"ScatterDotColor"},a.createElement(i.ColorPicker,{color:c[t].color,enableNamedColors:!1,onChange:function(e){c[t].color=e,n(c)}})),a.createElement("div",{className:"ScatterFlex ScatterSize"},a.createElement("div",{className:"ScatterLabel"},"Size"),a.createElement(i.Input,{css:"",type:"number",label:"Dot Size",value:c[t].dotSize,min:1,max:20,title:"Set size of dot",onChange:function(e){c[t].dotSize=e.target.valueAsNumber,n(c)}}))),a.createElement("div",{className:"ScatterFlex"},a.createElement("div",{className:"ScatterFlex ScatterLineType"},a.createElement("div",{className:"ScatterLabel"},"Line"),a.createElement(i.Select,{isLoading:!1,value:c[t].lineType,onChange:function(e){c[t].lineType=e.value,n(c)},options:[{label:"None",value:"none"},{label:"Simple",value:"simple"},{label:"Linear",value:"linear"},{label:"Exponential",value:"exponential"},{label:"Power",value:"power"}]})),r),a.createElement("hr",null)))}));var s=c.some((function(e){return-1===e.col}))?null:a.createElement("div",null,a.createElement(i.Button,{variant:"secondary",size:"sm",onClick:function(){c.push(new y(-1,j(),2,0,"none",!1)),n(c)}},a.createElement("i",{className:"fa fa-plus"})," ","Add",t.name.replace("(s)","")),a.createElement("hr",null));return a.createElement("div",null,l,s)}return null};n.d(t,"plugin",(function(){return q}));var q=new r.PanelPlugin((function(e){var t,n,r=e.options,i=e.data,o=e.width,l=e.height;if((null===(t=i.series)||void 0===t?void 0:t.length)>0){var c=i.series[0],s=null===(n=i.request)||void 0===n?void 0:n.panelId,u=new Array(0);if(c.fields.forEach((function(e){var t;u.push(new b(e.name,(null===(t=e.config)||void 0===t?void 0:t.displayName)||e.name,e.values.toArray().map(Number)))})),u.length<2)return a.createElement("div",{style:{overflow:"hidden",height:"100%"}},a.createElement("p",null,"To get started, create a table query that returns 2 or more numeric columns"));if(-1!==r.xAxis.col&&0!==r.fieldSets.length||function(e,t){if((-1===e.xAxis.col||e.xAxis.col>=t.length)&&(e.xAxis=new f(0,!1)),0===e.xAxisTitle.text.length&&(e.xAxisTitle=new p(t[0].displayName,"white",2)),e.fieldSets=e.fieldSets.filter((function(n){return n.col>=0&&n.col<t.length&&n.col!==e.xAxis.col})),0===e.fieldSets.length){var n=t.map((function(e,t){return new y(t,w(),3,1,"none",!1)}));e.fieldSets=n.filter((function(t){return t.col!==e.xAxis.col}))}}(r,u),r.xAxis.col>=u.length)return a.createElement("div",{style:{overflow:"hidden",height:"100%"}},a.createElement("p",null,"X Axis field setting not found in current query"));var d=r.fieldSets.filter((function(e){return null!=e&&(null==e?void 0:e.col)>=0&&(null==e?void 0:e.col)<u.length}));return 0===d.length?a.createElement("div",{style:{overflow:"hidden",height:"100%"}},a.createElement("p",null,"No Y Axis(s) data found in current query")):z(r,o,l,d,u,s)}return a.createElement("div",{style:{overflow:"hidden",height:"100%"}},a.createElement("p",null,"No data"),a.createElement("p",null,"To get started, create a table query that returns 2 or more numeric columns"))})).setPanelOptions((function(e){return e.addCustomEditor({id:"xAxis",path:"xAxis",name:"X Axis Field",category:["X Axis"],editor:F,defaultValue:new f(-1,!1)}),e.addCustomEditor({id:"xAxisExtents",path:"xAxisExtents",name:"X Axis Extent (Min & Max)",category:["X Axis"],editor:o,defaultValue:new g(NaN,NaN)}),e.addCustomEditor({id:"xAxisTitle",path:"xAxisTitle",name:"X Axis Title",category:["X Axis"],editor:l,defaultValue:new p("","#777",1)}),e.addCustomEditor({id:"fieldSets",path:"fieldSets",name:"Field(s)",category:["Y Axis"],editor:P,defaultValue:[]}),e.addCustomEditor({id:"yAxisExtents",path:"yAxisExtents",name:"Y Axis Extent (Min & Max)",category:["Y Axis"],editor:o,defaultValue:new g(NaN,NaN)}),e.addCustomEditor({id:"yAxisTitle",path:"yAxisTitle",name:"Y Axis Title",category:["Y Axis"],editor:l,defaultValue:new p("","#777",1)}),e.addBooleanSwitch({path:"rotateYAxisTitle",name:"Rotate Y Axis Title",category:["Y Axis"],defaultValue:!1,showIf:function(e){var t;return(null===(t=e.yAxisTitle.text)||void 0===t?void 0:t.length)>0}}),e.addCustomEditor({id:"legend",path:"legend",name:"Legend",category:["Legend"],editor:c,defaultValue:new h(!1,3)}),e.addCustomEditor({id:"grid",path:"grid",name:"Grid",category:["Display"],editor:u,defaultValue:new m("gray")}),e.addCustomEditor({id:"border",path:"border",name:"Border",category:["Display"],editor:s,defaultValue:new d(!1,"yellow",1)}),e}))}])}));
+define(["@grafana/data","@grafana/ui","d3","jquery","react"], function(__WEBPACK_EXTERNAL_MODULE__grafana_data__, __WEBPACK_EXTERNAL_MODULE__grafana_ui__, __WEBPACK_EXTERNAL_MODULE_d3__, __WEBPACK_EXTERNAL_MODULE_jquery__, __WEBPACK_EXTERNAL_MODULE_react__) { return /******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// define __esModule on exports
+/******/ 	__webpack_require__.r = function(exports) {
+/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 		}
+/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 	};
+/******/
+/******/ 	// create a fake namespace object
+/******/ 	// mode & 1: value is a module id, require it
+/******/ 	// mode & 2: merge all properties of value into the ns
+/******/ 	// mode & 4: return value when already ns object
+/******/ 	// mode & 8|1: behave like require
+/******/ 	__webpack_require__.t = function(value, mode) {
+/******/ 		if(mode & 1) value = __webpack_require__(value);
+/******/ 		if(mode & 8) return value;
+/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
+/******/ 		var ns = Object.create(null);
+/******/ 		__webpack_require__.r(ns);
+/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
+/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
+/******/ 		return ns;
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "/";
+/******/
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = "./module.tsx");
+/******/ })
+/************************************************************************/
+/******/ ({
+
+/***/ "../node_modules/css-loader/dist/cjs.js?!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/dist/cjs.js!./ScatterPanel.css":
+/*!****************************************************************************************************************************************************************!*\
+  !*** ../node_modules/css-loader/dist/cjs.js??ref--8-1!../node_modules/postcss-loader/src??ref--8-2!../node_modules/sass-loader/dist/cjs.js!./ScatterPanel.css ***!
+  \****************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+// Imports
+var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
+exports = ___CSS_LOADER_API_IMPORT___(true);
+// Module
+exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-left: 5px;\n  width: 55px;\n  color: #9fa7b3;\n  font-size: 12px;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,WAAW;EACX,cAAc;EACd,eAAe;AACjB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-left: 5px;\n  width: 55px;\n  color: #9fa7b3;\n  font-size: 12px;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}"]}]);
+// Exports
+module.exports = exports;
+
+
+/***/ }),
+
+/***/ "../node_modules/css-loader/dist/runtime/api.js":
+/*!******************************************************!*\
+  !*** ../node_modules/css-loader/dist/runtime/api.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+// eslint-disable-next-line func-names
+module.exports = function (useSourceMap) {
+  var list = []; // return the list of modules as css string
+
+  list.toString = function toString() {
+    return this.map(function (item) {
+      var content = cssWithMappingToString(item, useSourceMap);
+
+      if (item[2]) {
+        return "@media ".concat(item[2], " {").concat(content, "}");
+      }
+
+      return content;
+    }).join('');
+  }; // import a list of modules into the list
+  // eslint-disable-next-line func-names
+
+
+  list.i = function (modules, mediaQuery, dedupe) {
+    if (typeof modules === 'string') {
+      // eslint-disable-next-line no-param-reassign
+      modules = [[null, modules, '']];
+    }
+
+    var alreadyImportedModules = {};
+
+    if (dedupe) {
+      for (var i = 0; i < this.length; i++) {
+        // eslint-disable-next-line prefer-destructuring
+        var id = this[i][0];
+
+        if (id != null) {
+          alreadyImportedModules[id] = true;
+        }
+      }
+    }
+
+    for (var _i = 0; _i < modules.length; _i++) {
+      var item = [].concat(modules[_i]);
+
+      if (dedupe && alreadyImportedModules[item[0]]) {
+        // eslint-disable-next-line no-continue
+        continue;
+      }
+
+      if (mediaQuery) {
+        if (!item[2]) {
+          item[2] = mediaQuery;
+        } else {
+          item[2] = "".concat(mediaQuery, " and ").concat(item[2]);
+        }
+      }
+
+      list.push(item);
+    }
+  };
+
+  return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+  var content = item[1] || ''; // eslint-disable-next-line prefer-destructuring
+
+  var cssMapping = item[3];
+
+  if (!cssMapping) {
+    return content;
+  }
+
+  if (useSourceMap && typeof btoa === 'function') {
+    var sourceMapping = toComment(cssMapping);
+    var sourceURLs = cssMapping.sources.map(function (source) {
+      return "/*# sourceURL=".concat(cssMapping.sourceRoot || '').concat(source, " */");
+    });
+    return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+  }
+
+  return [content].join('\n');
+} // Adapted from convert-source-map (MIT)
+
+
+function toComment(sourceMap) {
+  // eslint-disable-next-line no-undef
+  var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+  var data = "sourceMappingURL=data:application/json;charset=utf-8;base64,".concat(base64);
+  return "/*# ".concat(data, " */");
+}
+
+/***/ }),
+
+/***/ "../node_modules/randomcolor/randomColor.js":
+/*!**************************************************!*\
+  !*** ../node_modules/randomcolor/randomColor.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(module) {// randomColor by David Merfield under the CC0 license
+// https://github.com/davidmerfield/randomColor/
+
+;(function(root, factory) {
+
+  // Support CommonJS
+  if (true) {
+    var randomColor = factory();
+
+    // Support NodeJS & Component, which allow module.exports to be a function
+    if ( true && module && module.exports) {
+      exports = module.exports = randomColor;
+    }
+
+    // Support CommonJS 1.1.1 spec
+    exports.randomColor = randomColor;
+
+  // Support AMD
+  } else {}
+
+}(this, function() {
+
+  // Seed to get repeatable colors
+  var seed = null;
+
+  // Shared color dictionary
+  var colorDictionary = {};
+
+  // Populate the color dictionary
+  loadColorBounds();
+
+  // check if a range is taken
+  var colorRanges = [];
+
+  var randomColor = function (options) {
+
+    options = options || {};
+
+    // Check if there is a seed and ensure it's an
+    // integer. Otherwise, reset the seed value.
+    if (options.seed !== undefined && options.seed !== null && options.seed === parseInt(options.seed, 10)) {
+      seed = options.seed;
+
+    // A string was passed as a seed
+    } else if (typeof options.seed === 'string') {
+      seed = stringToInteger(options.seed);
+
+    // Something was passed as a seed but it wasn't an integer or string
+    } else if (options.seed !== undefined && options.seed !== null) {
+      throw new TypeError('The seed value must be an integer or string');
+
+    // No seed, reset the value outside.
+    } else {
+      seed = null;
+    }
+
+    var H,S,B;
+
+    // Check if we need to generate multiple colors
+    if (options.count !== null && options.count !== undefined) {
+
+      var totalColors = options.count,
+          colors = [];
+      // Value false at index i means the range i is not taken yet.
+      for (var i = 0; i < options.count; i++) {
+        colorRanges.push(false)
+        }
+      options.count = null;
+
+      while (totalColors > colors.length) {
+
+        var color = randomColor(options);
+
+        if (seed !== null) {
+          options.seed = seed;
+        }
+
+        colors.push(color);
+      }
+
+      options.count = totalColors;
+
+      return colors;
+    }
+
+    // First we pick a hue (H)
+    H = pickHue(options);
+
+    // Then use H to determine saturation (S)
+    S = pickSaturation(H, options);
+
+    // Then use S and H to determine brightness (B).
+    B = pickBrightness(H, S, options);
+
+    // Then we return the HSB color in the desired format
+    return setFormat([H,S,B], options);
+  };
+
+  function pickHue(options) {
+    if (colorRanges.length > 0) {
+      var hueRange = getRealHueRange(options.hue)
+
+      var hue = randomWithin(hueRange)
+
+      //Each of colorRanges.length ranges has a length equal approximatelly one step
+      var step = (hueRange[1] - hueRange[0]) / colorRanges.length
+
+      var j = parseInt((hue - hueRange[0]) / step)
+
+      //Check if the range j is taken
+      if (colorRanges[j] === true) {
+        j = (j + 2) % colorRanges.length
+      }
+      else {
+        colorRanges[j] = true
+           }
+
+      var min = (hueRange[0] + j * step) % 359,
+          max = (hueRange[0] + (j + 1) * step) % 359;
+
+      hueRange = [min, max]
+
+      hue = randomWithin(hueRange)
+
+      if (hue < 0) {hue = 360 + hue;}
+      return hue
+    }
+    else {
+      var hueRange = getHueRange(options.hue)
+
+      hue = randomWithin(hueRange);
+      // Instead of storing red as two seperate ranges,
+      // we group them, using negative numbers
+      if (hue < 0) {
+        hue = 360 + hue;
+      }
+
+      return hue;
+    }
+  }
+
+  function pickSaturation (hue, options) {
+
+    if (options.hue === 'monochrome') {
+      return 0;
+    }
+
+    if (options.luminosity === 'random') {
+      return randomWithin([0,100]);
+    }
+
+    var saturationRange = getSaturationRange(hue);
+
+    var sMin = saturationRange[0],
+        sMax = saturationRange[1];
+
+    switch (options.luminosity) {
+
+      case 'bright':
+        sMin = 55;
+        break;
+
+      case 'dark':
+        sMin = sMax - 10;
+        break;
+
+      case 'light':
+        sMax = 55;
+        break;
+   }
+
+    return randomWithin([sMin, sMax]);
+
+  }
+
+  function pickBrightness (H, S, options) {
+
+    var bMin = getMinimumBrightness(H, S),
+        bMax = 100;
+
+    switch (options.luminosity) {
+
+      case 'dark':
+        bMax = bMin + 20;
+        break;
+
+      case 'light':
+        bMin = (bMax + bMin)/2;
+        break;
+
+      case 'random':
+        bMin = 0;
+        bMax = 100;
+        break;
+    }
+
+    return randomWithin([bMin, bMax]);
+  }
+
+  function setFormat (hsv, options) {
+
+    switch (options.format) {
+
+      case 'hsvArray':
+        return hsv;
+
+      case 'hslArray':
+        return HSVtoHSL(hsv);
+
+      case 'hsl':
+        var hsl = HSVtoHSL(hsv);
+        return 'hsl('+hsl[0]+', '+hsl[1]+'%, '+hsl[2]+'%)';
+
+      case 'hsla':
+        var hslColor = HSVtoHSL(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'hsla('+hslColor[0]+', '+hslColor[1]+'%, '+hslColor[2]+'%, ' + alpha + ')';
+
+      case 'rgbArray':
+        return HSVtoRGB(hsv);
+
+      case 'rgb':
+        var rgb = HSVtoRGB(hsv);
+        return 'rgb(' + rgb.join(', ') + ')';
+
+      case 'rgba':
+        var rgbColor = HSVtoRGB(hsv);
+        var alpha = options.alpha || Math.random();
+        return 'rgba(' + rgbColor.join(', ') + ', ' + alpha + ')';
+
+      default:
+        return HSVtoHex(hsv);
+    }
+
+  }
+
+  function getMinimumBrightness(H, S) {
+
+    var lowerBounds = getColorInfo(H).lowerBounds;
+
+    for (var i = 0; i < lowerBounds.length - 1; i++) {
+
+      var s1 = lowerBounds[i][0],
+          v1 = lowerBounds[i][1];
+
+      var s2 = lowerBounds[i+1][0],
+          v2 = lowerBounds[i+1][1];
+
+      if (S >= s1 && S <= s2) {
+
+         var m = (v2 - v1)/(s2 - s1),
+             b = v1 - m*s1;
+
+         return m*S + b;
+      }
+
+    }
+
+    return 0;
+  }
+
+  function getHueRange (colorInput) {
+
+    if (typeof parseInt(colorInput) === 'number') {
+
+      var number = parseInt(colorInput);
+
+      if (number < 360 && number > 0) {
+        return [number, number];
+      }
+
+    }
+
+    if (typeof colorInput === 'string') {
+
+      if (colorDictionary[colorInput]) {
+        var color = colorDictionary[colorInput];
+        if (color.hueRange) {return color.hueRange;}
+      } else if (colorInput.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorInput)[0];
+        return [ hue, hue ];
+      }
+    }
+
+    return [0,360];
+
+  }
+
+  function getSaturationRange (hue) {
+    return getColorInfo(hue).saturationRange;
+  }
+
+  function getColorInfo (hue) {
+
+    // Maps red colors to make picking hue easier
+    if (hue >= 334 && hue <= 360) {
+      hue-= 360;
+    }
+
+    for (var colorName in colorDictionary) {
+       var color = colorDictionary[colorName];
+       if (color.hueRange &&
+           hue >= color.hueRange[0] &&
+           hue <= color.hueRange[1]) {
+          return colorDictionary[colorName];
+       }
+    } return 'Color not found';
+  }
+
+  function randomWithin (range) {
+    if (seed === null) {
+      //generate random evenly destinct number from : https://martin.ankerl.com/2009/12/09/how-to-create-random-colors-programmatically/
+      var golden_ratio = 0.618033988749895
+      var r=Math.random()
+      r += golden_ratio
+      r %= 1
+      return Math.floor(range[0] + r*(range[1] + 1 - range[0]));
+    } else {
+      //Seeded random algorithm from http://indiegamr.com/generate-repeatable-random-numbers-in-js/
+      var max = range[1] || 1;
+      var min = range[0] || 0;
+      seed = (seed * 9301 + 49297) % 233280;
+      var rnd = seed / 233280.0;
+      return Math.floor(min + rnd * (max - min));
+}
+  }
+
+  function HSVtoHex (hsv){
+
+    var rgb = HSVtoRGB(hsv);
+
+    function componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? '0' + hex : hex;
+    }
+
+    var hex = '#' + componentToHex(rgb[0]) + componentToHex(rgb[1]) + componentToHex(rgb[2]);
+
+    return hex;
+
+  }
+
+  function defineColor (name, hueRange, lowerBounds) {
+
+    var sMin = lowerBounds[0][0],
+        sMax = lowerBounds[lowerBounds.length - 1][0],
+
+        bMin = lowerBounds[lowerBounds.length - 1][1],
+        bMax = lowerBounds[0][1];
+
+    colorDictionary[name] = {
+      hueRange: hueRange,
+      lowerBounds: lowerBounds,
+      saturationRange: [sMin, sMax],
+      brightnessRange: [bMin, bMax]
+    };
+
+  }
+
+  function loadColorBounds () {
+
+    defineColor(
+      'monochrome',
+      null,
+      [[0,0],[100,0]]
+    );
+
+    defineColor(
+      'red',
+      [-26,18],
+      [[20,100],[30,92],[40,89],[50,85],[60,78],[70,70],[80,60],[90,55],[100,50]]
+    );
+
+    defineColor(
+      'orange',
+      [18,46],
+      [[20,100],[30,93],[40,88],[50,86],[60,85],[70,70],[100,70]]
+    );
+
+    defineColor(
+      'yellow',
+      [46,62],
+      [[25,100],[40,94],[50,89],[60,86],[70,84],[80,82],[90,80],[100,75]]
+    );
+
+    defineColor(
+      'green',
+      [62,178],
+      [[30,100],[40,90],[50,85],[60,81],[70,74],[80,64],[90,50],[100,40]]
+    );
+
+    defineColor(
+      'blue',
+      [178, 257],
+      [[20,100],[30,86],[40,80],[50,74],[60,60],[70,52],[80,44],[90,39],[100,35]]
+    );
+
+    defineColor(
+      'purple',
+      [257, 282],
+      [[20,100],[30,87],[40,79],[50,70],[60,65],[70,59],[80,52],[90,45],[100,42]]
+    );
+
+    defineColor(
+      'pink',
+      [282, 334],
+      [[20,100],[30,90],[40,86],[60,84],[80,80],[90,75],[100,73]]
+    );
+
+  }
+
+  function HSVtoRGB (hsv) {
+
+    // this doesn't work for the values of 0 and 360
+    // here's the hacky fix
+    var h = hsv[0];
+    if (h === 0) {h = 1;}
+    if (h === 360) {h = 359;}
+
+    // Rebase the h,s,v values
+    h = h/360;
+    var s = hsv[1]/100,
+        v = hsv[2]/100;
+
+    var h_i = Math.floor(h*6),
+      f = h * 6 - h_i,
+      p = v * (1 - s),
+      q = v * (1 - f*s),
+      t = v * (1 - (1 - f)*s),
+      r = 256,
+      g = 256,
+      b = 256;
+
+    switch(h_i) {
+      case 0: r = v; g = t; b = p;  break;
+      case 1: r = q; g = v; b = p;  break;
+      case 2: r = p; g = v; b = t;  break;
+      case 3: r = p; g = q; b = v;  break;
+      case 4: r = t; g = p; b = v;  break;
+      case 5: r = v; g = p; b = q;  break;
+    }
+
+    var result = [Math.floor(r*255), Math.floor(g*255), Math.floor(b*255)];
+    return result;
+  }
+
+  function HexToHSB (hex) {
+    hex = hex.replace(/^#/, '');
+    hex = hex.length === 3 ? hex.replace(/(.)/g, '$1$1') : hex;
+
+    var red = parseInt(hex.substr(0, 2), 16) / 255,
+          green = parseInt(hex.substr(2, 2), 16) / 255,
+          blue = parseInt(hex.substr(4, 2), 16) / 255;
+
+    var cMax = Math.max(red, green, blue),
+          delta = cMax - Math.min(red, green, blue),
+          saturation = cMax ? (delta / cMax) : 0;
+
+    switch (cMax) {
+      case red: return [ 60 * (((green - blue) / delta) % 6) || 0, saturation, cMax ];
+      case green: return [ 60 * (((blue - red) / delta) + 2) || 0, saturation, cMax ];
+      case blue: return [ 60 * (((red - green) / delta) + 4) || 0, saturation, cMax ];
+    }
+  }
+
+  function HSVtoHSL (hsv) {
+    var h = hsv[0],
+      s = hsv[1]/100,
+      v = hsv[2]/100,
+      k = (2-s)*v;
+
+    return [
+      h,
+      Math.round(s*v / (k<1 ? k : 2-k) * 10000) / 100,
+      k/2 * 100
+    ];
+  }
+
+  function stringToInteger (string) {
+    var total = 0
+    for (var i = 0; i !== string.length; i++) {
+      if (total >= Number.MAX_SAFE_INTEGER) break;
+      total += string.charCodeAt(i)
+    }
+    return total
+  }
+
+  // get The range of given hue when options.count!=0
+  function getRealHueRange(colorHue)
+  { if (!isNaN(colorHue)) {
+    var number = parseInt(colorHue);
+
+    if (number < 360 && number > 0) {
+      return getColorInfo(colorHue).hueRange
+    }
+  }
+    else if (typeof colorHue === 'string') {
+
+      if (colorDictionary[colorHue]) {
+        var color = colorDictionary[colorHue];
+
+        if (color.hueRange) {
+          return color.hueRange
+       }
+    } else if (colorHue.match(/^#?([0-9A-F]{3}|[0-9A-F]{6})$/i)) {
+        var hue = HexToHSB(colorHue)[0]
+        return getColorInfo(hue).hueRange
+    }
+  }
+
+    return [0,360]
+}
+  return randomColor;
+}));
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/module.js */ "../node_modules/webpack/buildin/module.js")(module)))
+
+/***/ }),
+
+/***/ "../node_modules/regression/dist/regression.js":
+/*!*****************************************************!*\
+  !*** ../node_modules/regression/dist/regression.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;(function (global, factory) {
+  if (true) {
+    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [module], __WEBPACK_AMD_DEFINE_FACTORY__ = (factory),
+				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
+				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
+				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+  } else { var mod; }
+})(this, function (module) {
+  'use strict';
+
+  function _defineProperty(obj, key, value) {
+    if (key in obj) {
+      Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+      });
+    } else {
+      obj[key] = value;
+    }
+
+    return obj;
+  }
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  function _toConsumableArray(arr) {
+    if (Array.isArray(arr)) {
+      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+        arr2[i] = arr[i];
+      }
+
+      return arr2;
+    } else {
+      return Array.from(arr);
+    }
+  }
+
+  var DEFAULT_OPTIONS = { order: 2, precision: 2, period: null };
+
+  /**
+  * Determine the coefficient of determination (r^2) of a fit from the observations
+  * and predictions.
+  *
+  * @param {Array<Array<number>>} data - Pairs of observed x-y values
+  * @param {Array<Array<number>>} results - Pairs of observed predicted x-y values
+  *
+  * @return {number} - The r^2 value, or NaN if one cannot be calculated.
+  */
+  function determinationCoefficient(data, results) {
+    var predictions = [];
+    var observations = [];
+
+    data.forEach(function (d, i) {
+      if (d[1] !== null) {
+        observations.push(d);
+        predictions.push(results[i]);
+      }
+    });
+
+    var sum = observations.reduce(function (a, observation) {
+      return a + observation[1];
+    }, 0);
+    var mean = sum / observations.length;
+
+    var ssyy = observations.reduce(function (a, observation) {
+      var difference = observation[1] - mean;
+      return a + difference * difference;
+    }, 0);
+
+    var sse = observations.reduce(function (accum, observation, index) {
+      var prediction = predictions[index];
+      var residual = observation[1] - prediction[1];
+      return accum + residual * residual;
+    }, 0);
+
+    return 1 - sse / ssyy;
+  }
+
+  /**
+  * Determine the solution of a system of linear equations A * x = b using
+  * Gaussian elimination.
+  *
+  * @param {Array<Array<number>>} input - A 2-d matrix of data in row-major form [ A | b ]
+  * @param {number} order - How many degrees to solve for
+  *
+  * @return {Array<number>} - Vector of normalized solution coefficients matrix (x)
+  */
+  function gaussianElimination(input, order) {
+    var matrix = input;
+    var n = input.length - 1;
+    var coefficients = [order];
+
+    for (var i = 0; i < n; i++) {
+      var maxrow = i;
+      for (var j = i + 1; j < n; j++) {
+        if (Math.abs(matrix[i][j]) > Math.abs(matrix[i][maxrow])) {
+          maxrow = j;
+        }
+      }
+
+      for (var k = i; k < n + 1; k++) {
+        var tmp = matrix[k][i];
+        matrix[k][i] = matrix[k][maxrow];
+        matrix[k][maxrow] = tmp;
+      }
+
+      for (var _j = i + 1; _j < n; _j++) {
+        for (var _k = n; _k >= i; _k--) {
+          matrix[_k][_j] -= matrix[_k][i] * matrix[i][_j] / matrix[i][i];
+        }
+      }
+    }
+
+    for (var _j2 = n - 1; _j2 >= 0; _j2--) {
+      var total = 0;
+      for (var _k2 = _j2 + 1; _k2 < n; _k2++) {
+        total += matrix[_k2][_j2] * coefficients[_k2];
+      }
+
+      coefficients[_j2] = (matrix[n][_j2] - total) / matrix[_j2][_j2];
+    }
+
+    return coefficients;
+  }
+
+  /**
+  * Round a number to a precision, specificed in number of decimal places
+  *
+  * @param {number} number - The number to round
+  * @param {number} precision - The number of decimal places to round to:
+  *                             > 0 means decimals, < 0 means powers of 10
+  *
+  *
+  * @return {numbr} - The number, rounded
+  */
+  function round(number, precision) {
+    var factor = Math.pow(10, precision);
+    return Math.round(number * factor) / factor;
+  }
+
+  /**
+  * The set of all fitting methods
+  *
+  * @namespace
+  */
+  var methods = {
+    linear: function linear(data, options) {
+      var sum = [0, 0, 0, 0, 0];
+      var len = 0;
+
+      for (var n = 0; n < data.length; n++) {
+        if (data[n][1] !== null) {
+          len++;
+          sum[0] += data[n][0];
+          sum[1] += data[n][1];
+          sum[2] += data[n][0] * data[n][0];
+          sum[3] += data[n][0] * data[n][1];
+          sum[4] += data[n][1] * data[n][1];
+        }
+      }
+
+      var run = len * sum[2] - sum[0] * sum[0];
+      var rise = len * sum[3] - sum[0] * sum[1];
+      var gradient = run === 0 ? 0 : round(rise / run, options.precision);
+      var intercept = round(sum[1] / len - gradient * sum[0] / len, options.precision);
+
+      var predict = function predict(x) {
+        return [round(x, options.precision), round(gradient * x + intercept, options.precision)];
+      };
+
+      var points = data.map(function (point) {
+        return predict(point[0]);
+      });
+
+      return {
+        points: points,
+        predict: predict,
+        equation: [gradient, intercept],
+        r2: round(determinationCoefficient(data, points), options.precision),
+        string: intercept === 0 ? 'y = ' + gradient + 'x' : 'y = ' + gradient + 'x + ' + intercept
+      };
+    },
+    exponential: function exponential(data, options) {
+      var sum = [0, 0, 0, 0, 0, 0];
+
+      for (var n = 0; n < data.length; n++) {
+        if (data[n][1] !== null) {
+          sum[0] += data[n][0];
+          sum[1] += data[n][1];
+          sum[2] += data[n][0] * data[n][0] * data[n][1];
+          sum[3] += data[n][1] * Math.log(data[n][1]);
+          sum[4] += data[n][0] * data[n][1] * Math.log(data[n][1]);
+          sum[5] += data[n][0] * data[n][1];
+        }
+      }
+
+      var denominator = sum[1] * sum[2] - sum[5] * sum[5];
+      var a = Math.exp((sum[2] * sum[3] - sum[5] * sum[4]) / denominator);
+      var b = (sum[1] * sum[4] - sum[5] * sum[3]) / denominator;
+      var coeffA = round(a, options.precision);
+      var coeffB = round(b, options.precision);
+      var predict = function predict(x) {
+        return [round(x, options.precision), round(coeffA * Math.exp(coeffB * x), options.precision)];
+      };
+
+      var points = data.map(function (point) {
+        return predict(point[0]);
+      });
+
+      return {
+        points: points,
+        predict: predict,
+        equation: [coeffA, coeffB],
+        string: 'y = ' + coeffA + 'e^(' + coeffB + 'x)',
+        r2: round(determinationCoefficient(data, points), options.precision)
+      };
+    },
+    logarithmic: function logarithmic(data, options) {
+      var sum = [0, 0, 0, 0];
+      var len = data.length;
+
+      for (var n = 0; n < len; n++) {
+        if (data[n][1] !== null) {
+          sum[0] += Math.log(data[n][0]);
+          sum[1] += data[n][1] * Math.log(data[n][0]);
+          sum[2] += data[n][1];
+          sum[3] += Math.pow(Math.log(data[n][0]), 2);
+        }
+      }
+
+      var a = (len * sum[1] - sum[2] * sum[0]) / (len * sum[3] - sum[0] * sum[0]);
+      var coeffB = round(a, options.precision);
+      var coeffA = round((sum[2] - coeffB * sum[0]) / len, options.precision);
+
+      var predict = function predict(x) {
+        return [round(x, options.precision), round(round(coeffA + coeffB * Math.log(x), options.precision), options.precision)];
+      };
+
+      var points = data.map(function (point) {
+        return predict(point[0]);
+      });
+
+      return {
+        points: points,
+        predict: predict,
+        equation: [coeffA, coeffB],
+        string: 'y = ' + coeffA + ' + ' + coeffB + ' ln(x)',
+        r2: round(determinationCoefficient(data, points), options.precision)
+      };
+    },
+    power: function power(data, options) {
+      var sum = [0, 0, 0, 0, 0];
+      var len = data.length;
+
+      for (var n = 0; n < len; n++) {
+        if (data[n][1] !== null) {
+          sum[0] += Math.log(data[n][0]);
+          sum[1] += Math.log(data[n][1]) * Math.log(data[n][0]);
+          sum[2] += Math.log(data[n][1]);
+          sum[3] += Math.pow(Math.log(data[n][0]), 2);
+        }
+      }
+
+      var b = (len * sum[1] - sum[0] * sum[2]) / (len * sum[3] - Math.pow(sum[0], 2));
+      var a = (sum[2] - b * sum[0]) / len;
+      var coeffA = round(Math.exp(a), options.precision);
+      var coeffB = round(b, options.precision);
+
+      var predict = function predict(x) {
+        return [round(x, options.precision), round(round(coeffA * Math.pow(x, coeffB), options.precision), options.precision)];
+      };
+
+      var points = data.map(function (point) {
+        return predict(point[0]);
+      });
+
+      return {
+        points: points,
+        predict: predict,
+        equation: [coeffA, coeffB],
+        string: 'y = ' + coeffA + 'x^' + coeffB,
+        r2: round(determinationCoefficient(data, points), options.precision)
+      };
+    },
+    polynomial: function polynomial(data, options) {
+      var lhs = [];
+      var rhs = [];
+      var a = 0;
+      var b = 0;
+      var len = data.length;
+      var k = options.order + 1;
+
+      for (var i = 0; i < k; i++) {
+        for (var l = 0; l < len; l++) {
+          if (data[l][1] !== null) {
+            a += Math.pow(data[l][0], i) * data[l][1];
+          }
+        }
+
+        lhs.push(a);
+        a = 0;
+
+        var c = [];
+        for (var j = 0; j < k; j++) {
+          for (var _l = 0; _l < len; _l++) {
+            if (data[_l][1] !== null) {
+              b += Math.pow(data[_l][0], i + j);
+            }
+          }
+          c.push(b);
+          b = 0;
+        }
+        rhs.push(c);
+      }
+      rhs.push(lhs);
+
+      var coefficients = gaussianElimination(rhs, k).map(function (v) {
+        return round(v, options.precision);
+      });
+
+      var predict = function predict(x) {
+        return [round(x, options.precision), round(coefficients.reduce(function (sum, coeff, power) {
+          return sum + coeff * Math.pow(x, power);
+        }, 0), options.precision)];
+      };
+
+      var points = data.map(function (point) {
+        return predict(point[0]);
+      });
+
+      var string = 'y = ';
+      for (var _i = coefficients.length - 1; _i >= 0; _i--) {
+        if (_i > 1) {
+          string += coefficients[_i] + 'x^' + _i + ' + ';
+        } else if (_i === 1) {
+          string += coefficients[_i] + 'x + ';
+        } else {
+          string += coefficients[_i];
+        }
+      }
+
+      return {
+        string: string,
+        points: points,
+        predict: predict,
+        equation: [].concat(_toConsumableArray(coefficients)).reverse(),
+        r2: round(determinationCoefficient(data, points), options.precision)
+      };
+    }
+  };
+
+  function createWrapper() {
+    var reduce = function reduce(accumulator, name) {
+      return _extends({
+        _round: round
+      }, accumulator, _defineProperty({}, name, function (data, supplied) {
+        return methods[name](data, _extends({}, DEFAULT_OPTIONS, supplied));
+      }));
+    };
+
+    return Object.keys(methods).reduce(reduce, {});
+  }
+
+  module.exports = createWrapper();
+});
+
+
+/***/ }),
+
+/***/ "../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js":
+/*!*****************************************************************************!*\
+  !*** ../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var isOldIE = function isOldIE() {
+  var memo;
+  return function memorize() {
+    if (typeof memo === 'undefined') {
+      // Test for IE <= 9 as proposed by Browserhacks
+      // @see http://browserhacks.com/#hack-e71d8692f65334173fee715c222cb805
+      // Tests for existence of standard globals is to allow style-loader
+      // to operate correctly into non-standard environments
+      // @see https://github.com/webpack-contrib/style-loader/issues/177
+      memo = Boolean(window && document && document.all && !window.atob);
+    }
+
+    return memo;
+  };
+}();
+
+var getTarget = function getTarget() {
+  var memo = {};
+  return function memorize(target) {
+    if (typeof memo[target] === 'undefined') {
+      var styleTarget = document.querySelector(target); // Special case to return head of iframe instead of iframe itself
+
+      if (window.HTMLIFrameElement && styleTarget instanceof window.HTMLIFrameElement) {
+        try {
+          // This will throw an exception if access to iframe is blocked
+          // due to cross-origin restrictions
+          styleTarget = styleTarget.contentDocument.head;
+        } catch (e) {
+          // istanbul ignore next
+          styleTarget = null;
+        }
+      }
+
+      memo[target] = styleTarget;
+    }
+
+    return memo[target];
+  };
+}();
+
+var stylesInDom = [];
+
+function getIndexByIdentifier(identifier) {
+  var result = -1;
+
+  for (var i = 0; i < stylesInDom.length; i++) {
+    if (stylesInDom[i].identifier === identifier) {
+      result = i;
+      break;
+    }
+  }
+
+  return result;
+}
+
+function modulesToDom(list, options) {
+  var idCountMap = {};
+  var identifiers = [];
+
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i];
+    var id = options.base ? item[0] + options.base : item[0];
+    var count = idCountMap[id] || 0;
+    var identifier = "".concat(id, " ").concat(count);
+    idCountMap[id] = count + 1;
+    var index = getIndexByIdentifier(identifier);
+    var obj = {
+      css: item[1],
+      media: item[2],
+      sourceMap: item[3]
+    };
+
+    if (index !== -1) {
+      stylesInDom[index].references++;
+      stylesInDom[index].updater(obj);
+    } else {
+      stylesInDom.push({
+        identifier: identifier,
+        updater: addStyle(obj, options),
+        references: 1
+      });
+    }
+
+    identifiers.push(identifier);
+  }
+
+  return identifiers;
+}
+
+function insertStyleElement(options) {
+  var style = document.createElement('style');
+  var attributes = options.attributes || {};
+
+  if (typeof attributes.nonce === 'undefined') {
+    var nonce =  true ? __webpack_require__.nc : undefined;
+
+    if (nonce) {
+      attributes.nonce = nonce;
+    }
+  }
+
+  Object.keys(attributes).forEach(function (key) {
+    style.setAttribute(key, attributes[key]);
+  });
+
+  if (typeof options.insert === 'function') {
+    options.insert(style);
+  } else {
+    var target = getTarget(options.insert || 'head');
+
+    if (!target) {
+      throw new Error("Couldn't find a style target. This probably means that the value for the 'insert' parameter is invalid.");
+    }
+
+    target.appendChild(style);
+  }
+
+  return style;
+}
+
+function removeStyleElement(style) {
+  // istanbul ignore if
+  if (style.parentNode === null) {
+    return false;
+  }
+
+  style.parentNode.removeChild(style);
+}
+/* istanbul ignore next  */
+
+
+var replaceText = function replaceText() {
+  var textStore = [];
+  return function replace(index, replacement) {
+    textStore[index] = replacement;
+    return textStore.filter(Boolean).join('\n');
+  };
+}();
+
+function applyToSingletonTag(style, index, remove, obj) {
+  var css = remove ? '' : obj.media ? "@media ".concat(obj.media, " {").concat(obj.css, "}") : obj.css; // For old IE
+
+  /* istanbul ignore if  */
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = replaceText(index, css);
+  } else {
+    var cssNode = document.createTextNode(css);
+    var childNodes = style.childNodes;
+
+    if (childNodes[index]) {
+      style.removeChild(childNodes[index]);
+    }
+
+    if (childNodes.length) {
+      style.insertBefore(cssNode, childNodes[index]);
+    } else {
+      style.appendChild(cssNode);
+    }
+  }
+}
+
+function applyToTag(style, options, obj) {
+  var css = obj.css;
+  var media = obj.media;
+  var sourceMap = obj.sourceMap;
+
+  if (media) {
+    style.setAttribute('media', media);
+  } else {
+    style.removeAttribute('media');
+  }
+
+  if (sourceMap && btoa) {
+    css += "\n/*# sourceMappingURL=data:application/json;base64,".concat(btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))), " */");
+  } // For old IE
+
+  /* istanbul ignore if  */
+
+
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    while (style.firstChild) {
+      style.removeChild(style.firstChild);
+    }
+
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+var singleton = null;
+var singletonCounter = 0;
+
+function addStyle(obj, options) {
+  var style;
+  var update;
+  var remove;
+
+  if (options.singleton) {
+    var styleIndex = singletonCounter++;
+    style = singleton || (singleton = insertStyleElement(options));
+    update = applyToSingletonTag.bind(null, style, styleIndex, false);
+    remove = applyToSingletonTag.bind(null, style, styleIndex, true);
+  } else {
+    style = insertStyleElement(options);
+    update = applyToTag.bind(null, style, options);
+
+    remove = function remove() {
+      removeStyleElement(style);
+    };
+  }
+
+  update(obj);
+  return function updateStyle(newObj) {
+    if (newObj) {
+      if (newObj.css === obj.css && newObj.media === obj.media && newObj.sourceMap === obj.sourceMap) {
+        return;
+      }
+
+      update(obj = newObj);
+    } else {
+      remove();
+    }
+  };
+}
+
+module.exports = function (list, options) {
+  options = options || {}; // Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+  // tags it will allow on a page
+
+  if (!options.singleton && typeof options.singleton !== 'boolean') {
+    options.singleton = isOldIE();
+  }
+
+  list = list || [];
+  var lastIdentifiers = modulesToDom(list, options);
+  return function update(newList) {
+    newList = newList || [];
+
+    if (Object.prototype.toString.call(newList) !== '[object Array]') {
+      return;
+    }
+
+    for (var i = 0; i < lastIdentifiers.length; i++) {
+      var identifier = lastIdentifiers[i];
+      var index = getIndexByIdentifier(identifier);
+      stylesInDom[index].references--;
+    }
+
+    var newLastIdentifiers = modulesToDom(newList, options);
+
+    for (var _i = 0; _i < lastIdentifiers.length; _i++) {
+      var _identifier = lastIdentifiers[_i];
+
+      var _index = getIndexByIdentifier(_identifier);
+
+      if (stylesInDom[_index].references === 0) {
+        stylesInDom[_index].updater();
+
+        stylesInDom.splice(_index, 1);
+      }
+    }
+
+    lastIdentifiers = newLastIdentifiers;
+  };
+};
+
+/***/ }),
+
+/***/ "../node_modules/webpack/buildin/module.js":
+/*!*************************************************!*\
+  !*** ../node_modules/webpack/buildin/module.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function(module) {
+	if (!module.webpackPolyfill) {
+		module.deprecate = function() {};
+		module.paths = [];
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
+
+
+/***/ }),
+
+/***/ "./ScatterPanel.css":
+/*!**************************!*\
+  !*** ./ScatterPanel.css ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var api = __webpack_require__(/*! ../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+            var content = __webpack_require__(/*! !../node_modules/css-loader/dist/cjs.js??ref--8-1!../node_modules/postcss-loader/src??ref--8-2!../node_modules/sass-loader/dist/cjs.js!./ScatterPanel.css */ "../node_modules/css-loader/dist/cjs.js?!../node_modules/postcss-loader/src/index.js?!../node_modules/sass-loader/dist/cjs.js!./ScatterPanel.css");
+
+            content = content.__esModule ? content.default : content;
+
+            if (typeof content === 'string') {
+              content = [[module.i, content, '']];
+            }
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = api(content, options);
+
+var exported = content.locals ? content.locals : {};
+
+
+
+module.exports = exported;
+
+/***/ }),
+
+/***/ "./ScatterPanel.tsx":
+/*!**************************!*\
+  !*** ./ScatterPanel.tsx ***!
+  \**************************/
+/*! exports provided: ScatterPanel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScatterPanel", function() { return ScatterPanel; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "jquery");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "d3");
+/* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(d3__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var regression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! regression */ "../node_modules/regression/dist/regression.js");
+/* harmony import */ var regression__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(regression__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var types_ColData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! types/ColData */ "./types/ColData.ts");
+/* harmony import */ var types_MarginPair__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! types/MarginPair */ "./types/MarginPair.ts");
+/* harmony import */ var types_XAxis__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! types/XAxis */ "./types/XAxis.ts");
+/* harmony import */ var types_FieldSet__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! types/FieldSet */ "./types/FieldSet.ts");
+/* harmony import */ var types_Title__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! types/Title */ "./types/Title.ts");
+/* harmony import */ var _ScatterPanel_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ScatterPanel.css */ "./ScatterPanel.css");
+/* harmony import */ var _ScatterPanel_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_ScatterPanel_css__WEBPACK_IMPORTED_MODULE_9__);
+
+
+
+
+
+
+
+
+
+
+
+var randomColor = __webpack_require__(/*! randomcolor */ "../node_modules/randomcolor/randomColor.js");
+
+function autoConfigure(options, colData) {
+  if (options.xAxis.col === -1 || options.xAxis.col >= colData.length) {
+    options.xAxis = new types_XAxis__WEBPACK_IMPORTED_MODULE_6__["XAxis"](0, false);
+  }
+
+  if (options.xAxisTitle.text.length === 0) {
+    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_8__["Title"](colData[0].displayName, 'white', 2);
+  }
+
+  options.fieldSets = options.fieldSets.filter(function (f) {
+    return f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col;
+  });
+
+  if (options.fieldSets.length === 0) {
+    var fieldSets = colData.map(function (f, i) {
+      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_7__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', false);
+    });
+    options.fieldSets = fieldSets.filter(function (c) {
+      return c.col !== options.xAxis.col;
+    });
+  }
+
+  options.xMargins.lower = 30;
+  options.xMargins.upper = 10;
+  options.yMargins.lower = 20;
+  options.yMargins.upper = 20;
+}
+
+function evaluateYLinear(reg, x) {
+  return reg.equation[0] * x + reg.equation[1];
+}
+
+function evaluateXLinear(reg, y) {
+  return (y - reg.equation[1]) / reg.equation[0];
+}
+
+function evaluateYExponential(reg, x) {
+  return reg.equation[0] * Math.exp(reg.equation[1] * x);
+} // function evaluateXExponential(reg: regression.Result, y: number){
+//   return Math.log(y / reg.equation[0]) / reg.equation[1];
+// }
+
+
+function evaluateYPower(reg, x) {
+  //  return reg.equation[0] * Math.pow(x, reg.equation[1]);
+  return reg.equation[0] * Math.pow(x, reg.equation[1]);
+} // function evaluateXPower(reg: regression.Result, y: number){
+//   return Math.log(y / reg.equation[0]) / reg.equation[1];
+// }
+
+
+function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent) {
+  var lines = new Array(0);
+  fieldSets.forEach(function (fieldSet, index) {
+    if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
+      var path = '';
+      var xyData = xValues.map(function (d, i) {
+        return [d, yValues[index][i]];
+      }).filter(function (xy) {
+        return xy[1] != null;
+      });
+
+      if (fieldSet.lineType === 'simple') {
+        path = "\n        " + xyData.map(function (xy, i) {
+          return (i === 0 ? 'M' : 'L') + " " + xScale(xy[0]) + " " + yScale(xy[1]);
+        }).join(' ') + "\n      ";
+      } else if (fieldSet.lineType === 'linear') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+        var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.linear(xyData); // check for start and end points inside the plotted area
+
+        var x0 = xExtent[0];
+        var y0 = evaluateYLinear(reg, x0);
+
+        if (y0 < yExtent[0]) {
+          y0 = yExtent[0];
+          x0 = evaluateXLinear(reg, y0);
+        }
+
+        if (y0 > yExtent[1]) {
+          y0 = yExtent[1];
+          x0 = evaluateXLinear(reg, y0);
+        }
+
+        var x1 = xExtent[1];
+        var y1 = evaluateYLinear(reg, x1);
+
+        if (y1 < yExtent[0]) {
+          y1 = yExtent[0];
+          x1 = evaluateXLinear(reg, y1);
+        }
+
+        if (y1 > yExtent[1]) {
+          y1 = yExtent[1];
+          x1 = evaluateXLinear(reg, y1);
+        }
+
+        path = "M " + xScale(x0) + " " + yScale(y0) + " L " + xScale(x1) + " " + yScale(y1);
+      } else if (fieldSet.lineType === 'exponential') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+        var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.exponential(xyData);
+        var x0 = xExtent[0]; //        let y0 = evaluateYExponential(reg, x0);
+
+        var x1 = xExtent[1]; //        let y1 = evaluateYExponential(reg, x1);
+
+        var steps = 50;
+        var dx = x0 + (x1 - x0) / steps;
+        var xys = new Array(0);
+
+        for (var i = 0; i < steps; i++) {
+          var x = x0 + i * dx;
+          var y = evaluateYExponential(reg, x);
+          xys.push([x, y]);
+        }
+
+        path = "\n        " + xys.map(function (d, i) {
+          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
+        }).join(' ') + "\n      ";
+      } else if (fieldSet.lineType === 'power') {
+        // using the regression package, first create an array of arrays for the X/Y values
+        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+        var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.power(xyData);
+        var x0 = xExtent[0];
+
+        if (x0 < 0) {
+          x0 = 0;
+        } // Domain for power regressions MUST be positive
+
+
+        var x1 = xExtent[1];
+        var steps = 100;
+        var dx = x0 + (x1 - x0) / steps;
+        var xys = new Array(0);
+
+        for (var i = 0; i < steps; i++) {
+          var x = x0 + i * dx;
+          var y = evaluateYPower(reg, x);
+          xys.push([x, y]);
+        }
+
+        path = "\n        " + xys.map(function (d, i) {
+          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
+        }).join(' ') + "\n      ";
+      }
+
+      if (path.length) {
+        var className = "ScatterLine ScatterLine-" + index;
+
+        if (options.legend.size && fieldSet.hidden) {
+          className += ' ScatterLineHidden';
+        }
+
+        lines.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
+          className: className,
+          d: path,
+          stroke: fieldSet.color,
+          strokeWidth: fieldSet.lineSize,
+          fill: "none"
+        }));
+      }
+    }
+  });
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    clipPath: "url(#grid)"
+  }, lines);
+}
+
+function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale) {
+  return fieldSets.map(function (y, i) {
+    return xValues.map(function (x, j) {
+      var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
+      var yValue = yValues[i][j];
+
+      if (dotSize > 0 && yValue != null) {
+        var className = "ScatterSet-" + i;
+
+        if (options.legend.size && y.hidden) {
+          className += ' ScatterSetHidden';
+        }
+
+        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("circle", {
+          key: "circle-[" + y + "][" + i + "]",
+          cx: xScale(x),
+          cy: yScale(yValue),
+          r: dotSize,
+          className: className,
+          fill: y.color
+        });
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        key: "circle-[" + y + "][" + i + "]"
+      });
+    });
+  });
+}
+
+function applySetFieldSetHidden(fieldSet, index, hidden, panelId) {
+  fieldSet.hidden = hidden;
+  var panelGroup = jquery__WEBPACK_IMPORTED_MODULE_1___default()(".ScatterPanel-" + panelId);
+  var markers = jquery__WEBPACK_IMPORTED_MODULE_1___default()(".ScatterSet-" + index, panelGroup);
+
+  if (hidden) {
+    markers.addClass('ScatterSetHidden');
+  } else {
+    markers.removeClass('ScatterSetHidden');
+  }
+
+  var lines = jquery__WEBPACK_IMPORTED_MODULE_1___default()(".ScatterLine-" + index, panelGroup);
+
+  if (hidden) {
+    lines.addClass('ScatterLineHidden');
+  } else {
+    lines.removeClass('ScatterLineHidden');
+  }
+}
+
+function onLegendClick(e, index, fieldSets, panelId) {
+  var thisLegendTextElement = jquery__WEBPACK_IMPORTED_MODULE_1___default()(e.currentTarget);
+  var legendGroup = thisLegendTextElement.parent();
+  var legendTextElements = jquery__WEBPACK_IMPORTED_MODULE_1___default()('.ScatterLegendText', legendGroup);
+  var hiddenLegendTextElements = legendTextElements.filter('.ScatterLegendTextHidden');
+
+  if (e.ctrlKey) {
+    // toggle the state of the current item
+    thisLegendTextElement.toggleClass('ScatterLegendTextHidden');
+    applySetFieldSetHidden(fieldSets[index], index, !fieldSets[index].hidden, panelId);
+  } else if (hiddenLegendTextElements.length === 0) {
+    // if none are hidden, hide everything else
+    legendTextElements.addClass('ScatterLegendTextHidden');
+    thisLegendTextElement.toggleClass('ScatterLegendTextHidden');
+    fieldSets.forEach(function (f, i) {
+      applySetFieldSetHidden(f, i, index !== i, panelId);
+    });
+  } else if (!thisLegendTextElement.hasClass('ScatterLegendTextHidden')) {
+    // if this item is visible, unhide everything
+    legendTextElements.removeClass('ScatterLegendTextHidden');
+    fieldSets.forEach(function (f, i) {
+      applySetFieldSetHidden(f, i, false, panelId);
+    });
+  } else {
+    // hide everything but this one
+    legendTextElements.addClass('ScatterLegendTextHidden');
+    thisLegendTextElement.toggleClass('ScatterLegendTextHidden');
+    fieldSets.forEach(function (f, i) {
+      applySetFieldSetHidden(f, i, index !== i, panelId);
+    });
+  }
+}
+
+function drawLegend(options, width, height, xMargins, yMargins, colNames, panelId) {
+  if (options.legend.size) {
+    var scale_1 = options.legend.size / 3;
+    var fieldSets_1 = options.fieldSets.filter(function (x) {
+      return x.col >= 0 && x.col < colNames.length;
+    });
+    var maxLength = d3__WEBPACK_IMPORTED_MODULE_2__["max"](fieldSets_1.map(function (f) {
+      return colNames[f.col].length;
+    }));
+
+    if (fieldSets_1.length > 0) {
+      var offset_1 = 20;
+      var dx = offset_1 + 8.6 * scale_1 * maxLength;
+      xMargins.upper += dx;
+      var legends_1 = new Array(0);
+      fieldSets_1.forEach(function (f, i) {
+        var className = f.hidden ? 'ScatterLegendText ScatterLegendTextHidden' : 'ScatterLegendText';
+        legends_1.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+          transform: "translate(" + offset_1 + ", " + 30 * scale_1 * i + ") scale(" + scale_1 + ")",
+          className: className,
+          alignmentBaseline: "hanging",
+          textAnchor: "left",
+          fill: f.color,
+          onClick: function onClick(e) {
+            onLegendClick(e, i, fieldSets_1, panelId);
+          }
+        }, colNames[f.col]));
+      });
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+        transform: "translate(" + (width - dx) + ", " + yMargins.upper + ")"
+      }, legends_1);
+    }
+  }
+
+  return null;
+}
+
+function drawXTitle(options, width, height, xMargins, yMargins) {
+  var title = options.xAxisTitle;
+
+  if (title.text) {
+    var scale = title.textSize;
+    var dx = 8.2 * scale * title.text.length;
+    var dy = 14;
+    yMargins.lower += dy * scale;
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+      transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + (height - dy * scale) + ") scale(" + scale + ")"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+      className: "ScatterXTitleRect",
+      alignmentBaseline: "hanging",
+      textAnchor: "middle",
+      width: dx,
+      height: dy,
+      fill: title.color
+    }, title.text));
+  }
+
+  return null;
+}
+
+function drawYTitle(options, width, height, xMargins, yMargins) {
+  var title = options.yAxisTitle;
+
+  if (title.text) {
+    var scale = title.textSize;
+    var dx = 8.2 * title.text.length;
+    var dy = 14;
+
+    if (options.rotateYAxisTitle) {
+      xMargins.lower += dy * scale;
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+        transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") rotate(-90) scale(" + scale + ")"
+      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+        className: "ScatterXTitleRect",
+        alignmentBaseline: "hanging",
+        textAnchor: "middle",
+        width: dx,
+        height: dy,
+        fill: title.color
+      }, title.text));
+    }
+
+    xMargins.lower += dx * scale;
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+      transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + scale + ")"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+      className: "ScatterXTitleRect",
+      textAnchor: "left",
+      width: dx,
+      height: dy,
+      fill: title.color
+    }, title.text));
+  }
+
+  return null;
+}
+
+function generateContent(options, width, height, fieldSets, colData, panelId) {
+  var visibleFieldSets = fieldSets;
+  var colValues = colData.map(function (c) {
+    return c.values;
+  });
+  var colNames = colData.map(function (c) {
+    return c.displayName || c.name;
+  });
+  var xValues = colValues[options.xAxis.col];
+  var xExtent = [options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3__WEBPACK_IMPORTED_MODULE_2__["min"](xValues), options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3__WEBPACK_IMPORTED_MODULE_2__["max"](xValues)];
+  var yValues = visibleFieldSets.map(function (f) {
+    return colValues[f.col];
+  });
+  var yExtents = yValues.map(function (c) {
+    return d3__WEBPACK_IMPORTED_MODULE_2__["extent"](c);
+  });
+  var yExtent = [options.yAxisExtents.min === 0 ? 0 : options.yAxisExtents.min || d3__WEBPACK_IMPORTED_MODULE_2__["min"](yExtents.map(function (c) {
+    return c[0];
+  })), options.yAxisExtents.max === 0 ? 0 : options.yAxisExtents.max || d3__WEBPACK_IMPORTED_MODULE_2__["max"](yExtents.map(function (c) {
+    return c[1];
+  }))];
+  var xMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_5__["MarginPair"](options.xMargins.lower || 0, options.xMargins.upper || 0);
+  var yMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_5__["MarginPair"](options.yMargins.lower || 0, options.yMargins.upper || 0);
+  var legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
+  var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
+  var xTitle = drawXTitle(options, width, height, xMargins, yMargins);
+  var border = options.border.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("rect", {
+    transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
+    width: width - xMargins.lower - xMargins.upper,
+    height: height - yMargins.upper - yMargins.lower,
+    stroke: options.border.color,
+    strokeWidth: options.border.size,
+    fill: "none"
+  }) : null;
+  var clippath = react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("defs", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("clipPath", {
+    id: "grid"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("rect", {
+    transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
+    width: width - xMargins.lower - xMargins.upper,
+    height: height - yMargins.upper - yMargins.lower
+  })));
+  var xScale = d3__WEBPACK_IMPORTED_MODULE_2__["scaleLinear"]().nice().domain(xExtent).range([options.xAxis.inverted ? width - xMargins.upper : xMargins.lower, options.xAxis.inverted ? xMargins.lower : width - xMargins.upper]);
+  var xAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisBottom"](xScale);
+  if (options.label.col >= 0) xAxis = xAxis.ticks(0);else xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
+  var yScale = d3__WEBPACK_IMPORTED_MODULE_2__["scaleLinear"]().nice().domain(yExtent).range([height - yMargins.lower, yMargins.upper]);
+  var yAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisLeft"](yScale).tickSize(xMargins.lower + xMargins.upper - width);
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("svg", {
+    width: width,
+    height: height
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    className: "ScatterPanel-" + panelId
+  }, legend, xTitle, yTitle, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    transform: "translate(0, " + (height - yMargins.lower) + ")",
+    ref: function ref(node) {
+      d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(xAxis).selectAll('line').attr('stroke', options.grid.color);
+    }
+  }), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    transform: "translate(" + xMargins.lower + ", 0)",
+    ref: function ref(node) {
+      d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(yAxis).selectAll('line').attr('stroke', options.grid.color);
+    }
+  }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", null, drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", null, drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale))));
+}
+
+var ScatterPanel = function ScatterPanel(_a) {
+  var _b, _c;
+
+  var options = _a.options,
+      data = _a.data,
+      width = _a.width,
+      height = _a.height;
+
+  if (((_b = data.series) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+    var frame = data.series[0];
+    var panelId = (_c = data.request) === null || _c === void 0 ? void 0 : _c.panelId;
+    var colData_1 = new Array(0);
+    frame.fields.forEach(function (field) {
+      var _a;
+
+      colData_1.push(new types_ColData__WEBPACK_IMPORTED_MODULE_4__["ColData"](field.name, ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) || field.name, field.values.toArray().map(function (v) {
+        return v;
+      })));
+    });
+
+    if (colData_1.length < 2) {
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        style: {
+          overflow: 'hidden',
+          height: '100%'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "To get started, create a table query that returns 2 or more numeric columns"));
+    }
+
+    if (options.xAxis.col === -1 || options.fieldSets.length === 0) {
+      // Nothing has been setup - call auto-config
+      autoConfigure(options, colData_1);
+    }
+
+    if (options.xAxis.col >= colData_1.length) {
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        style: {
+          overflow: 'hidden',
+          height: '100%'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "X Axis field setting not found in current query"));
+    }
+
+    var fieldSets = options.fieldSets.filter(function (x) {
+      return x != null && (x === null || x === void 0 ? void 0 : x.col) >= 0 && (x === null || x === void 0 ? void 0 : x.col) < colData_1.length;
+    });
+
+    if (fieldSets.length === 0) {
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        style: {
+          overflow: 'hidden',
+          height: '100%'
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "No Y Axis(s) data found in current query"));
+    }
+
+    return generateContent(options, width, height, fieldSets, colData_1, panelId);
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    style: {
+      overflow: 'hidden',
+      height: '100%'
+    }
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "No data"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "To get started, create a table query that returns 2 or more numeric columns"));
+};
+
+/***/ }),
+
+/***/ "./editors/BorderEditor.tsx":
+/*!**********************************!*\
+  !*** ./editors/BorderEditor.tsx ***!
+  \**********************************/
+/*! exports provided: BorderEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BorderEditor", function() { return BorderEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var BorderEditor = function BorderEditor(_a) {
+  var value = _a.value,
+      _onChange = _a.onChange;
+  var color = value.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterDotColor"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+    color: value.color,
+    enableNamedColors: false,
+    onChange: function onChange(e) {
+      value.color = e;
+
+      _onChange(value);
+    }
+  })) : null;
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterFlex"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterFlex ScatterSize"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterLabel"
+  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    type: "number",
+    min: 0,
+    max: 10,
+    title: "Border Line width",
+    value: value.size,
+    onChange: function onChange(e) {
+      value.size = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })), color);
+};
+
+/***/ }),
+
+/***/ "./editors/ExtentsEditor.tsx":
+/*!***********************************!*\
+  !*** ./editors/ExtentsEditor.tsx ***!
+  \***********************************/
+/*! exports provided: ExtentsEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ExtentsEditor", function() { return ExtentsEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var ExtentsEditor = function ExtentsEditor(_a) {
+  var value = _a.value,
+      _onChange = _a.onChange;
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterExtents"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterExtentLimit"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    type: "number",
+    value: value.min,
+    title: "Axis Min (leave blank for auto)",
+    onChange: function onChange(e) {
+      value.min = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterExtentLimit"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    className: "ScatterExtentLimit",
+    type: "number",
+    value: value.max,
+    title: "Axis Max (leave blank for auto)",
+    onChange: function onChange(e) {
+      value.max = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })));
+};
+
+/***/ }),
+
+/***/ "./editors/FieldSetEditor.tsx":
+/*!************************************!*\
+  !*** ./editors/FieldSetEditor.tsx ***!
+  \************************************/
+/*! exports provided: FieldSetEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FieldSetEditor", function() { return FieldSetEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../types/FieldSet */ "./types/FieldSet.ts");
+
+
+
+
+var randomColor = __webpack_require__(/*! randomcolor */ "../node_modules/randomcolor/randomColor.js");
+
+var FieldSetEditor = function FieldSetEditor(_a) {
+  var item = _a.item,
+      _onChange = _a.onChange,
+      context = _a.context;
+
+  if (context.data && context.data.length > 0) {
+    var options_1 = context.data.flatMap(function (frame) {
+      return frame.fields;
+    }).map(function (field, index) {
+      var _a;
+
+      return {
+        label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
+        value: index
+      };
+    });
+    var sizeOptions_1 = options_1;
+    var selects_1 = new Array(0);
+    var values_1 = context.options.fieldSets.filter(function (x) {
+      return x.col != null;
+    });
+
+    if (values_1) {
+      values_1.forEach(function (val, index) {
+        var lineSize = values_1[index].lineType === 'none' ? null : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterFlex ScatterSize"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterLabel"
+        }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+          css: "",
+          type: "number",
+          label: "Line Size",
+          value: values_1[index].lineSize,
+          min: 1,
+          max: 10,
+          title: "Set size of line",
+          onChange: function onChange(e) {
+            values_1[index].lineSize = e.target.valueAsNumber;
+
+            _onChange(values_1);
+          }
+        }));
+        selects_1.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "FieldSetEditor"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterFlex"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterSelect"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+          isLoading: false,
+          value: values_1[index].col,
+          isClearable: values_1.length > 1,
+          onChange: function onChange(e) {
+            if (e) {
+              values_1[index].col = e.value;
+            } else {
+              values_1.splice(index, 1);
+            }
+
+            _onChange(values_1);
+          },
+          options: options_1
+        })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterFlex ScatterSize"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterLabel"
+        }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterSelect"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+          isLoading: false,
+          value: values_1[index].sizeCol,
+          isClearable: true,
+          onChange: function onChange(e) {
+            values_1[index].sizeCol = e ? e.value : -1;
+
+            _onChange(values_1);
+          },
+          options: sizeOptions_1
+        })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+          css: "",
+          type: "number",
+          value: values_1[index].dotSize,
+          min: 1,
+          max: 20,
+          title: "Set size of dot",
+          onChange: function onChange(e) {
+            values_1[index].dotSize = e.target.valueAsNumber;
+
+            _onChange(values_1);
+          }
+        })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterDotColor"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+          color: values_1[index].color,
+          enableNamedColors: false,
+          onChange: function onChange(e) {
+            values_1[index].color = e;
+
+            _onChange(values_1);
+          }
+        }))), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterFlex"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterFlex ScatterLineType"
+        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          className: "ScatterLabel"
+        }, "Line"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+          isLoading: false,
+          value: values_1[index].lineType,
+          onChange: function onChange(e) {
+            values_1[index].lineType = e.value;
+
+            _onChange(values_1);
+          },
+          options: [{
+            label: 'None',
+            value: 'none'
+          }, {
+            label: 'Simple',
+            value: 'simple'
+          }, {
+            label: 'Linear',
+            value: 'linear'
+          }, {
+            label: 'Exponential',
+            value: 'exponential'
+          }, {
+            label: 'Power',
+            value: 'power'
+          }]
+        })), lineSize), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("hr", null)));
+      });
+    }
+
+    var addButton = values_1.some(function (x) {
+      return x.col === -1;
+    }) ? null : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      variant: "secondary",
+      size: "sm",
+      onClick: function onClick() {
+        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 0, 'none', false));
+
+        _onChange(values_1);
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("i", {
+      className: "fa fa-plus"
+    }), ' ', "Add", item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("hr", null));
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, selects_1, addButton);
+  }
+
+  return null;
+};
+
+/***/ }),
+
+/***/ "./editors/GridEditor.tsx":
+/*!********************************!*\
+  !*** ./editors/GridEditor.tsx ***!
+  \********************************/
+/*! exports provided: GridEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "GridEditor", function() { return GridEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var GridEditor = function GridEditor(_a) {
+  var value = _a.value,
+      _onChange = _a.onChange;
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterBorder ScatterFlex"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterFlex"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterCheckbox"
+  }, "Color"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterDotColor"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+    color: value.color,
+    enableNamedColors: false,
+    onChange: function onChange(e) {
+      value.color = e;
+
+      _onChange(value);
+    }
+  }))));
+};
+
+/***/ }),
+
+/***/ "./editors/LabelEditor.tsx":
+/*!*********************************!*\
+  !*** ./editors/LabelEditor.tsx ***!
+  \*********************************/
+/*! exports provided: LabelEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LabelEditor", function() { return LabelEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var LabelEditor = function LabelEditor(_a) {
+  var _onChange = _a.onChange,
+      context = _a.context;
+
+  if (context.data && context.data.length > 0) {
+    var label_1 = context.options.label;
+    var options = context.data.flatMap(function (frame) {
+      return frame.fields;
+    }).map(function (field, index) {
+      var _a;
+
+      return {
+        label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
+        value: index
+      };
+    });
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "LabelEditor"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterFlex"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterSelect"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+      isLoading: false,
+      isClearable: true,
+      value: label_1.col,
+      onChange: function onChange(e) {
+        label_1.col = e ? e.value : -1;
+
+        _onChange(label_1);
+      },
+      options: options
+    }))));
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+    onChange: function onChange() {},
+    disabled: true
+  });
+};
+
+/***/ }),
+
+/***/ "./editors/LegendEditor.tsx":
+/*!**********************************!*\
+  !*** ./editors/LegendEditor.tsx ***!
+  \**********************************/
+/*! exports provided: LegendEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LegendEditor", function() { return LegendEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var LegendEditor = function LegendEditor(_a) {
+  var value = _a.value,
+      _onChange = _a.onChange;
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterFlex"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterFlex ScatterSize"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterLabel"
+  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    className: "ScatterLegendSize",
+    type: "number",
+    value: value.size,
+    min: 0,
+    max: 10,
+    title: "Legend Text Size",
+    onChange: function onChange(e) {
+      value.size = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })));
+};
+
+/***/ }),
+
+/***/ "./editors/MarginPairEditor.tsx":
+/*!**************************************!*\
+  !*** ./editors/MarginPairEditor.tsx ***!
+  \**************************************/
+/*! exports provided: MarginPairEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarginPairEditor", function() { return MarginPairEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var MarginPairEditor = function MarginPairEditor(_a) {
+  var value = _a.value,
+      _onChange = _a.onChange;
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterMargins"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterMargin"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    type: "number",
+    value: value.lower,
+    //        title="Left Margin"
+    onChange: function onChange(e) {
+      value.lower = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterExtentLimit"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    className: "ScatterExtentLimit",
+    type: "number",
+    value: value.upper,
+    //        title="Right Margin"
+    onChange: function onChange(e) {
+      value.upper = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })));
+};
+
+/***/ }),
+
+/***/ "./editors/TitleEditor.tsx":
+/*!*********************************!*\
+  !*** ./editors/TitleEditor.tsx ***!
+  \*********************************/
+/*! exports provided: TitleEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TitleEditor", function() { return TitleEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var TitleEditor = function TitleEditor(_a) {
+  var value = _a.value,
+      _onChange = _a.onChange;
+  var color = value.textSize > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "TitleColor"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+    color: value.color,
+    enableNamedColors: false,
+    onChange: function onChange(e) {
+      value.color = e;
+
+      _onChange(value);
+    }
+  })) : null;
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "TitleEditor"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "TitleText"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    type: "string",
+    value: value.text,
+    onChange: function onChange(e) {
+      value.text = e.target.value;
+
+      _onChange(value);
+    }
+  })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterFlex ScatterSize"
+  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    className: "ScatterLabel"
+  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    css: "",
+    type: "number",
+    min: 0,
+    max: 10,
+    title: "Set size of text",
+    value: value.textSize,
+    onChange: function onChange(e) {
+      value.textSize = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })), color);
+};
+
+/***/ }),
+
+/***/ "./editors/XAxisEditor.tsx":
+/*!*********************************!*\
+  !*** ./editors/XAxisEditor.tsx ***!
+  \*********************************/
+/*! exports provided: XAxisEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "XAxisEditor", function() { return XAxisEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+
+
+var XAxisEditor = function XAxisEditor(_a) {
+  var _onChange = _a.onChange,
+      context = _a.context;
+
+  if (context.data && context.data.length > 0) {
+    var xAxis_1 = context.options.xAxis;
+    var options = context.data.flatMap(function (frame) {
+      return frame.fields;
+    }).map(function (field, index) {
+      var _a;
+
+      return {
+        label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
+        value: index
+      };
+    });
+    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "XAxisEditor"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterFlex"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterSelect"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+      isLoading: false,
+      value: xAxis_1.col,
+      onChange: function onChange(e) {
+        xAxis_1.col = e.value;
+
+        _onChange(xAxis_1);
+      },
+      options: options
+    })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterFlex"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterCheckbox",
+      title: "Draw X axis right to left"
+    }, "Inverted"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+      css: "",
+      value: xAxis_1.inverted,
+      onChange: function onChange(e) {
+        xAxis_1.inverted = e.currentTarget.checked;
+
+        _onChange(xAxis_1);
+      }
+    }))));
+  }
+
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+    onChange: function onChange() {},
+    disabled: true
+  });
+};
+
+/***/ }),
+
+/***/ "./module.tsx":
+/*!********************!*\
+  !*** ./module.tsx ***!
+  \********************/
+/*! exports provided: plugin */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "plugin", function() { return plugin; });
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @grafana/data */ "@grafana/data");
+/* harmony import */ var _grafana_data__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_grafana_data__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var editors_ExtentsEditor__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! editors/ExtentsEditor */ "./editors/ExtentsEditor.tsx");
+/* harmony import */ var editors_MarginPairEditor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! editors/MarginPairEditor */ "./editors/MarginPairEditor.tsx");
+/* harmony import */ var editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! editors/TitleEditor */ "./editors/TitleEditor.tsx");
+/* harmony import */ var editors_LabelEditor__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! editors/LabelEditor */ "./editors/LabelEditor.tsx");
+/* harmony import */ var editors_LegendEditor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! editors/LegendEditor */ "./editors/LegendEditor.tsx");
+/* harmony import */ var editors_BorderEditor__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! editors/BorderEditor */ "./editors/BorderEditor.tsx");
+/* harmony import */ var editors_GridEditor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! editors/GridEditor */ "./editors/GridEditor.tsx");
+/* harmony import */ var types_Border__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! types/Border */ "./types/Border.ts");
+/* harmony import */ var types_XAxis__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! types/XAxis */ "./types/XAxis.ts");
+/* harmony import */ var types_MarginPair__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! types/MarginPair */ "./types/MarginPair.ts");
+/* harmony import */ var types_Label__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! types/Label */ "./types/Label.ts");
+/* harmony import */ var types_Title__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! types/Title */ "./types/Title.ts");
+/* harmony import */ var types_Grid__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! types/Grid */ "./types/Grid.ts");
+/* harmony import */ var types_Legend__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! types/Legend */ "./types/Legend.ts");
+/* harmony import */ var types_Extents__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! types/Extents */ "./types/Extents.ts");
+/* harmony import */ var ScatterPanel__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ScatterPanel */ "./ScatterPanel.tsx");
+/* harmony import */ var editors_XAxisEditor__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! editors/XAxisEditor */ "./editors/XAxisEditor.tsx");
+/* harmony import */ var editors_FieldSetEditor__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! editors/FieldSetEditor */ "./editors/FieldSetEditor.tsx");
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](ScatterPanel__WEBPACK_IMPORTED_MODULE_16__["ScatterPanel"]).setPanelOptions(function (builder) {
+  builder.addCustomEditor({
+    id: 'xAxis',
+    path: 'xAxis',
+    name: 'X Axis Field',
+    category: ['X Axis'],
+    editor: editors_XAxisEditor__WEBPACK_IMPORTED_MODULE_17__["XAxisEditor"],
+    defaultValue: new types_XAxis__WEBPACK_IMPORTED_MODULE_9__["XAxis"](-1, false)
+  });
+  builder.addCustomEditor({
+    id: 'xAxisExtents',
+    path: 'xAxisExtents',
+    name: 'X Axis Extent (Min & Max)',
+    category: ['X Axis'],
+    editor: editors_ExtentsEditor__WEBPACK_IMPORTED_MODULE_1__["ExtentsEditor"],
+    defaultValue: new types_Extents__WEBPACK_IMPORTED_MODULE_15__["Extents"](NaN, NaN)
+  });
+  builder.addCustomEditor({
+    id: 'xMargins',
+    path: 'xMargins',
+    name: 'Margins (Left & Right)',
+    category: ['X Axis'],
+    editor: editors_MarginPairEditor__WEBPACK_IMPORTED_MODULE_2__["MarginPairEditor"],
+    defaultValue: new types_MarginPair__WEBPACK_IMPORTED_MODULE_10__["MarginPair"](30, 10)
+  });
+  builder.addCustomEditor({
+    id: 'xAxisTitle',
+    path: 'xAxisTitle',
+    name: 'X Axis Title',
+    category: ['X Axis'],
+    editor: editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__["TitleEditor"],
+    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1)
+  });
+  builder.addCustomEditor({
+    id: 'label',
+    path: 'label',
+    name: 'X Axis Labels',
+    category: ['X Axis'],
+    editor: editors_LabelEditor__WEBPACK_IMPORTED_MODULE_4__["LabelEditor"],
+    defaultValue: new types_Label__WEBPACK_IMPORTED_MODULE_11__["Label"](-1)
+  });
+  builder.addCustomEditor({
+    id: 'fieldSets',
+    path: 'fieldSets',
+    name: 'Field(s)',
+    category: ['Y Axis'],
+    editor: editors_FieldSetEditor__WEBPACK_IMPORTED_MODULE_18__["FieldSetEditor"],
+    defaultValue: []
+  });
+  builder.addCustomEditor({
+    id: 'yAxisExtents',
+    path: 'yAxisExtents',
+    name: 'Y Axis Extent (Min & Max)',
+    category: ['Y Axis'],
+    editor: editors_ExtentsEditor__WEBPACK_IMPORTED_MODULE_1__["ExtentsEditor"],
+    defaultValue: new types_Extents__WEBPACK_IMPORTED_MODULE_15__["Extents"](NaN, NaN)
+  });
+  builder.addCustomEditor({
+    id: 'yMargins',
+    path: 'yMargins',
+    name: 'Margins (Bottom & Top)',
+    category: ['Y Axis'],
+    editor: editors_MarginPairEditor__WEBPACK_IMPORTED_MODULE_2__["MarginPairEditor"],
+    defaultValue: new types_MarginPair__WEBPACK_IMPORTED_MODULE_10__["MarginPair"](20, 20)
+  });
+  builder.addCustomEditor({
+    id: 'yAxisTitle',
+    path: 'yAxisTitle',
+    name: 'Y Axis Title',
+    category: ['Y Axis'],
+    editor: editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__["TitleEditor"],
+    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1)
+  });
+  builder.addBooleanSwitch({
+    path: 'rotateYAxisTitle',
+    name: 'Rotate Y Axis Title',
+    category: ['Y Axis'],
+    defaultValue: false,
+    showIf: function showIf(config) {
+      var _a;
+
+      return ((_a = config.yAxisTitle.text) === null || _a === void 0 ? void 0 : _a.length) > 0;
+    }
+  });
+  builder.addCustomEditor({
+    id: 'legend',
+    path: 'legend',
+    name: 'Legend',
+    category: ['Display'],
+    editor: editors_LegendEditor__WEBPACK_IMPORTED_MODULE_5__["LegendEditor"],
+    defaultValue: new types_Legend__WEBPACK_IMPORTED_MODULE_14__["Legend"](false, 3)
+  });
+  builder.addCustomEditor({
+    id: 'grid',
+    path: 'grid',
+    name: 'Grid',
+    category: ['Display'],
+    editor: editors_GridEditor__WEBPACK_IMPORTED_MODULE_7__["GridEditor"],
+    defaultValue: new types_Grid__WEBPACK_IMPORTED_MODULE_13__["Grid"]('gray')
+  });
+  builder.addCustomEditor({
+    id: 'border',
+    path: 'border',
+    name: 'Border',
+    category: ['Display'],
+    editor: editors_BorderEditor__WEBPACK_IMPORTED_MODULE_6__["BorderEditor"],
+    defaultValue: new types_Border__WEBPACK_IMPORTED_MODULE_8__["Border"]('yellow', 0)
+  });
+  return builder;
+});
+
+/***/ }),
+
+/***/ "./types/Border.ts":
+/*!*************************!*\
+  !*** ./types/Border.ts ***!
+  \*************************/
+/*! exports provided: Border */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Border", function() { return Border; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var Border =
+/** @class */
+function () {
+  function Border(color, size) {
+    this.color = color;
+    this.size = size;
+  }
+
+  return Border;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/ColData.ts":
+/*!**************************!*\
+  !*** ./types/ColData.ts ***!
+  \**************************/
+/*! exports provided: ColData */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColData", function() { return ColData; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var ColData =
+/** @class */
+function () {
+  function ColData(name, displayName, values) {
+    this.name = name;
+    this.displayName = displayName;
+    this.values = values;
+  }
+
+  return ColData;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/Extents.ts":
+/*!**************************!*\
+  !*** ./types/Extents.ts ***!
+  \**************************/
+/*! exports provided: Extents */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Extents", function() { return Extents; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var Extents =
+/** @class */
+function () {
+  function Extents(min, max) {
+    this.min = min;
+    this.max = max;
+  }
+
+  return Extents;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/FieldSet.ts":
+/*!***************************!*\
+  !*** ./types/FieldSet.ts ***!
+  \***************************/
+/*! exports provided: FieldSet */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "FieldSet", function() { return FieldSet; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var FieldSet =
+/** @class */
+function () {
+  function FieldSet(col, sizeCol, color, dotSize, lineSize, lineType, hidden) {
+    this.col = col;
+    this.sizeCol = sizeCol;
+    this.color = color;
+    this.dotSize = dotSize;
+    this.lineSize = lineSize;
+    this.lineType = lineType;
+    this.hidden = hidden;
+  }
+
+  return FieldSet;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/Grid.ts":
+/*!***********************!*\
+  !*** ./types/Grid.ts ***!
+  \***********************/
+/*! exports provided: Grid */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Grid", function() { return Grid; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var Grid =
+/** @class */
+function () {
+  function Grid(color) {
+    this.color = color;
+  }
+
+  return Grid;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/Label.ts":
+/*!************************!*\
+  !*** ./types/Label.ts ***!
+  \************************/
+/*! exports provided: Label */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Label", function() { return Label; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var Label =
+/** @class */
+function () {
+  function Label(col) {
+    this.col = col;
+  }
+
+  return Label;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/Legend.ts":
+/*!*************************!*\
+  !*** ./types/Legend.ts ***!
+  \*************************/
+/*! exports provided: Legend */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Legend", function() { return Legend; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var Legend =
+/** @class */
+function () {
+  function Legend(show, size) {
+    this.show = show;
+    this.size = size;
+  }
+
+  return Legend;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/MarginPair.ts":
+/*!*****************************!*\
+  !*** ./types/MarginPair.ts ***!
+  \*****************************/
+/*! exports provided: MarginPair */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MarginPair", function() { return MarginPair; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var MarginPair =
+/** @class */
+function () {
+  function MarginPair(lower, upper) {
+    this.lower = lower;
+    this.upper = upper;
+  }
+
+  return MarginPair;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/Title.ts":
+/*!************************!*\
+  !*** ./types/Title.ts ***!
+  \************************/
+/*! exports provided: Title */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Title", function() { return Title; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var Title =
+/** @class */
+function () {
+  function Title(text, color, textSize) {
+    this.text = text;
+    this.color = color;
+    this.textSize = textSize;
+  }
+
+  return Title;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/XAxis.ts":
+/*!************************!*\
+  !*** ./types/XAxis.ts ***!
+  \************************/
+/*! exports provided: XAxis */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "XAxis", function() { return XAxis; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var XAxis =
+/** @class */
+function () {
+  function XAxis(col, inverted) {
+    this.col = col;
+    this.inverted = inverted;
+  }
+
+  return XAxis;
+}();
+
+
+
+/***/ }),
+
+/***/ "@grafana/data":
+/*!********************************!*\
+  !*** external "@grafana/data" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_data__;
+
+/***/ }),
+
+/***/ "@grafana/ui":
+/*!******************************!*\
+  !*** external "@grafana/ui" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE__grafana_ui__;
+
+/***/ }),
+
+/***/ "d3":
+/*!*********************!*\
+  !*** external "d3" ***!
+  \*********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_d3__;
+
+/***/ }),
+
+/***/ "jquery":
+/*!*************************!*\
+  !*** external "jquery" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_jquery__;
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "react" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = __WEBPACK_EXTERNAL_MODULE_react__;
+
+/***/ })
+
+/******/ })});;
 //# sourceMappingURL=module.js.map

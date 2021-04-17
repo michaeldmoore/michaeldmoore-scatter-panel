@@ -1,8 +1,8 @@
 /* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
-export class Border {
+export class MarginPair {
   constructor(
-    public color: string,
-    public size: number,
+    public lower: number,
+    public upper: number,
   ) {
   }
 }

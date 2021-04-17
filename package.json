@@ -17,7 +17,9 @@
     "email": "plugins@grafana.com"
   },
   "devDependencies": {
-    "@grafana/toolkit": "^7.3.6",
+    "@grafana/data": "latest",
+    "@grafana/toolkit": "latest",
+    "@grafana/ui": "latest",
     "@types/d3": "^6.2.0",
     "@types/randomcolor": "^0.5.5",
     "@types/regression": "^2.0.0",
@@ -35,11 +37,9 @@
     "eslint-plugin-react-hooks": "^4.2.0"
   },
   "engines": {
-    "node": ">=12 <13"
+    "node": ">=14"
   },
   "dependencies": {
-    "@grafana/data": "^7.3.6",
-    "@grafana/ui": "^7.3.6",
     "@types/jquery": "^3.5.5",
     "d3": "^6.3.1",
     "jquery": "^3.5.1",

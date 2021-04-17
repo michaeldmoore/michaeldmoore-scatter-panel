@@ -2,6 +2,7 @@
 export class FieldSet {
   constructor(
     public col: number,
+    public sizeCol: number,
     public color: string,
     public dotSize: number,
     public lineSize: number,

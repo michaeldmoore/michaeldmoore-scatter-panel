@@ -17,7 +17,6 @@
 }
 
 .ScatterLineType{
-  width: 190px;
 }
 
 .ScatterDotColor{
@@ -25,20 +24,31 @@
 }
 
 .ScatterSelect{
-    width:100%;
+  display:flex;
+  min-width:160px;
 }
 
 .ScatterExtents{
-    display:flex;
+  display:flex;
 }
 
 .ScatterExtentLimit{
-    padding-right:20px;
+  width: 180px;
+  padding-right:20px;
+}
+
+.ScatterMargins{
+  display:flex;
+}
+
+.ScatterMarginLimit{
+  width: 180px;
+  padding-right:20px;
 }
 
 .ScatterLabel{
   padding-top: 6px;
-  width: 90px;
+  width: 85px;
   color: rgb(159, 167, 179);
   font-size: 12px;
   text-align: center;
@@ -74,22 +84,11 @@
 }
 
 .TitleText{
-    padding-right:20px;
-}
-
-.TitleSize{
-    padding-right:20px;
-    max-width: 70px;
+    width:160px;
 }
 
 .TitleColor{
     padding-top:7px;
-}
-
-.TitleLabel{
-    padding-top:8px;
-    color:#777;
-    font-size: smaller;
 }
 
 .ScatterLegend input {
