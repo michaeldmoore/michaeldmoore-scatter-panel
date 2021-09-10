@@ -194,7 +194,8 @@ function drawDots(options: ScatterOptions,
   colValues: number[][],
   xScale: Function,
   yScale: Function) {
-  return fieldSets.map((y, i: number) => (
+
+  const dots = fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
       const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
 
@@ -220,6 +221,13 @@ function drawDots(options: ScatterOptions,
       return <div key={`circle-[${y}][${i}]`}></div>;
     })
   ));
+
+  return (
+    <g clipPath="url(#grid)">
+      {dots}
+    </g>
+  );
+
 }
 
 function applySetFieldSetHidden(

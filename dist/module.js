@@ -1676,7 +1676,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
 }
 
 function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale) {
-  return fieldSets.map(function (y, i) {
+  var dots = fieldSets.map(function (y, i) {
     return xValues.map(function (x, j) {
       var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
       var yValue = yValues[i][j];
@@ -1703,6 +1703,9 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
       });
     });
   });
+  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    clipPath: "url(#grid)"
+  }, dots);
 }
 
 function applySetFieldSetHidden(fieldSet, index, hidden, panelId) {

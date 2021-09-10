@@ -5,7 +5,7 @@
   "info": {
     "description": "A really easy-to-use scatter-plot plugin panel for table formatted Grafana data",
     "author": {
-      "name": "Michael Moore<mdmoore@gmail.com>",
+      "name": "Michael Moore",
       "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel"
     },
     "keywords": [
@@ -36,7 +36,7 @@
       }
     ],
     "version": "1.0.0",
-    "updated": "2021-04-17"
+    "updated": "2021-06-02"
   },
   "dependencies": {
     "grafanaDependency": ">=7.3.0",
