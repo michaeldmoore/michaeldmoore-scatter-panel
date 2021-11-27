@@ -1883,8 +1883,6 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
   return null;
 }
 
-function getXValues(col) {}
-
 function generateContent(options, width, height, fieldSets, colData, panelId) {
   //  const visibleFieldSets = fieldSets;
   var colValues = colData.map(function (c) {

@@ -416,10 +416,6 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
   return null;
 }
 
-function getXValues(col: number) {
-
-}
-
 function generateContent(
   options: ScatterOptions,
   width: number,
