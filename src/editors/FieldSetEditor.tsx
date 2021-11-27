@@ -16,7 +16,9 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-      }));
+        valid: field.type !== "string"
+      }))
+      .filter(o => o.valid);
 
     const sizeOptions = options;
 

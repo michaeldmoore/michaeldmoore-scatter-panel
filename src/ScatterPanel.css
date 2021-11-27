@@ -91,6 +91,15 @@
     padding-top:7px;
 }
 
+.LabelEditor{
+  display:flex;
+}
+
+.LabelColor{
+  padding-top:7px;
+}
+
+
 .ScatterLegend input {
   width: 50px;
 }

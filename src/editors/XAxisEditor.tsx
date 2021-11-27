@@ -15,7 +15,9 @@ export const XAxisEditor: React.FC<Props> = ({ onChange, context }) => {
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-      }));
+        valid: field.type !== "string"
+      }))
+      .filter(o => o.valid);
 
     return (
       <div className="XAxisEditor">

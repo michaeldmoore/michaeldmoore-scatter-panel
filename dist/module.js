@@ -97,7 +97,7 @@ define(["@grafana/data","@grafana/ui","d3","jquery","react"], function(__WEBPACK
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-left: 5px;\n  width: 55px;\n  color: #9fa7b3;\n  font-size: 12px;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,WAAW;EACX,cAAc;EACd,eAAe;AACjB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-left: 5px;\n  width: 55px;\n  color: #9fa7b3;\n  font-size: 12px;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}"]}]);
+exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-left: 5px;\n  width: 55px;\n  color: #9fa7b3;\n  font-size: 12px;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,iBAAiB;EACjB,WAAW;EACX,cAAc;EACd,eAAe;AACjB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-left: 5px;\n  width: 55px;\n  color: #9fa7b3;\n  font-size: 12px;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}"]}]);
 // Exports
 module.exports = exports;
 
@@ -1695,6 +1695,22 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
   });
 }
 
+function drawLabels(options, labels, xValues, xScale) {
+  return xValues.map(function (x, i) {
+    if (i < labels.length) {
+      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+        key: "label-[" + i + "]",
+        x: xScale(x),
+        alignmentBaseline: "hanging",
+        textAnchor: "middle",
+        fill: options.label.color,
+        fontSize: options.label.textSize * 4,
+        fontWeight: "100"
+      }, labels[i]);
+    } else return null;
+  });
+}
+
 function applySetFieldSetHidden(fieldSet, index, hidden, panelId) {
   fieldSet.hidden = hidden;
   var panelGroup = jquery__WEBPACK_IMPORTED_MODULE_1___default()(".ScatterPanel-" + panelId);
@@ -1870,6 +1886,7 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   })), options.yAxisExtents.max === 0 ? 0 : options.yAxisExtents.max || d3__WEBPACK_IMPORTED_MODULE_2__["max"](yExtents.map(function (c) {
     return c[1];
   }))];
+  var labels = options.label.col >= 0 ? colValues[options.label.col] : [];
   var xMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_5__["MarginPair"](options.xMargins.lower || 0, options.xMargins.upper || 0);
   var yMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_5__["MarginPair"](options.yMargins.lower || 0, options.yMargins.upper || 0);
   var legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
@@ -1918,7 +1935,10 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
     clipPath: "url(#grid-" + panelId + "." + width + ")"
   }, drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
     id: 'dots'
-  }, drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale))));
+  }, drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    id: 'labels',
+    transform: "translate(0, " + (height - yMargins.lower + options.label.textSize + 3) + ")"
+  }, drawLabels(options, labels, xValues, xScale))));
 }
 
 var ScatterPanel = function ScatterPanel(_a) {
@@ -2125,8 +2145,11 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
-        value: index
+        value: index,
+        valid: field.type !== "string"
       };
+    }).filter(function (o) {
+      return o.valid;
     });
     var sizeOptions_1 = options_1;
     var selects_1 = new Array(0);
@@ -2334,9 +2357,40 @@ var LabelEditor = function LabelEditor(_a) {
 
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
-        value: index
+        value: index,
+        valid: field.type === "string"
       };
+    }).filter(function (o) {
+      return o.valid;
     });
+    var color = label_1.col >= 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterFlex"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterFlex ScatterSize"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "ScatterLabel"
+    }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+      type: "number",
+      min: 1,
+      max: 10,
+      title: "Set size of text",
+      value: label_1.textSize,
+      onChange: function onChange(e) {
+        label_1.textSize = e.target.valueAsNumber;
+
+        _onChange(label_1);
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      className: "LabelColor"
+    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+      color: label_1.color,
+      enableNamedColors: false,
+      onChange: function onChange(e) {
+        label_1.color = e;
+
+        _onChange(label_1);
+      }
+    }))) : null;
     return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
       className: "LabelEditor"
     }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
@@ -2353,7 +2407,7 @@ var LabelEditor = function LabelEditor(_a) {
         _onChange(label_1);
       },
       options: options
-    }))));
+    }))), color);
   }
 
   return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
@@ -2546,8 +2600,11 @@ var XAxisEditor = function XAxisEditor(_a) {
 
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
-        value: index
+        value: index,
+        valid: field.type !== "string"
       };
+    }).filter(function (o) {
+      return o.valid;
     });
     return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
       className: "XAxisEditor"
@@ -2675,7 +2732,7 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](Scatt
     name: 'X Axis Labels',
     category: ['X Axis'],
     editor: editors_LabelEditor__WEBPACK_IMPORTED_MODULE_4__["LabelEditor"],
-    defaultValue: new types_Label__WEBPACK_IMPORTED_MODULE_11__["Label"](-1)
+    defaultValue: new types_Label__WEBPACK_IMPORTED_MODULE_11__["Label"](-1, '#CCC', 2)
   });
   builder.addCustomEditor({
     id: 'fieldSets',
@@ -2898,8 +2955,10 @@ __webpack_require__.r(__webpack_exports__);
 var Label =
 /** @class */
 function () {
-  function Label(col) {
+  function Label(col, color, textSize) {
     this.col = col;
+    this.color = color;
+    this.textSize = textSize;
   }
 
   return Label;

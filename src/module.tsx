@@ -63,7 +63,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'X Axis Labels',
       category: ['X Axis'],
       editor: LabelEditor,
-      defaultValue: new Label(-1),
+      defaultValue: new Label(-1, '#CCC', 2),
     });
 
     builder.addCustomEditor({

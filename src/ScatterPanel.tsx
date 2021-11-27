@@ -208,6 +208,33 @@ function drawDots(options: ScatterOptions,
   ));
 }
 
+function drawLabels(options: ScatterOptions,
+  labels: string[],
+  xValues: number[],
+  xScale: Function) {
+
+  return xValues.map((x, i: number) => {
+    if (i < labels.length) {
+      return (
+        <text
+          key={`label-[${i}]`}
+          x={xScale(x)}
+          alignmentBaseline="hanging"
+          textAnchor="middle"
+          fill={options.label.color}
+          fontSize={options.label.textSize * 4}
+          fontWeight="100"
+        >
+          {labels[i]}
+        </text>
+      );
+    }
+    else
+      return null;
+    }
+  )
+}
+
 function applySetFieldSetHidden(
   fieldSet: FieldSet,
   index: number,
@@ -381,7 +408,7 @@ function generateContent(
   colData: {
     name: string,
     displayName: string,
-    values: number[]
+    values: any[]
   }[],
   panelId: number,
 ) {
@@ -404,6 +431,7 @@ function generateContent(
       || d3.max(yExtents.map((c) => c[1]) as number[]),
   ] as number[];
 
+  const labels = options.label.col >= 0 ? colValues[options.label.col]: [];
   const xMargins = new MarginPair(options.xMargins.lower || 0, options.xMargins.upper || 0);
   const yMargins = new MarginPair(options.yMargins.lower || 0, options.yMargins.upper || 0);
   const legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
@@ -491,6 +519,11 @@ function generateContent(
         </g>
         <g id='dots'>
           {drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale)}
+        </g>
+        <g id='labels'
+          transform={`translate(0, ${height - yMargins.lower + options.label.textSize + 3})`}
+          >
+          {drawLabels(options, labels, xValues, xScale)}
         </g>
       </g>
     </svg>

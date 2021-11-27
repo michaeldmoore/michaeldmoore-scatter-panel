@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { StandardEditorProps } from '@grafana/data';
-import { Select } from '@grafana/ui';
+import { Select, Input, ColorPicker } from '@grafana/ui';
 import { Label } from '../types/Label';
 
 interface Props extends StandardEditorProps<Label> { }
@@ -15,7 +15,38 @@ export const LabelEditor: React.FC<Props> = ({ onChange, context }) => {
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-      }));
+        valid: field.type === "string"
+      }))
+      .filter(o => o.valid);
+
+    const color = label.col >= 0 ?
+      <div className="ScatterFlex">
+        <div className="ScatterFlex ScatterSize">
+          <div className="ScatterLabel">Size</div>
+          <Input
+            type="number"
+            min={1}
+            max={10}
+            title="Set size of text"
+            value={label.textSize}
+            onChange={(e) => {
+              label.textSize = (e.target as HTMLInputElement).valueAsNumber;
+              onChange(label);
+            }}
+          />
+        </div>
+
+        <div className="LabelColor">
+          <ColorPicker
+            color={label.color}
+            enableNamedColors={false}
+            onChange={(e) => {
+              label.color = e;
+              onChange(label);
+            }}
+          />
+        </div>
+      </div> : null;
 
     return (
       <div className="LabelEditor">
@@ -33,6 +64,7 @@ export const LabelEditor: React.FC<Props> = ({ onChange, context }) => {
             />
           </div>
         </div>
+        {color}
       </div>
     );
   }

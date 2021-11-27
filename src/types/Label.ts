@@ -2,6 +2,8 @@
 export class Label {
   constructor(
     public col: number,
+    public color: string,
+    public textSize: number,
   ) {
   }
 }
