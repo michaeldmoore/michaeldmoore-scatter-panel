@@ -50,18 +50,9 @@ function evaluateYExponential(reg: regression.Result, x: number) {
   return reg.equation[0] * Math.exp(reg.equation[1] * x);
 }
 
-// function evaluateXExponential(reg: regression.Result, y: number){
-//   return Math.log(y / reg.equation[0]) / reg.equation[1];
-// }
-
 function evaluateYPower(reg: regression.Result, x: number) {
-//  return reg.equation[0] * Math.pow(x, reg.equation[1]);
   return reg.equation[0] * (x ** reg.equation[1]);
 }
-
-// function evaluateXPower(reg: regression.Result, y: number){
-//   return Math.log(y / reg.equation[0]) / reg.equation[1];
-// }
 
 function drawLines(
   options: ScatterOptions,
@@ -73,7 +64,7 @@ function drawLines(
   xExtent: number[],
   yExtent: number[],
 ) {
-  const lines = new Array(0);
+  const lines = new Array(0) as JSX.Element[];
 
   fieldSets.forEach((fieldSet, index) => {
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
@@ -121,10 +112,7 @@ function drawLines(
         const reg = regression.exponential(xyData);
 
         const x0 = xExtent[0];
-        //        let y0 = evaluateYExponential(reg, x0);
-
         const x1 = xExtent[1];
-        //        let y1 = evaluateYExponential(reg, x1);
 
         const steps = 50;
         const dx = x0 + (x1 - x0) / steps;
@@ -169,6 +157,7 @@ function drawLines(
 
         lines.push(
           <path
+            key={`line-[${index}]`}
             className={className}
             d={path}
             stroke={fieldSet.color}
@@ -180,11 +169,7 @@ function drawLines(
     }
   });
 
-  return (
-    <g clipPath="url(#grid)">
-      {lines}
-    </g>
-  );
+  return lines;
 }
 
 function drawDots(options: ScatterOptions,
@@ -195,7 +180,7 @@ function drawDots(options: ScatterOptions,
   xScale: Function,
   yScale: Function) {
 
-  const dots = fieldSets.map((y, i: number) => (
+  return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
       const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
 
@@ -221,13 +206,6 @@ function drawDots(options: ScatterOptions,
       return <div key={`circle-[${y}][${i}]`}></div>;
     })
   ));
-
-  return (
-    <g clipPath="url(#grid)">
-      {dots}
-    </g>
-  );
-
 }
 
 function applySetFieldSetHidden(
@@ -308,7 +286,7 @@ function drawLegend(options: ScatterOptions, width: number, height: number, xMar
       });
 
       return (
-        <g transform={`translate(${width - dx}, ${yMargins.upper})`}>
+        <g id="legend" transform={`translate(${width - dx}, ${yMargins.upper})`}>
           {legends}
         </g>
       );
@@ -328,7 +306,7 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, xMar
     yMargins.lower += dy * scale;
 
     return (
-      <g
+      <g id="XTitle"
         transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height - dy * scale}) scale(${scale})`}
       >
         <text
@@ -358,11 +336,11 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
       xMargins.lower += dy * scale;
 
       return (
-        <g
+        <g id="YTitle"
           transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) rotate(-90) scale(${scale})`}
         >
           <text
-            className="ScatterXTitleRect"
+            className="ScatterYTitleRect"
             alignmentBaseline="hanging"
             textAnchor="middle"
             width={dx}
@@ -377,11 +355,11 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
     xMargins.lower += dx * scale;
 
     return (
-      <g
+      <g id="YTitle"
         transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) scale(${scale})`}
       >
         <text
-          className="ScatterXTitleRect"
+          className="ScatterYTitleRect"
           textAnchor="left"
           width={dx}
           height={dy}
@@ -433,7 +411,7 @@ function generateContent(
   const xTitle = drawXTitle(options, width, height, xMargins, yMargins);
 
   const border = options.border.size > 0 ? (
-    <rect
+    <rect id="border"
       transform={`translate(${xMargins.lower}, ${yMargins.upper})`}
       width={width - xMargins.lower - xMargins.upper}
       height={height - yMargins.upper - yMargins.lower}
@@ -445,7 +423,7 @@ function generateContent(
 
   const clippath = (
     <defs>
-      <clipPath id="grid">
+      <clipPath id={`grid-${panelId}.${width}`}>
         <rect
           transform={`translate(${xMargins.lower}, ${yMargins.upper})`}
           width={width - xMargins.lower - xMargins.upper}
@@ -488,7 +466,7 @@ function generateContent(
         {legend}
         {xTitle}
         {yTitle}
-        <g
+        <g id="YGrid"
           transform={`translate(0, ${height - yMargins.lower})`}
           ref={(node) => {
             d3.select(node)  
@@ -497,7 +475,7 @@ function generateContent(
               .attr('stroke', options.grid.color);
           }}
         />
-        <g
+        <g id="HGrid"
           transform={`translate(${xMargins.lower}, 0)`}
           ref={(node) => {
             d3.select(node)
@@ -508,10 +486,10 @@ function generateContent(
         />
         {clippath}
         {border}
-        <g>
+        <g id='lines' clipPath={`url(#grid-${panelId}.${width})`}>
           {drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
         </g>
-        <g>
+        <g id='dots'>
           {drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale)}
         </g>
       </g>

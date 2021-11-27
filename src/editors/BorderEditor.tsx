@@ -23,7 +23,6 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
       <div className="ScatterFlex ScatterSize">
         <div className="ScatterLabel">Size</div>
         <Input
-          css=""
           type="number"
           min={0}
           max={10}

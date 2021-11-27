@@ -34,7 +34,6 @@ export const XAxisEditor: React.FC<Props> = ({ onChange, context }) => {
           <div className="ScatterFlex">
             <div className="ScatterCheckbox" title="Draw X axis right to left">Inverted</div>
             <Checkbox
-              css=""
               value={xAxis.inverted}
               onChange={(e) => {
                 xAxis.inverted = e.currentTarget.checked;

@@ -22,7 +22,6 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
     <div className="TitleEditor">
       <div className="TitleText">
         <Input
-          css=""
           type="string"
           value={value.text}
           onChange={(e) => {
@@ -34,7 +33,6 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
       <div className="ScatterFlex ScatterSize">
         <div className="ScatterLabel">Size</div>
         <Input
-          css=""
           type="number"
           min={0}
           max={10}

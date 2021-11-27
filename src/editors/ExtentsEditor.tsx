@@ -9,7 +9,6 @@ export const ExtentsEditor: React.FC<Props> = ({ value, onChange }) => (
   <div className="ScatterExtents">
     <div className="ScatterExtentLimit">
       <Input
-        css=""
         type="number"
         value={value.min}
         title="Axis Min (leave blank for auto)"
@@ -21,7 +20,6 @@ export const ExtentsEditor: React.FC<Props> = ({ value, onChange }) => (
     </div>
     <div className="ScatterExtentLimit">
       <Input
-        css=""
         className="ScatterExtentLimit"
         type="number"
         value={value.max}

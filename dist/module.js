@@ -1545,18 +1545,11 @@ function evaluateXLinear(reg, y) {
 
 function evaluateYExponential(reg, x) {
   return reg.equation[0] * Math.exp(reg.equation[1] * x);
-} // function evaluateXExponential(reg: regression.Result, y: number){
-//   return Math.log(y / reg.equation[0]) / reg.equation[1];
-// }
-
+}
 
 function evaluateYPower(reg, x) {
-  //  return reg.equation[0] * Math.pow(x, reg.equation[1]);
   return reg.equation[0] * Math.pow(x, reg.equation[1]);
-} // function evaluateXPower(reg: regression.Result, y: number){
-//   return Math.log(y / reg.equation[0]) / reg.equation[1];
-// }
-
+}
 
 function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent) {
   var lines = new Array(0);
@@ -1609,10 +1602,8 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         // using the regression package, first create an array of arrays for the X/Y values
         //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
         var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.exponential(xyData);
-        var x0 = xExtent[0]; //        let y0 = evaluateYExponential(reg, x0);
-
-        var x1 = xExtent[1]; //        let y1 = evaluateYExponential(reg, x1);
-
+        var x0 = xExtent[0];
+        var x1 = xExtent[1];
         var steps = 50;
         var dx = x0 + (x1 - x0) / steps;
         var xys = new Array(0);
@@ -1661,6 +1652,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         }
 
         lines.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
+          key: "line-[" + index + "]",
           className: className,
           d: path,
           stroke: fieldSet.color,
@@ -1670,13 +1662,11 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
       }
     }
   });
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
-    clipPath: "url(#grid)"
-  }, lines);
+  return lines;
 }
 
 function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale) {
-  var dots = fieldSets.map(function (y, i) {
+  return fieldSets.map(function (y, i) {
     return xValues.map(function (x, j) {
       var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
       var yValue = yValues[i][j];
@@ -1703,9 +1693,6 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
       });
     });
   });
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
-    clipPath: "url(#grid)"
-  }, dots);
 }
 
 function applySetFieldSetHidden(fieldSet, index, hidden, panelId) {
@@ -1790,6 +1777,7 @@ function drawLegend(options, width, height, xMargins, yMargins, colNames, panelI
         }, colNames[f.col]));
       });
       return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+        id: "legend",
         transform: "translate(" + (width - dx) + ", " + yMargins.upper + ")"
       }, legends_1);
     }
@@ -1807,6 +1795,7 @@ function drawXTitle(options, width, height, xMargins, yMargins) {
     var dy = 14;
     yMargins.lower += dy * scale;
     return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+      id: "XTitle",
       transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + (height - dy * scale) + ") scale(" + scale + ")"
     }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
       className: "ScatterXTitleRect",
@@ -1832,9 +1821,10 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
     if (options.rotateYAxisTitle) {
       xMargins.lower += dy * scale;
       return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+        id: "YTitle",
         transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") rotate(-90) scale(" + scale + ")"
       }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
-        className: "ScatterXTitleRect",
+        className: "ScatterYTitleRect",
         alignmentBaseline: "hanging",
         textAnchor: "middle",
         width: dx,
@@ -1845,9 +1835,10 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
 
     xMargins.lower += dx * scale;
     return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+      id: "YTitle",
       transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + scale + ")"
     }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
-      className: "ScatterXTitleRect",
+      className: "ScatterYTitleRect",
       textAnchor: "left",
       width: dx,
       height: dy,
@@ -1885,6 +1876,7 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
   var xTitle = drawXTitle(options, width, height, xMargins, yMargins);
   var border = options.border.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("rect", {
+    id: "border",
     transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
     width: width - xMargins.lower - xMargins.upper,
     height: height - yMargins.upper - yMargins.lower,
@@ -1893,7 +1885,7 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
     fill: "none"
   }) : null;
   var clippath = react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("defs", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("clipPath", {
-    id: "grid"
+    id: "grid-" + panelId + "." + width
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("rect", {
     transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
     width: width - xMargins.lower - xMargins.upper,
@@ -1910,16 +1902,23 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
     className: "ScatterPanel-" + panelId
   }, legend, xTitle, yTitle, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    id: "YGrid",
     transform: "translate(0, " + (height - yMargins.lower) + ")",
     ref: function ref(node) {
       d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(xAxis).selectAll('line').attr('stroke', options.grid.color);
     }
   }), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    id: "HGrid",
     transform: "translate(" + xMargins.lower + ", 0)",
     ref: function ref(node) {
       d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(yAxis).selectAll('line').attr('stroke', options.grid.color);
     }
-  }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", null, drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", null, drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale))));
+  }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    id: 'lines',
+    clipPath: "url(#grid-" + panelId + "." + width + ")"
+  }, drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    id: 'dots'
+  }, drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale))));
 }
 
 var ScatterPanel = function ScatterPanel(_a) {
@@ -2028,7 +2027,6 @@ var BorderEditor = function BorderEditor(_a) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterLabel"
   }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     type: "number",
     min: 0,
     max: 10,
@@ -2068,7 +2066,6 @@ var ExtentsEditor = function ExtentsEditor(_a) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterExtentLimit"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     type: "number",
     value: value.min,
     title: "Axis Min (leave blank for auto)",
@@ -2080,7 +2077,6 @@ var ExtentsEditor = function ExtentsEditor(_a) {
   })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterExtentLimit"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     className: "ScatterExtentLimit",
     type: "number",
     value: value.max,
@@ -2145,7 +2141,6 @@ var FieldSetEditor = function FieldSetEditor(_a) {
         }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
           className: "ScatterLabel"
         }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-          css: "",
           type: "number",
           label: "Line Size",
           value: values_1[index].lineSize,
@@ -2195,7 +2190,6 @@ var FieldSetEditor = function FieldSetEditor(_a) {
           },
           options: sizeOptions_1
         })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-          css: "",
           type: "number",
           value: values_1[index].dotSize,
           min: 1,
@@ -2396,7 +2390,6 @@ var LegendEditor = function LegendEditor(_a) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterLabel"
   }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     className: "ScatterLegendSize",
     type: "number",
     value: value.size,
@@ -2437,7 +2430,6 @@ var MarginPairEditor = function MarginPairEditor(_a) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterMargin"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     type: "number",
     value: value.lower,
     //        title="Left Margin"
@@ -2449,7 +2441,6 @@ var MarginPairEditor = function MarginPairEditor(_a) {
   })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterExtentLimit"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     className: "ScatterExtentLimit",
     type: "number",
     value: value.upper,
@@ -2499,7 +2490,6 @@ var TitleEditor = function TitleEditor(_a) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "TitleText"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     type: "string",
     value: value.text,
     onChange: function onChange(e) {
@@ -2512,7 +2502,6 @@ var TitleEditor = function TitleEditor(_a) {
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterLabel"
   }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    css: "",
     type: "number",
     min: 0,
     max: 10,
@@ -2581,7 +2570,6 @@ var XAxisEditor = function XAxisEditor(_a) {
       className: "ScatterCheckbox",
       title: "Draw X axis right to left"
     }, "Inverted"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
-      css: "",
       value: xAxis_1.inverted,
       onChange: function onChange(e) {
         xAxis_1.inverted = e.currentTarget.checked;

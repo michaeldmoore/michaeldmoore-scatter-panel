@@ -11,7 +11,6 @@ export const LegendEditor: React.FC<Props> = ({ value, onChange }) => {
       <div className="ScatterFlex ScatterSize">
         <div className="ScatterLabel">Size</div>
         <Input
-          css=""
           className="ScatterLegendSize"
           type="number"
           value={value.size}

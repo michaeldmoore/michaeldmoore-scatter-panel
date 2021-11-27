@@ -30,7 +30,6 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
           <div className="ScatterFlex ScatterSize">
             <div className="ScatterLabel">Size</div>
             <Input
-              css=""
               type="number"
               label="Line Size"
               value={values[index].lineSize}
@@ -78,7 +77,6 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
 
 
                 <Input
-                  css=""
                   type="number"
                   value={values[index].dotSize}
                   min={1}

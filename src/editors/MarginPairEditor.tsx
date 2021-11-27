@@ -9,7 +9,6 @@ export const MarginPairEditor: React.FC<Props> = ({ value, onChange }) => (
   <div className="ScatterMargins">
     <div className="ScatterMargin">
       <Input
-        css=""
         type="number"
         value={value.lower}
 //        title="Left Margin"
@@ -21,7 +20,6 @@ export const MarginPairEditor: React.FC<Props> = ({ value, onChange }) => (
     </div>
     <div className="ScatterExtentLimit">
       <Input
-        css=""
         className="ScatterExtentLimit"
         type="number"
         value={value.upper}
