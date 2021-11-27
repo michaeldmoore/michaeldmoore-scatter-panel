@@ -228,7 +228,7 @@ function drawDots(options: ScatterOptions,
 
   return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
-      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : y.dotSize;
+      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;//y.dotSize;
 
       const yValue = yValues[i][j];
 

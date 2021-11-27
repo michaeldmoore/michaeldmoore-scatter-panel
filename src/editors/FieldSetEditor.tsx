@@ -20,7 +20,14 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
       }))
       .filter(o => o.valid);
 
-    const sizeOptions = options;
+    var sizeOptions = Array(0);
+
+    for (var i = 1; i < 11; i += 2)
+      sizeOptions.push({label: i, value: -i});
+
+    options.forEach(o => {
+      sizeOptions.push(o);
+    });
 
     const selects = new Array(0);
 
@@ -61,7 +68,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   options={options}
                 />
               </div>
-              <div className="ScatterFlex ScatterSize">
+              <div className="ScatterFlex ScatterDotSize">
                 <div className="ScatterLabel">Size</div>
 
                 <div className="ScatterSelect">
@@ -76,19 +83,6 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                     options={sizeOptions}
                   />
                 </div>
-
-
-                <Input
-                  type="number"
-                  value={values[index].dotSize}
-                  min={1}
-                  max={20}
-                  title="Set size of dot"
-                  onChange={(e) => {
-                    values[index].dotSize = (e.target as HTMLInputElement).valueAsNumber;
-                    onChange(values);
-                  }}
-                />
               </div>
               <div className="ScatterDotColor">
                 <ColorPicker
