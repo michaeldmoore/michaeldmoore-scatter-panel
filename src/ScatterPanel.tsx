@@ -109,7 +109,7 @@ function drawLines(
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
       let path = '';
 
-      const xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter(xy => xy[1] != null) as DataPoint[];
+      let xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter(xy => xy[1] != null) as DataPoint[];
       if (fieldSet.lineType === 'simple') {
         path = `
         ${xyData.map((xy, i) => `${i === 0 ? 'M' : 'L'} ${xScale(xy[0])} ${yScale(xy[1])}`).join(' ')}
@@ -148,6 +148,10 @@ function drawLines(
         // using the regression package, first create an array of arrays for the X/Y values
         //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
+        if (fieldSet.lineType === 'power')
+          xyData = xyData.filter(d => d[0] > 0);
+
+
         const reg = getRegression(fieldSet.lineType, xyData);
 
         const x0 = xExtent[0];
@@ -158,37 +162,39 @@ function drawLines(
         const xys = new Array(0);
         for (let i = 0; i < steps; i++) {
           const x = x0 + i * dx;
-          const y = evaluate(fieldSet.lineType, reg, x);
-          xys.push([x, y]);
+          if (fieldSet.lineType !== 'power' || x > 0) {
+            const y = evaluate(fieldSet.lineType, reg, x);
+            xys.push([x, y]);
+          }
         }
         path = `
         ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
       `;
       }
-/*       else if (fieldSet.lineType === 'power') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-
-        const reg = getRegression(fieldSet.lineType, xyData);
-
-        let x0 = xExtent[0];
-        if (x0 < 0) { x0 = 0; } // Domain for power regressions MUST be positive
-
-        const x1 = xExtent[1];
-
-        const steps = 100;
-        const dx = x0 + (x1 - x0) / steps;
-        const xys = new Array(0);
-        for (let i = 0; i < steps; i++) {
-          const x = x0 + i * dx;
-          const y = evaluate(fieldSet.lineType, reg, x);
-          xys.push([x, y]);
-        }
-        path = `
-        ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
-      `;
-      }
-*/
+      /*       else if (fieldSet.lineType === 'power') {
+              // using the regression package, first create an array of arrays for the X/Y values
+              //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+      
+              const reg = getRegression(fieldSet.lineType, xyData);
+      
+              let x0 = xExtent[0];
+              if (x0 < 0) { x0 = 0; } // Domain for power regressions MUST be positive
+      
+              const x1 = xExtent[1];
+      
+              const steps = 100;
+              const dx = x0 + (x1 - x0) / steps;
+              const xys = new Array(0);
+              for (let i = 0; i < steps; i++) {
+                const x = x0 + i * dx;
+                const y = evaluate(fieldSet.lineType, reg, x);
+                xys.push([x, y]);
+              }
+              path = `
+              ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
+            `;
+            }
+      */
       if (path.length) {
         let className = `ScatterLine ScatterLine-${index}`;
         if (options.legend.size && fieldSet.hidden) {

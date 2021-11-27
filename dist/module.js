@@ -1643,6 +1643,9 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         {
           // using the regression package, first create an array of arrays for the X/Y values
           //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+          if (fieldSet.lineType === 'power') xyData = xyData.filter(function (d) {
+            return d[0] > 0;
+          });
           var reg = getRegression(fieldSet.lineType, xyData);
           var x0 = xExtent[0];
           var x1 = xExtent[1];
@@ -1652,8 +1655,11 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
 
           for (var i = 0; i < steps; i++) {
             var x = x0 + i * dx;
-            var y = evaluate(fieldSet.lineType, reg, x);
-            xys.push([x, y]);
+
+            if (fieldSet.lineType !== 'power' || x > 0) {
+              var y = evaluate(fieldSet.lineType, reg, x);
+              xys.push([x, y]);
+            }
           }
 
           path = "\n        " + xys.map(function (d, i) {
