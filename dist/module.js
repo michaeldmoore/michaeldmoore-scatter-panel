@@ -1534,21 +1534,61 @@ function autoConfigure(options, colData) {
   options.yMargins.lower = 20;
   options.yMargins.upper = 20;
 }
-
-function evaluateYLinear(reg, x) {
-  return reg.equation[0] * x + reg.equation[1];
+/*
+function evaluateYLinear(reg: regression.Result, x: number) {
+  return (reg.equation[0] * x) + reg.equation[1];
 }
 
-function evaluateXLinear(reg, y) {
+function evaluateXLinear(reg: regression.Result, y: number) {
   return (y - reg.equation[1]) / reg.equation[0];
 }
 
-function evaluateYExponential(reg, x) {
+function evaluateYExponential(reg: regression.Result, x: number) {
   return reg.equation[0] * Math.exp(reg.equation[1] * x);
 }
 
-function evaluateYPower(reg, x) {
-  return reg.equation[0] * Math.pow(x, reg.equation[1]);
+function evaluateYPower(reg: regression.Result, x: number) {
+  return reg.equation[0] * (x ** reg.equation[1]);
+}
+*/
+
+
+function getRegression(method, xyData) {
+  switch (method) {
+    case 'exponential':
+      return regression__WEBPACK_IMPORTED_MODULE_3___default.a.exponential(xyData);
+      break;
+
+    case 'power':
+      return regression__WEBPACK_IMPORTED_MODULE_3___default.a.power(xyData);
+      break;
+
+    case 'linear':
+    default:
+      return regression__WEBPACK_IMPORTED_MODULE_3___default.a.linear(xyData);
+      break;
+  }
+}
+
+function evaluate(method, reg, val) {
+  switch (method) {
+    case "exponential":
+      return reg.equation[0] * Math.exp(reg.equation[1] * val);
+      break;
+
+    case "power":
+      return reg.equation[0] * Math.pow(val, reg.equation[1]);
+      break;
+
+    case "XLinear":
+      return (val - reg.equation[1]) / reg.equation[0];
+      break;
+
+    case "YLinear":
+    default:
+      return reg.equation[0] * val + reg.equation[1];
+      break;
+  }
 }
 
 function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent) {
@@ -1569,80 +1609,82 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
       } else if (fieldSet.lineType === 'linear') {
         // using the regression package, first create an array of arrays for the X/Y values
         //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-        var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.linear(xyData); // check for start and end points inside the plotted area
+        var reg = getRegression(fieldSet.lineType, xyData); // check for start and end points inside the plotted area
 
         var x0 = xExtent[0];
-        var y0 = evaluateYLinear(reg, x0);
+        var y0 = evaluate('YLinear', reg, x0);
 
         if (y0 < yExtent[0]) {
           y0 = yExtent[0];
-          x0 = evaluateXLinear(reg, y0);
+          x0 = evaluate('XLinear', reg, y0);
         }
 
         if (y0 > yExtent[1]) {
           y0 = yExtent[1];
-          x0 = evaluateXLinear(reg, y0);
+          x0 = evaluate('XLinear', reg, y0);
         }
 
         var x1 = xExtent[1];
-        var y1 = evaluateYLinear(reg, x1);
+        var y1 = evaluate('YLinear', reg, x1);
 
         if (y1 < yExtent[0]) {
           y1 = yExtent[0];
-          x1 = evaluateXLinear(reg, y1);
+          x1 = evaluate('XLinear', reg, y1);
         }
 
         if (y1 > yExtent[1]) {
           y1 = yExtent[1];
-          x1 = evaluateXLinear(reg, y1);
+          x1 = evaluate('XLinear', reg, y1);
         }
 
         path = "M " + xScale(x0) + " " + yScale(y0) + " L " + xScale(x1) + " " + yScale(y1);
-      } else if (fieldSet.lineType === 'exponential') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-        var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.exponential(xyData);
-        var x0 = xExtent[0];
-        var x1 = xExtent[1];
-        var steps = 50;
-        var dx = x0 + (x1 - x0) / steps;
-        var xys = new Array(0);
+      } else
+        /*if (fieldSet.lineType === 'exponential')*/
+        {
+          // using the regression package, first create an array of arrays for the X/Y values
+          //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+          var reg = getRegression(fieldSet.lineType, xyData);
+          var x0 = xExtent[0];
+          var x1 = xExtent[1];
+          var steps = 100;
+          var dx = (x1 - x0) / (steps - 1);
+          var xys = new Array(0);
 
-        for (var i = 0; i < steps; i++) {
-          var x = x0 + i * dx;
-          var y = evaluateYExponential(reg, x);
-          xys.push([x, y]);
+          for (var i = 0; i < steps; i++) {
+            var x = x0 + i * dx;
+            var y = evaluate(fieldSet.lineType, reg, x);
+            xys.push([x, y]);
+          }
+
+          path = "\n        " + xys.map(function (d, i) {
+            return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
+          }).join(' ') + "\n      ";
         }
+      /*       else if (fieldSet.lineType === 'power') {
+              // using the regression package, first create an array of arrays for the X/Y values
+              //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
+      
+              const reg = getRegression(fieldSet.lineType, xyData);
+      
+              let x0 = xExtent[0];
+              if (x0 < 0) { x0 = 0; } // Domain for power regressions MUST be positive
+      
+              const x1 = xExtent[1];
+      
+              const steps = 100;
+              const dx = x0 + (x1 - x0) / steps;
+              const xys = new Array(0);
+              for (let i = 0; i < steps; i++) {
+                const x = x0 + i * dx;
+                const y = evaluate(fieldSet.lineType, reg, x);
+                xys.push([x, y]);
+              }
+              path = `
+              ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
+            `;
+            }
+      */
 
-        path = "\n        " + xys.map(function (d, i) {
-          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
-        }).join(' ') + "\n      ";
-      } else if (fieldSet.lineType === 'power') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-        var reg = regression__WEBPACK_IMPORTED_MODULE_3___default.a.power(xyData);
-        var x0 = xExtent[0];
-
-        if (x0 < 0) {
-          x0 = 0;
-        } // Domain for power regressions MUST be positive
-
-
-        var x1 = xExtent[1];
-        var steps = 100;
-        var dx = x0 + (x1 - x0) / steps;
-        var xys = new Array(0);
-
-        for (var i = 0; i < steps; i++) {
-          var x = x0 + i * dx;
-          var y = evaluateYPower(reg, x);
-          xys.push([x, y]);
-        }
-
-        path = "\n        " + xys.map(function (d, i) {
-          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
-        }).join(' ') + "\n      ";
-      }
 
       if (path.length) {
         var className = "ScatterLine ScatterLine-" + index;

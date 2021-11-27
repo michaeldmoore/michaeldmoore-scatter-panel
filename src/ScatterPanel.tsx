@@ -37,7 +37,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.yMargins.lower = 20;
   options.yMargins.upper = 20;
 }
-
+/*
 function evaluateYLinear(reg: regression.Result, x: number) {
   return (reg.equation[0] * x) + reg.equation[1];
 }
@@ -52,6 +52,45 @@ function evaluateYExponential(reg: regression.Result, x: number) {
 
 function evaluateYPower(reg: regression.Result, x: number) {
   return reg.equation[0] * (x ** reg.equation[1]);
+}
+*/
+function getRegression(method: string, xyData: regression.DataPoint[]) {
+  switch (method) {
+    case 'exponential':
+      return regression.exponential(xyData);
+      break;
+
+    case 'power':
+      return regression.power(xyData);
+      break;
+
+    case 'linear':
+    default:
+      return regression.linear(xyData);
+      break;
+
+  }
+}
+
+function evaluate(method: string, reg: regression.Result, val: number) {
+  switch (method) {
+    case "exponential":
+      return reg.equation[0] * Math.exp(reg.equation[1] * val);
+      break;
+
+    case "power":
+      return reg.equation[0] * (val ** reg.equation[1]);
+      break;
+
+    case "XLinear":
+      return (val - reg.equation[1]) / reg.equation[0];
+      break;
+
+    case "YLinear":
+    default:
+      return (reg.equation[0] * val) + reg.equation[1];
+      break;
+  }
 }
 
 function drawLines(
@@ -79,57 +118,58 @@ function drawLines(
         // using the regression package, first create an array of arrays for the X/Y values
         //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
-        const reg = regression.linear(xyData);
+        const reg = getRegression(fieldSet.lineType, xyData);
 
         // check for start and end points inside the plotted area
         let x0 = xExtent[0];
-        let y0 = evaluateYLinear(reg, x0);
+        let y0 = evaluate('YLinear', reg, x0);
         if (y0 < yExtent[0]) {
           y0 = yExtent[0];
-          x0 = evaluateXLinear(reg, y0);
+          x0 = evaluate('XLinear', reg, y0);
         }
         if (y0 > yExtent[1]) {
           y0 = yExtent[1];
-          x0 = evaluateXLinear(reg, y0);
+          x0 = evaluate('XLinear', reg, y0);
         }
 
         let x1 = xExtent[1];
-        let y1 = evaluateYLinear(reg, x1);
+        let y1 = evaluate('YLinear', reg, x1);
         if (y1 < yExtent[0]) {
           y1 = yExtent[0];
-          x1 = evaluateXLinear(reg, y1);
+          x1 = evaluate('XLinear', reg, y1);
         }
         if (y1 > yExtent[1]) {
           y1 = yExtent[1];
-          x1 = evaluateXLinear(reg, y1);
+          x1 = evaluate('XLinear', reg, y1);
         }
 
         path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
-      } else if (fieldSet.lineType === 'exponential') {
+      } else /*if (fieldSet.lineType === 'exponential')*/ {
         // using the regression package, first create an array of arrays for the X/Y values
         //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
-        const reg = regression.exponential(xyData);
+        const reg = getRegression(fieldSet.lineType, xyData);
 
         const x0 = xExtent[0];
         const x1 = xExtent[1];
 
-        const steps = 50;
-        const dx = x0 + (x1 - x0) / steps;
+        const steps = 100;
+        const dx = (x1 - x0) / (steps - 1);
         const xys = new Array(0);
         for (let i = 0; i < steps; i++) {
           const x = x0 + i * dx;
-          const y = evaluateYExponential(reg, x);
+          const y = evaluate(fieldSet.lineType, reg, x);
           xys.push([x, y]);
         }
         path = `
         ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
       `;
-      } else if (fieldSet.lineType === 'power') {
+      }
+/*       else if (fieldSet.lineType === 'power') {
         // using the regression package, first create an array of arrays for the X/Y values
         //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
 
-        const reg = regression.power(xyData);
+        const reg = getRegression(fieldSet.lineType, xyData);
 
         let x0 = xExtent[0];
         if (x0 < 0) { x0 = 0; } // Domain for power regressions MUST be positive
@@ -141,14 +181,14 @@ function drawLines(
         const xys = new Array(0);
         for (let i = 0; i < steps; i++) {
           const x = x0 + i * dx;
-          const y = evaluateYPower(reg, x);
+          const y = evaluate(fieldSet.lineType, reg, x);
           xys.push([x, y]);
         }
         path = `
         ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
       `;
       }
-
+*/
       if (path.length) {
         let className = `ScatterLine ScatterLine-${index}`;
         if (options.legend.size && fieldSet.hidden) {
@@ -231,7 +271,7 @@ function drawLabels(options: ScatterOptions,
     }
     else
       return null;
-    }
+  }
   )
 }
 
@@ -431,7 +471,7 @@ function generateContent(
       || d3.max(yExtents.map((c) => c[1]) as number[]),
   ] as number[];
 
-  const labels = options.label.col >= 0 ? colValues[options.label.col]: [];
+  const labels = options.label.col >= 0 ? colValues[options.label.col] : [];
   const xMargins = new MarginPair(options.xMargins.lower || 0, options.xMargins.upper || 0);
   const yMargins = new MarginPair(options.yMargins.lower || 0, options.yMargins.upper || 0);
   const legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
@@ -471,7 +511,7 @@ function generateContent(
     ]);
 
   let xAxis = d3.axisBottom(xScale);
-  
+
   if (options.label.col >= 0)
     xAxis = xAxis.ticks(0);
   else
@@ -484,7 +524,7 @@ function generateContent(
     .range([height - yMargins.lower, yMargins.upper]);
 
   let yAxis = d3.axisLeft(yScale).tickSize(xMargins.lower + xMargins.upper - width);
-  
+
   return (
     <svg
       width={width}
@@ -497,7 +537,7 @@ function generateContent(
         <g id="YGrid"
           transform={`translate(0, ${height - yMargins.lower})`}
           ref={(node) => {
-            d3.select(node)  
+            d3.select(node)
               .call(xAxis as any)
               .selectAll('line')
               .attr('stroke', options.grid.color);
@@ -522,7 +562,7 @@ function generateContent(
         </g>
         <g id='labels'
           transform={`translate(0, ${height - yMargins.lower + options.label.textSize + 3})`}
-          >
+        >
           {drawLabels(options, labels, xValues, xScale)}
         </g>
       </g>
