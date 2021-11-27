@@ -115,9 +115,6 @@ function drawLines(
         ${xyData.map((xy, i) => `${i === 0 ? 'M' : 'L'} ${xScale(xy[0])} ${yScale(xy[1])}`).join(' ')}
       `;
       } else if (fieldSet.lineType === 'linear') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-
         const reg = getRegression(fieldSet.lineType, xyData);
 
         // check for start and end points inside the plotted area
@@ -144,13 +141,9 @@ function drawLines(
         }
 
         path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
-      } else /*if (fieldSet.lineType === 'exponential')*/ {
-        // using the regression package, first create an array of arrays for the X/Y values
-        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-
+      } else {
         if (fieldSet.lineType === 'power')
           xyData = xyData.filter(d => d[0] > 0);
-
 
         const reg = getRegression(fieldSet.lineType, xyData);
 
@@ -171,30 +164,7 @@ function drawLines(
         ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
       `;
       }
-      /*       else if (fieldSet.lineType === 'power') {
-              // using the regression package, first create an array of arrays for the X/Y values
-              //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-      
-              const reg = getRegression(fieldSet.lineType, xyData);
-      
-              let x0 = xExtent[0];
-              if (x0 < 0) { x0 = 0; } // Domain for power regressions MUST be positive
-      
-              const x1 = xExtent[1];
-      
-              const steps = 100;
-              const dx = x0 + (x1 - x0) / steps;
-              const xys = new Array(0);
-              for (let i = 0; i < steps; i++) {
-                const x = x0 + i * dx;
-                const y = evaluate(fieldSet.lineType, reg, x);
-                xys.push([x, y]);
-              }
-              path = `
-              ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
-            `;
-            }
-      */
+
       if (path.length) {
         let className = `ScatterLine ScatterLine-${index}`;
         if (options.legend.size && fieldSet.hidden) {
@@ -446,6 +416,10 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
   return null;
 }
 
+function getXValues(col: number) {
+
+}
+
 function generateContent(
   options: ScatterOptions,
   width: number,
@@ -454,21 +428,22 @@ function generateContent(
   colData: {
     name: string,
     displayName: string,
+    type: string,
     values: any[]
   }[],
   panelId: number,
 ) {
-  const visibleFieldSets = fieldSets;
+//  const visibleFieldSets = fieldSets;
 
   const colValues = colData.map((c) => c.values);
   const colNames = colData.map((c) => c.displayName || c.name);
-  const xValues = colValues[options.xAxis.col];
+  const xValues = colData[options.xAxis.col].type !== "string" ? colValues[options.xAxis.col] : Array.from(colValues[0],(x,i)=>i);
   const xExtent = [
     options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3.min(xValues),
     options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3.max(xValues),
   ] as number[];
 
-  const yValues = visibleFieldSets.map((f) => colValues[f.col]);
+  const yValues = fieldSets.map((f) => colValues[f.col]);
   const yExtents = yValues.map((c) => d3.extent(c));
   const yExtent = [
     options.yAxisExtents.min === 0 ? 0 : options.yAxisExtents.min
@@ -561,10 +536,10 @@ function generateContent(
         {clippath}
         {border}
         <g id='lines' clipPath={`url(#grid-${panelId}.${width})`}>
-          {drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
+          {drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
         </g>
         <g id='dots'>
-          {drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale)}
+          {drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale)}
         </g>
         <g id='labels'
           transform={`translate(0, ${height - yMargins.lower + options.label.textSize + 3})`}
@@ -589,6 +564,7 @@ export const ScatterPanel: React.FC<Props> = ({
       colData.push(new ColData(
         field.name,
         field.config?.displayName || field.name,
+        field.type,
         field.values.toArray().map(v => v as number),
       ));
     });

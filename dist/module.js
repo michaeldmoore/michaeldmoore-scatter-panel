@@ -1607,8 +1607,6 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
           return (i === 0 ? 'M' : 'L') + " " + xScale(xy[0]) + " " + yScale(xy[1]);
         }).join(' ') + "\n      ";
       } else if (fieldSet.lineType === 'linear') {
-        // using the regression package, first create an array of arrays for the X/Y values
-        //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
         var reg = getRegression(fieldSet.lineType, xyData); // check for start and end points inside the plotted area
 
         var x0 = xExtent[0];
@@ -1638,59 +1636,30 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         }
 
         path = "M " + xScale(x0) + " " + yScale(y0) + " L " + xScale(x1) + " " + yScale(y1);
-      } else
-        /*if (fieldSet.lineType === 'exponential')*/
-        {
-          // using the regression package, first create an array of arrays for the X/Y values
-          //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-          if (fieldSet.lineType === 'power') xyData = xyData.filter(function (d) {
-            return d[0] > 0;
-          });
-          var reg = getRegression(fieldSet.lineType, xyData);
-          var x0 = xExtent[0];
-          var x1 = xExtent[1];
-          var steps = 100;
-          var dx = (x1 - x0) / (steps - 1);
-          var xys = new Array(0);
+      } else {
+        if (fieldSet.lineType === 'power') xyData = xyData.filter(function (d) {
+          return d[0] > 0;
+        });
+        var reg = getRegression(fieldSet.lineType, xyData);
+        var x0 = xExtent[0];
+        var x1 = xExtent[1];
+        var steps = 100;
+        var dx = (x1 - x0) / (steps - 1);
+        var xys = new Array(0);
 
-          for (var i = 0; i < steps; i++) {
-            var x = x0 + i * dx;
+        for (var i = 0; i < steps; i++) {
+          var x = x0 + i * dx;
 
-            if (fieldSet.lineType !== 'power' || x > 0) {
-              var y = evaluate(fieldSet.lineType, reg, x);
-              xys.push([x, y]);
-            }
+          if (fieldSet.lineType !== 'power' || x > 0) {
+            var y = evaluate(fieldSet.lineType, reg, x);
+            xys.push([x, y]);
           }
-
-          path = "\n        " + xys.map(function (d, i) {
-            return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
-          }).join(' ') + "\n      ";
         }
-      /*       else if (fieldSet.lineType === 'power') {
-              // using the regression package, first create an array of arrays for the X/Y values
-              //const xyData = xValues.map((d, i) => [d, yValues[index][i]]) as DataPoint[];
-      
-              const reg = getRegression(fieldSet.lineType, xyData);
-      
-              let x0 = xExtent[0];
-              if (x0 < 0) { x0 = 0; } // Domain for power regressions MUST be positive
-      
-              const x1 = xExtent[1];
-      
-              const steps = 100;
-              const dx = x0 + (x1 - x0) / steps;
-              const xys = new Array(0);
-              for (let i = 0; i < steps; i++) {
-                const x = x0 + i * dx;
-                const y = evaluate(fieldSet.lineType, reg, x);
-                xys.push([x, y]);
-              }
-              path = `
-              ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
-            `;
-            }
-      */
 
+        path = "\n        " + xys.map(function (d, i) {
+          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
+        }).join(' ') + "\n      ";
+      }
 
       if (path.length) {
         var className = "ScatterLine ScatterLine-" + index;
@@ -1914,17 +1883,21 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
   return null;
 }
 
+function getXValues(col) {}
+
 function generateContent(options, width, height, fieldSets, colData, panelId) {
-  var visibleFieldSets = fieldSets;
+  //  const visibleFieldSets = fieldSets;
   var colValues = colData.map(function (c) {
     return c.values;
   });
   var colNames = colData.map(function (c) {
     return c.displayName || c.name;
   });
-  var xValues = colValues[options.xAxis.col];
+  var xValues = colData[options.xAxis.col].type !== "string" ? colValues[options.xAxis.col] : Array.from(colValues[0], function (x, i) {
+    return i;
+  });
   var xExtent = [options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3__WEBPACK_IMPORTED_MODULE_2__["min"](xValues), options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3__WEBPACK_IMPORTED_MODULE_2__["max"](xValues)];
-  var yValues = visibleFieldSets.map(function (f) {
+  var yValues = fieldSets.map(function (f) {
     return colValues[f.col];
   });
   var yExtents = yValues.map(function (c) {
@@ -1982,9 +1955,9 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
     id: 'lines',
     clipPath: "url(#grid-" + panelId + "." + width + ")"
-  }, drawLines(options, visibleFieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+  }, drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
     id: 'dots'
-  }, drawDots(options, visibleFieldSets, xValues, yValues, colValues, xScale, yScale)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+  }, drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
     id: 'labels',
     transform: "translate(0, " + (height - yMargins.lower + options.label.textSize + 3) + ")"
   }, drawLabels(options, labels, xValues, xScale))));
@@ -2005,7 +1978,7 @@ var ScatterPanel = function ScatterPanel(_a) {
     frame.fields.forEach(function (field) {
       var _a;
 
-      colData_1.push(new types_ColData__WEBPACK_IMPORTED_MODULE_4__["ColData"](field.name, ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) || field.name, field.values.toArray().map(function (v) {
+      colData_1.push(new types_ColData__WEBPACK_IMPORTED_MODULE_4__["ColData"](field.name, ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) || field.name, field.type, field.values.toArray().map(function (v) {
         return v;
       })));
     });
@@ -2652,9 +2625,8 @@ var XAxisEditor = function XAxisEditor(_a) {
         value: index,
         valid: field.type !== "string"
       };
-    }).filter(function (o) {
-      return o.valid;
-    });
+    }); //      .filter(o => o.valid);
+
     return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
       className: "XAxisEditor"
     }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
@@ -2895,9 +2867,10 @@ __webpack_require__.r(__webpack_exports__);
 var ColData =
 /** @class */
 function () {
-  function ColData(name, displayName, values) {
+  function ColData(name, displayName, type, values) {
     this.name = name;
     this.displayName = displayName;
+    this.type = type;
     this.values = values;
   }
 
