@@ -1,4 +1,4 @@
-declare namespace ThielSenRegression {
+declare module ThielSenRegression {
   export interface ThielSenRegressionModel {
     name: 'ThielSenRegression';
   }

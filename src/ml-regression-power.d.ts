@@ -1,4 +1,4 @@
-declare namespace PowerRegression {
+declare module PowerRegression {
   export interface PowerRegressionModel {
     name: 'PowerRegression';
   }

@@ -1,4 +1,4 @@
-declare namespace PolynomialRegression {
+declare module PolynomialRegression {
   export interface PolynomialRegressionModel {
     name: 'PolynomialRegression';
   }
