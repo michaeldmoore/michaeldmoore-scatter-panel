@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Input } from '@grafana/ui';
 import { Legend } from '../types/Legend';

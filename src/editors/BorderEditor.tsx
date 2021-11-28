@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { ColorPicker, Input } from '@grafana/ui';
 import { Border } from '../types/Border';
@@ -6,19 +6,22 @@ import { Border } from '../types/Border';
 interface Props extends StandardEditorProps<Border> { }
 
 export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
-  const color = value.size > 0 ?
-    <div className="ScatterDotColor">
-    <ColorPicker
-      color={value.color}
-      enableNamedColors={false}
-      onChange={(e: string) => {
-        value.color = e;
-        onChange(value);
-      }}
-    />
-  </div> : null;
+  const color = value.size > 0
+    ?
+    (<div className="ScatterDotColor">
+      <ColorPicker
+        color={value.color}
+        enableNamedColors={false}
+        onChange={(e: string) => {
+          value.color = e;
+          onChange(value);
+        }}
+      />
+    </div>)
+    : null;
 
-  return (
+  return
+  (
     <div className="ScatterFlex">
       <div className="ScatterFlex ScatterSize">
         <div className="ScatterLabel">Size</div>
@@ -35,5 +38,6 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
         />
       </div>
       {color}
-    </div>);
+    </div>
+  );
 };

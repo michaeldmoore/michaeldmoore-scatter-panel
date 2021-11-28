@@ -1534,24 +1534,6 @@ function autoConfigure(options, colData) {
   options.yMargins.lower = 20;
   options.yMargins.upper = 20;
 }
-/*
-function evaluateYLinear(reg: regression.Result, x: number) {
-  return (reg.equation[0] * x) + reg.equation[1];
-}
-
-function evaluateXLinear(reg: regression.Result, y: number) {
-  return (y - reg.equation[1]) / reg.equation[0];
-}
-
-function evaluateYExponential(reg: regression.Result, x: number) {
-  return reg.equation[0] * Math.exp(reg.equation[1] * x);
-}
-
-function evaluateYPower(reg: regression.Result, x: number) {
-  return reg.equation[0] * (x ** reg.equation[1]);
-}
-*/
-
 
 function getRegression(method, xyData) {
   if (method === 'exponential') {
@@ -1677,8 +1659,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
 function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale) {
   return fieldSets.map(function (y, i) {
     return xValues.map(function (x, j) {
-      var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol; // y.dotSize;
-
+      var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;
       var yValue = yValues[i][j];
 
       if (dotSize > 0 && yValue != null) {
@@ -2043,9 +2024,9 @@ __webpack_require__.r(__webpack_exports__);
 var BorderEditor = function BorderEditor(_a) {
   var value = _a.value,
       _onChange = _a.onChange;
-  var color = value.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  var color = value.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterDotColor"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
     color: value.color,
     enableNamedColors: false,
     onChange: function onChange(e) {
@@ -2054,13 +2035,14 @@ var BorderEditor = function BorderEditor(_a) {
       _onChange(value);
     }
   })) : null;
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  return;
+  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex ScatterSize"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterLabel"
-  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
     type: "number",
     min: 0,
     max: 10,
@@ -2160,22 +2142,22 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
         value: index,
-        valid: field.type !== "string"
+        valid: field.type !== 'string'
       };
     }).filter(function (o) {
       return o.valid;
     });
-    var sizeOptions = Array(0);
+    var sizeOptions_1 = Array(0);
 
     for (var i = 1; i < 11; i += 2) {
-      sizeOptions.push({
+      sizeOptions_1.push({
         label: i,
         value: -i
       });
     }
 
     options_1.forEach(function (o) {
-      sizeOptions.push(o);
+      sizeOptions_1.push(o);
     });
     var selects_1 = new Array(0);
     var values_1 = context.options.fieldSets.filter(function (x) {
@@ -2184,11 +2166,11 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
     if (values_1) {
       values_1.forEach(function (val, index) {
-        var lineSize = values_1[index].lineType === 'none' ? null : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        var lineSize = values_1[index].lineType === 'none' ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex ScatterSize"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterLabel"
-        }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+        }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
           type: "number",
           label: "Line Size",
           value: values_1[index].lineSize,
@@ -2201,13 +2183,13 @@ var FieldSetEditor = function FieldSetEditor(_a) {
             _onChange(values_1);
           }
         }));
-        selects_1.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        selects_1.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "FieldSetEditor"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterSelect"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
           isLoading: false,
           value: values_1[index].col,
           isClearable: values_1.length > 1,
@@ -2221,13 +2203,13 @@ var FieldSetEditor = function FieldSetEditor(_a) {
             _onChange(values_1);
           },
           options: options_1
-        })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex ScatterDotSize"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterLabel"
-        }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterSelect"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
           isLoading: false,
           value: values_1[index].sizeCol,
           isClearable: true,
@@ -2236,10 +2218,10 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
             _onChange(values_1);
           },
-          options: sizeOptions
-        }))), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+          options: sizeOptions_1
+        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterDotColor"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
           color: values_1[index].color,
           enableNamedColors: false,
           onChange: function onChange(e) {
@@ -2247,13 +2229,13 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
             _onChange(values_1);
           }
-        }))), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex ScatterLineType"
-        }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterLabel"
-        }, "Line"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+        }, "Line"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
           isLoading: false,
           value: values_1[index].lineType,
           onChange: function onChange(e) {
@@ -2277,13 +2259,13 @@ var FieldSetEditor = function FieldSetEditor(_a) {
             label: 'Power',
             value: 'power'
           }]
-        })), lineSize), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("hr", null)));
+        })), lineSize), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null)));
       });
     }
 
     var addButton = values_1.some(function (x) {
       return x.col === -1;
-    }) ? null : react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+    }) ? null : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
       variant: "secondary",
       size: "sm",
       onClick: function onClick() {
@@ -2291,10 +2273,10 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
         _onChange(values_1);
       }
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("i", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "fa fa-plus"
-    }), ' ', "Add", item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("hr", null));
-    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null, selects_1, addButton);
+    }), ' ', "Add", item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, selects_1, addButton);
   }
 
   return null;
@@ -2372,18 +2354,18 @@ var LabelEditor = function LabelEditor(_a) {
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
         value: index,
-        valid: field.type === "string"
+        valid: field.type === 'string'
       };
     }).filter(function (o) {
       return o.valid;
     });
-    var color = label_1.col >= 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    var color = label_1.col >= 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterFlex"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterFlex ScatterSize"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterLabel"
-    }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
       type: "number",
       min: 1,
       max: 10,
@@ -2394,9 +2376,9 @@ var LabelEditor = function LabelEditor(_a) {
 
         _onChange(label_1);
       }
-    })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "LabelColor"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
       color: label_1.color,
       enableNamedColors: false,
       onChange: function onChange(e) {
@@ -2405,13 +2387,13 @@ var LabelEditor = function LabelEditor(_a) {
         _onChange(label_1);
       }
     }))) : null;
-    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "LabelEditor"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterFlex"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterSelect"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
       isLoading: false,
       isClearable: true,
       value: label_1.col,
@@ -2424,7 +2406,7 @@ var LabelEditor = function LabelEditor(_a) {
     }))), color);
   }
 
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
     onChange: function onChange() {},
     disabled: true
   });
@@ -2451,13 +2433,13 @@ __webpack_require__.r(__webpack_exports__);
 var LegendEditor = function LegendEditor(_a) {
   var value = _a.value,
       _onChange = _a.onChange;
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex ScatterSize"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterLabel"
-  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
     className: "ScatterLegendSize",
     type: "number",
     value: value.size,
@@ -2542,9 +2524,9 @@ __webpack_require__.r(__webpack_exports__);
 var TitleEditor = function TitleEditor(_a) {
   var value = _a.value,
       _onChange = _a.onChange;
-  var color = value.textSize > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  var color = value.textSize > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "TitleColor"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
     color: value.color,
     enableNamedColors: false,
     onChange: function onChange(e) {
@@ -2553,11 +2535,12 @@ var TitleEditor = function TitleEditor(_a) {
       _onChange(value);
     }
   })) : null;
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  return;
+  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "TitleEditor"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "TitleText"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
     type: "string",
     value: value.text,
     onChange: function onChange(e) {
@@ -2565,11 +2548,11 @@ var TitleEditor = function TitleEditor(_a) {
 
       _onChange(value);
     }
-  })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex ScatterSize"
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterLabel"
-  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+  }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
     type: "number",
     min: 0,
     max: 10,
@@ -2615,17 +2598,16 @@ var XAxisEditor = function XAxisEditor(_a) {
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
         value: index,
-        valid: field.type !== "string"
+        valid: field.type !== 'string'
       };
-    }); //      .filter(o => o.valid);
-
-    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    });
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "XAxisEditor"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterFlex"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterSelect"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
       isLoading: false,
       value: xAxis_1.col,
       onChange: function onChange(e) {
@@ -2634,12 +2616,12 @@ var XAxisEditor = function XAxisEditor(_a) {
         _onChange(xAxis_1);
       },
       options: options
-    })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterFlex"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "ScatterCheckbox",
       title: "Draw X axis right to left"
-    }, "Inverted"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    }, "Inverted"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
       value: xAxis_1.inverted,
       onChange: function onChange(e) {
         xAxis_1.inverted = e.currentTarget.checked;
@@ -2649,7 +2631,7 @@ var XAxisEditor = function XAxisEditor(_a) {
     }))));
   }
 
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
     onChange: function onChange() {},
     disabled: true
   });

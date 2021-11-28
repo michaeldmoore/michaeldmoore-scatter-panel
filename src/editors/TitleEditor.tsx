@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { ColorPicker, Input } from '@grafana/ui';
 import { Title } from '../types/Title';
@@ -8,17 +8,18 @@ interface Props extends StandardEditorProps<Title> { }
 export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
   const color = value.textSize > 0 ?
     <div className="TitleColor">
-    <ColorPicker
-      color={value.color}
-      enableNamedColors={false}
-      onChange={(e) => {
-        value.color = e;
-        onChange(value);
-      }}
-    />
-  </div> : null;
+      <ColorPicker
+        color={value.color}
+        enableNamedColors={false}
+        onChange={(e) => {
+          value.color = e;
+          onChange(value);
+        }}
+      />
+    </div> : null;
 
-  return (
+  return
+  (
     <div className="TitleEditor">
       <div className="TitleText">
         <Input
@@ -45,5 +46,6 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
         />
       </div>
       {color}
-    </div>);
+    </div>
+  );
 };

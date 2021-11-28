@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import { Checkbox, Select } from '@grafana/ui';
 import { XAxis } from '../types/XAxis';
@@ -15,9 +15,8 @@ export const XAxisEditor: React.FC<Props> = ({ onChange, context }) => {
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-        valid: field.type !== "string"
+        valid: field.type !== 'string',
       }));
-//      .filter(o => o.valid);
 
     return (
       <div className="XAxisEditor">

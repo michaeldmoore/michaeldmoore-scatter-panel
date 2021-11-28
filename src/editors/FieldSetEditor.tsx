@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import {
   Button, ColorPicker, Input, Select,
@@ -16,16 +16,17 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-        valid: field.type !== "string"
+        valid: field.type !== 'string',
       }))
-      .filter(o => o.valid);
+      .filter((o) => o.valid);
 
-    var sizeOptions = Array(0);
+    const sizeOptions = Array(0);
 
-    for (var i = 1; i < 11; i += 2)
-      sizeOptions.push({label: i, value: -i});
+    for (let i = 1; i < 11; i += 2) {
+      sizeOptions.push({ label: i, value: -i });
+    }
 
-    options.forEach(o => {
+    options.forEach((o) => {
       sizeOptions.push(o);
     });
 
@@ -75,7 +76,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   <Select<number>
                     isLoading={false}
                     value={values[index].sizeCol}
-                    isClearable={true}  //  NB.  Add 1 thru 10 as negative numbers etc.
+                    isClearable={true}
                     onChange={(e) => {
                       values[index].sizeCol = e ? e.value as number : -1;
                       onChange(values);

@@ -37,23 +37,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.yMargins.lower = 20;
   options.yMargins.upper = 20;
 }
-/*
-function evaluateYLinear(reg: regression.Result, x: number) {
-  return (reg.equation[0] * x) + reg.equation[1];
-}
 
-function evaluateXLinear(reg: regression.Result, y: number) {
-  return (y - reg.equation[1]) / reg.equation[0];
-}
-
-function evaluateYExponential(reg: regression.Result, x: number) {
-  return reg.equation[0] * Math.exp(reg.equation[1] * x);
-}
-
-function evaluateYPower(reg: regression.Result, x: number) {
-  return reg.equation[0] * (x ** reg.equation[1]);
-}
-*/
 function getRegression(method: string, xyData: regression.DataPoint[]) {
   if (method === 'exponential') {
     return regression.exponential(xyData);
@@ -186,7 +170,7 @@ function drawDots(options: ScatterOptions,
   yScale: Function) {
   return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
-      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;// y.dotSize;
+      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;
 
       const yValue = yValues[i][j];
 
