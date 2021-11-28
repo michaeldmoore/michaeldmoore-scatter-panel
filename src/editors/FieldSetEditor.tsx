@@ -76,7 +76,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                   <Select<number>
                     isLoading={false}
                     value={values[index].sizeCol}
-                    isClearable={true}
+                    isClearable
                     onChange={(e) => {
                       values[index].sizeCol = e ? e.value as number : -1;
                       onChange(values);

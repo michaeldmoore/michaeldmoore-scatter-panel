@@ -7,16 +7,18 @@ interface Props extends StandardEditorProps<Title> { }
 
 export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
   const color = value.textSize > 0 ?
-    <div className="TitleColor">
-      <ColorPicker
-        color={value.color}
-        enableNamedColors={false}
-        onChange={(e) => {
-          value.color = e;
-          onChange(value);
-        }}
-      />
-    </div> : null;
+    (
+      <div className="TitleColor">
+        <ColorPicker
+          color={value.color}
+          enableNamedColors={false}
+          onChange={(e) => {
+            value.color = e;
+            onChange(value);
+          }}
+        />
+      </div>
+    ) : null;
 
   return (
     <div className="TitleEditor">

@@ -58,7 +58,7 @@ export const LabelEditor: React.FC<Props> = ({ onChange, context }) => {
           <div className="ScatterSelect">
             <Select<number>
               isLoading={false}
-              isClearable={true}
+              isClearable
               value={label.col}
               onChange={(e) => {
                 label.col = e ? e.value as number : -1;
