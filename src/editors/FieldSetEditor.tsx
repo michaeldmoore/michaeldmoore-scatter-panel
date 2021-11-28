@@ -55,25 +55,25 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
         );
 
         const polynomialOrder = values[index].lineType === 'polynomial'
-        ?
-        (
-          <div className="ScatterFlex ScatterSize">
-            <div className="ScatterLabel">Order</div>
-            <Input
-              type="number"
-              label="Line Size"
-              value={values[index].polynomialOrder}
-              min={1}
-              max={10}
-              title="Set order of polynomial fit"
-              onChange={(e) => {
-                values[index].polynomialOrder = (e.target as HTMLInputElement).valueAsNumber;
-                onChange(values);
-              }}
-            />
-          </div>
-        )
-        : null;
+          ?
+          (
+            <div className="ScatterFlex ScatterSize">
+              <div className="ScatterLabel">Order</div>
+              <Input
+                type="number"
+                label="Line Size"
+                value={values[index].polynomialOrder}
+                min={1}
+                max={10}
+                title="Set order of polynomial fit"
+                onChange={(e) => {
+                  values[index].polynomialOrder = (e.target as HTMLInputElement).valueAsNumber;
+                  onChange(values);
+                }}
+              />
+            </div>
+          )
+          : null;
 
         selects.push(
           <div className="FieldSetEditor">
