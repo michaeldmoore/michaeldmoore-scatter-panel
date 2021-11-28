@@ -40,7 +40,6 @@
     "@types/d3": "^6.2.0",
     "@types/jquery": "^3.5.5",
     "@types/randomcolor": "^0.5.5",
-    "@types/regression": "^2.0.0",
     "d3": "^6.3.1",
     "jquery": "^3.5.1",
     "ml-regression": "^5.0.0",
