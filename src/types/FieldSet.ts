@@ -7,6 +7,7 @@ export class FieldSet {
     public dotSize: number,
     public lineSize: number,
     public lineType: string,
+    public polynomialOrder: number,
     public hidden: boolean,
   ) {
   }

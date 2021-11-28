@@ -2,7 +2,11 @@ import React from 'react';
 import { PanelProps } from '@grafana/data';
 import $ from 'jquery';
 import * as d3 from 'd3';
-import { SimpleLinearRegression, ExponentialRegression, PowerRegression } from 'ml-regression';
+import SimpleLinearRegression from 'ml-regression-simple-linear';
+import ExponentialRegression from 'ml-regression-exponential';
+import PowerRegression from 'ml-regression-power';
+import TheilSenRegression from 'ml-regression-theil-sen';
+import PolynomialRegression from 'ml-regression-polynomial';
 import { ScatterOptions } from 'types/ScatterOptions';
 import { ColData } from 'types/ColData';
 import { MarginPair } from 'types/MarginPair';
@@ -27,7 +31,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
 
   if (options.fieldSets.length === 0) {
-    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', false));
+    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', 3, false));
 
     options.fieldSets = fieldSets.filter((c) => c.col !== options.xAxis.col);
   }
@@ -125,7 +129,47 @@ function drawLines(
           xys.push([x, y]);
         }
         path = `
-        ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
+      ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
+      `;
+      } else if (fieldSet.lineType === 'polynomial') {
+        xyData = xyData.filter((d) => d[0] > 0);
+        const pnx = xyData.map((xy) => xy[0]);
+        const pny = xyData.map((xy) => xy[1]);
+        const PN = new PolynomialRegression(pnx, pny, fieldSet.polynomialOrder ?? 3);
+
+        const x0 = xExtent[0];
+        const x1 = xExtent[1];
+
+        const steps = 100;
+        const dx = (x1 - x0) / (steps - 1);
+        const xys = new Array(0);
+        for (let i = 0; i < steps; i++) {
+          const x = x0 + i * dx;
+          const y = PN.predict(x);
+          xys.push([x, y]);
+        }
+        path = `
+    ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
+    `;
+      } else if (fieldSet.lineType === 'theilsen') {
+        xyData = xyData.filter((d) => d[0] > 0);
+        const tx = xyData.map((xy) => xy[0]);
+        const ty = xyData.map((xy) => xy[1]);
+        const TS = new TheilSenRegression(tx, ty);
+
+        const x0 = xExtent[0];
+        const x1 = xExtent[1];
+
+        const steps = 100;
+        const dx = (x1 - x0) / (steps - 1);
+        const xys = new Array(0);
+        for (let i = 0; i < steps; i++) {
+          const x = x0 + i * dx;
+          const y = TS.predict(x);
+          xys.push([x, y]);
+        }
+        path = `
+      ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
       `;
       }
 

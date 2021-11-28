@@ -43,6 +43,12 @@
     "d3": "^6.3.1",
     "jquery": "^3.5.1",
     "ml-regression": "^5.0.0",
+    "ml-regression-base": "^2.1.5",
+    "ml-regression-exponential": "^2.1.0",
+    "ml-regression-polynomial": "^2.2.0",
+    "ml-regression-power": "^2.0.0",
+    "ml-regression-simple-linear": "^2.0.3",
+    "ml-regression-theil-sen": "^2.0.0",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1"
   }

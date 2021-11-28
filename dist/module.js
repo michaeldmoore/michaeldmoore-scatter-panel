@@ -440,480 +440,6 @@ function rescale(input) {
 
 /***/ }),
 
-/***/ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js":
-/*!******************************************************************!*\
-  !*** ../node_modules/ml-distance-euclidean/lib-es6/euclidean.js ***!
-  \******************************************************************/
-/*! exports provided: squaredEuclidean, euclidean */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "squaredEuclidean", function() { return squaredEuclidean; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "euclidean", function() { return euclidean; });
-function squaredEuclidean(p, q) {
-    let d = 0;
-    for (let i = 0; i < p.length; i++) {
-        d += (p[i] - q[i]) * (p[i] - q[i]);
-    }
-    return d;
-}
-function euclidean(p, q) {
-    return Math.sqrt(squaredEuclidean(p, q));
-}
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel-gaussian/gaussian-kernel.js":
-/*!*************************************************************!*\
-  !*** ../node_modules/ml-kernel-gaussian/gaussian-kernel.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { squaredEuclidean } = __webpack_require__(/*! ml-distance-euclidean */ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js");
-
-const defaultOptions = {
-  sigma: 1
-};
-
-class GaussianKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.sigma = options.sigma;
-    this.divisor = 2 * options.sigma * options.sigma;
-  }
-  compute(x, y) {
-    const distance = squaredEuclidean(x, y);
-    return Math.exp(-distance / this.divisor);
-  }
-}
-
-module.exports = GaussianKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel-polynomial/polynomial-kernel.js":
-/*!*****************************************************************!*\
-  !*** ../node_modules/ml-kernel-polynomial/polynomial-kernel.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const defaultOptions = {
-  degree: 1,
-  constant: 1,
-  scale: 1
-};
-
-class PolynomialKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-
-    this.degree = options.degree;
-    this.constant = options.constant;
-    this.scale = options.scale;
-  }
-
-  compute(x, y) {
-    var sum = 0;
-    for (var i = 0; i < x.length; i++) {
-      sum += x[i] * y[i];
-    }
-    return Math.pow(this.scale * sum + this.constant, this.degree);
-  }
-}
-
-module.exports = PolynomialKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel-sigmoid/sigmoid-kernel.js":
-/*!***********************************************************!*\
-  !*** ../node_modules/ml-kernel-sigmoid/sigmoid-kernel.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const defaultOptions = {
-  alpha: 0.01,
-  constant: -Math.E
-};
-
-class SigmoidKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.alpha = options.alpha;
-    this.constant = options.constant;
-  }
-
-  compute(x, y) {
-    var sum = 0;
-    for (var i = 0; i < x.length; i++) {
-      sum += x[i] * y[i];
-    }
-    return Math.tanh(this.alpha * sum + this.constant);
-  }
-}
-
-module.exports = SigmoidKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernel.js":
-/*!***********************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernel.js ***!
-  \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { Matrix, MatrixTransposeView } = __webpack_require__(/*! ml-matrix */ "../node_modules/ml-matrix/src/index.js");
-const GaussianKernel = __webpack_require__(/*! ml-kernel-gaussian */ "../node_modules/ml-kernel-gaussian/gaussian-kernel.js");
-const PolynomialKernel = __webpack_require__(/*! ml-kernel-polynomial */ "../node_modules/ml-kernel-polynomial/polynomial-kernel.js");
-const SigmoidKernel = __webpack_require__(/*! ml-kernel-sigmoid */ "../node_modules/ml-kernel-sigmoid/sigmoid-kernel.js");
-
-const ANOVAKernel = __webpack_require__(/*! ./kernels/anova-kernel */ "../node_modules/ml-kernel/src/kernels/anova-kernel.js");
-const CauchyKernel = __webpack_require__(/*! ./kernels/cauchy-kernel */ "../node_modules/ml-kernel/src/kernels/cauchy-kernel.js");
-const ExponentialKernel = __webpack_require__(/*! ./kernels/exponential-kernel */ "../node_modules/ml-kernel/src/kernels/exponential-kernel.js");
-const HistogramKernel = __webpack_require__(/*! ./kernels/histogram-intersection-kernel */ "../node_modules/ml-kernel/src/kernels/histogram-intersection-kernel.js");
-const LaplacianKernel = __webpack_require__(/*! ./kernels/laplacian-kernel */ "../node_modules/ml-kernel/src/kernels/laplacian-kernel.js");
-const MultiquadraticKernel = __webpack_require__(/*! ./kernels/multiquadratic-kernel */ "../node_modules/ml-kernel/src/kernels/multiquadratic-kernel.js");
-const RationalKernel = __webpack_require__(/*! ./kernels/rational-quadratic-kernel */ "../node_modules/ml-kernel/src/kernels/rational-quadratic-kernel.js");
-
-const kernelType = {
-  gaussian: GaussianKernel,
-  rbf: GaussianKernel,
-  polynomial: PolynomialKernel,
-  poly: PolynomialKernel,
-  anova: ANOVAKernel,
-  cauchy: CauchyKernel,
-  exponential: ExponentialKernel,
-  histogram: HistogramKernel,
-  min: HistogramKernel,
-  laplacian: LaplacianKernel,
-  multiquadratic: MultiquadraticKernel,
-  rational: RationalKernel,
-  sigmoid: SigmoidKernel,
-  mlp: SigmoidKernel
-};
-
-class Kernel {
-  constructor(type, options) {
-    this.kernelType = type;
-    if (type === 'linear') return;
-
-    if (typeof type === 'string') {
-      type = type.toLowerCase();
-
-      var KernelConstructor = kernelType[type];
-      if (KernelConstructor) {
-        this.kernelFunction = new KernelConstructor(options);
-      } else {
-        throw new Error(`unsupported kernel type: ${type}`);
-      }
-    } else if (typeof type === 'object' && typeof type.compute === 'function') {
-      this.kernelFunction = type;
-    } else {
-      throw new TypeError(
-        'first argument must be a valid kernel type or instance'
-      );
-    }
-  }
-
-  compute(inputs, landmarks) {
-    inputs = Matrix.checkMatrix(inputs);
-    if (landmarks === undefined) {
-      landmarks = inputs;
-    } else {
-      landmarks = Matrix.checkMatrix(landmarks);
-    }
-    if (this.kernelType === 'linear') {
-      return inputs.mmul(new MatrixTransposeView(landmarks));
-    }
-
-    const kernelMatrix = new Matrix(inputs.rows, landmarks.rows);
-    if (inputs === landmarks) {
-      // fast path, matrix is symmetric
-      for (let i = 0; i < inputs.rows; i++) {
-        for (let j = i; j < inputs.rows; j++) {
-          const value = this.kernelFunction.compute(
-            inputs.getRow(i),
-            inputs.getRow(j)
-          );
-          kernelMatrix.set(i, j, value);
-          kernelMatrix.set(j, i, value);
-        }
-      }
-    } else {
-      for (let i = 0; i < inputs.rows; i++) {
-        for (let j = 0; j < landmarks.rows; j++) {
-          kernelMatrix.set(
-            i,
-            j,
-            this.kernelFunction.compute(inputs.getRow(i), landmarks.getRow(j))
-          );
-        }
-      }
-    }
-    return kernelMatrix;
-  }
-}
-
-module.exports = Kernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/anova-kernel.js":
-/*!*************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/anova-kernel.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const defaultOptions = {
-  sigma: 1,
-  degree: 1
-};
-
-class ANOVAKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.sigma = options.sigma;
-    this.degree = options.degree;
-  }
-
-  compute(x, y) {
-    var sum = 0;
-    var len = Math.min(x.length, y.length);
-    for (var i = 1; i <= len; ++i) {
-      sum += Math.pow(
-        Math.exp(
-          -this.sigma *
-            Math.pow(Math.pow(x[i - 1], i) - Math.pow(y[i - 1], i), 2)
-        ),
-        this.degree
-      );
-    }
-    return sum;
-  }
-}
-
-module.exports = ANOVAKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/cauchy-kernel.js":
-/*!**************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/cauchy-kernel.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { squaredEuclidean } = __webpack_require__(/*! ml-distance-euclidean */ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js");
-
-const defaultOptions = {
-  sigma: 1
-};
-
-class CauchyKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.sigma = options.sigma;
-  }
-
-  compute(x, y) {
-    return 1 / (1 + squaredEuclidean(x, y) / (this.sigma * this.sigma));
-  }
-}
-
-module.exports = CauchyKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/exponential-kernel.js":
-/*!*******************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/exponential-kernel.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { euclidean } = __webpack_require__(/*! ml-distance-euclidean */ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js");
-
-const defaultOptions = {
-  sigma: 1
-};
-
-class ExponentialKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.sigma = options.sigma;
-    this.divisor = 2 * options.sigma * options.sigma;
-  }
-
-  compute(x, y) {
-    const distance = euclidean(x, y);
-    return Math.exp(-distance / this.divisor);
-  }
-}
-
-module.exports = ExponentialKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/histogram-intersection-kernel.js":
-/*!******************************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/histogram-intersection-kernel.js ***!
-  \******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-class HistogramIntersectionKernel {
-  compute(x, y) {
-    var min = Math.min(x.length, y.length);
-    var sum = 0;
-    for (var i = 0; i < min; ++i) {
-      sum += Math.min(x[i], y[i]);
-    }
-
-    return sum;
-  }
-}
-
-module.exports = HistogramIntersectionKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/laplacian-kernel.js":
-/*!*****************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/laplacian-kernel.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { euclidean } = __webpack_require__(/*! ml-distance-euclidean */ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js");
-
-const defaultOptions = {
-  sigma: 1
-};
-
-class LaplacianKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.sigma = options.sigma;
-  }
-
-  compute(x, y) {
-    const distance = euclidean(x, y);
-    return Math.exp(-distance / this.sigma);
-  }
-}
-
-module.exports = LaplacianKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/multiquadratic-kernel.js":
-/*!**********************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/multiquadratic-kernel.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { squaredEuclidean } = __webpack_require__(/*! ml-distance-euclidean */ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js");
-
-const defaultOptions = {
-  constant: 1
-};
-
-class MultiquadraticKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.constant = options.constant;
-  }
-
-  compute(x, y) {
-    return Math.sqrt(squaredEuclidean(x, y) + this.constant * this.constant);
-  }
-}
-
-module.exports = MultiquadraticKernel;
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-kernel/src/kernels/rational-quadratic-kernel.js":
-/*!**************************************************************************!*\
-  !*** ../node_modules/ml-kernel/src/kernels/rational-quadratic-kernel.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-const { squaredEuclidean } = __webpack_require__(/*! ml-distance-euclidean */ "../node_modules/ml-distance-euclidean/lib-es6/euclidean.js");
-
-const defaultOptions = {
-  constant: 1
-};
-
-class RationalQuadraticKernel {
-  constructor(options) {
-    options = Object.assign({}, defaultOptions, options);
-    this.constant = options.constant;
-  }
-
-  compute(x, y) {
-    const distance = squaredEuclidean(x, y);
-    return 1 - distance / (distance + this.constant);
-  }
-}
-
-module.exports = RationalQuadraticKernel;
-
-
-/***/ }),
-
 /***/ "../node_modules/ml-matrix/src/correlation.js":
 /*!****************************************************!*\
   !*** ../node_modules/ml-matrix/src/correlation.js ***!
@@ -6968,156 +6494,6 @@ function regress(er, x, y) {
 
 /***/ }),
 
-/***/ "../node_modules/ml-regression-multivariate-linear/src/index.js":
-/*!**********************************************************************!*\
-  !*** ../node_modules/ml-regression-multivariate-linear/src/index.js ***!
-  \**********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MultivariateLinearRegression; });
-/* harmony import */ var ml_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ml-matrix */ "../node_modules/ml-matrix/src/index.js");
-
-
-class MultivariateLinearRegression {
-  constructor(x, y, options = {}) {
-    const { intercept = true, statistics = true } = options;
-    this.statistics = statistics;
-    if (x === true) {
-      this.weights = y.weights;
-      this.inputs = y.inputs;
-      this.outputs = y.outputs;
-      this.intercept = y.intercept;
-    } else {
-      x = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["default"](x);
-      y = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["default"](y);
-      if (intercept) {
-        x.addColumn(new Array(x.rows).fill(1));
-      }
-      let xt = x.transpose();
-      const xx = xt.mmul(x);
-      const xy = xt.mmul(y);
-      const invxx = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["SVD"](xx).inverse();
-      const beta = xy
-        .transpose()
-        .mmul(invxx)
-        .transpose();
-      this.weights = beta.to2DArray();
-      this.inputs = x.columns;
-      this.outputs = y.columns;
-      if (intercept) this.inputs--;
-      this.intercept = intercept;
-      if (statistics) {
-        /*
-         * Let's add some basic statistics about the beta's to be able to interpret them.
-         * source: http://dept.stat.lsa.umich.edu/~kshedden/Courses/Stat401/Notes/401-multreg.pdf
-         * validated against Excel Regression AddIn
-         * test: "datamining statistics test"
-         */
-        const fittedValues = x.mmul(beta);
-        const residuals = y.clone().addM(fittedValues.neg());
-        const variance =
-          residuals
-            .to2DArray()
-            .map((ri) => Math.pow(ri[0], 2))
-            .reduce((a, b) => a + b) /
-          (y.rows - x.columns);
-        this.stdError = Math.sqrt(variance);
-        this.stdErrorMatrix = Object(ml_matrix__WEBPACK_IMPORTED_MODULE_0__["pseudoInverse"])(xx).mul(variance);
-        this.stdErrors = this.stdErrorMatrix
-          .diagonal()
-          .map((d) => Math.sqrt(d));
-        this.tStats = this.weights.map((d, i) =>
-          this.stdErrors[i] === 0 ? 0 : d[0] / this.stdErrors[i],
-        );
-      }
-    }
-  }
-
-  predict(x) {
-    if (Array.isArray(x)) {
-      if (typeof x[0] === 'number') {
-        return this._predict(x);
-      } else if (Array.isArray(x[0])) {
-        const y = new Array(x.length);
-        for (let i = 0; i < x.length; i++) {
-          y[i] = this._predict(x[i]);
-        }
-        return y;
-      }
-    } else if (ml_matrix__WEBPACK_IMPORTED_MODULE_0__["default"].isMatrix(x)) {
-      const y = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["default"](x.rows, this.outputs);
-      for (let i = 0; i < x.rows; i++) {
-        y.setRow(i, this._predict(x.getRow(i)));
-      }
-      return y;
-    }
-    throw new TypeError('x must be a matrix or array of numbers');
-  }
-
-  _predict(x) {
-    const result = new Array(this.outputs);
-    if (this.intercept) {
-      for (let i = 0; i < this.outputs; i++) {
-        result[i] = this.weights[this.inputs][i];
-      }
-    } else {
-      result.fill(0);
-    }
-    for (let i = 0; i < this.inputs; i++) {
-      for (let j = 0; j < this.outputs; j++) {
-        result[j] += this.weights[i][j] * x[i];
-      }
-    }
-    return result;
-  }
-
-  score() {
-    throw new Error('score method is not implemented yet');
-  }
-
-  toJSON() {
-    return {
-      name: 'multivariateLinearRegression',
-      weights: this.weights,
-      inputs: this.inputs,
-      outputs: this.outputs,
-      intercept: this.intercept,
-      summary: this.statistics
-        ? {
-            regressionStatistics: {
-              standardError: this.stdError,
-              observations: this.outputs,
-            },
-            variables: this.weights.map((d, i) => {
-              return {
-                label:
-                  i === this.weights.length - 1
-                    ? 'Intercept'
-                    : `X Variable ${i + 1}`,
-                coefficients: d,
-                standardError: this.stdErrors[i],
-                tStat: this.tStats[i],
-              };
-            }),
-          }
-        : undefined,
-    };
-  }
-
-  static load(model) {
-    if (model.name !== 'multivariateLinearRegression') {
-      throw new Error('not a MLR model');
-    }
-    return new MultivariateLinearRegression(true, model);
-  }
-}
-
-
-/***/ }),
-
 /***/ "../node_modules/ml-regression-polynomial/src/index.js":
 /*!*************************************************************!*\
   !*** ../node_modules/ml-regression-polynomial/src/index.js ***!
@@ -7347,235 +6723,6 @@ function regress(pr, x, y) {
 
 /***/ }),
 
-/***/ "../node_modules/ml-regression-robust-polynomial/src/index.js":
-/*!********************************************************************!*\
-  !*** ../node_modules/ml-regression-robust-polynomial/src/index.js ***!
-  \********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RobustPolynomialRegression; });
-/* harmony import */ var ml_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ml-matrix */ "../node_modules/ml-matrix/src/index.js");
-/* harmony import */ var ml_regression_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ml-regression-base */ "../node_modules/ml-regression-base/src/index.js");
-
-
-
-/**
- * @class RobustPolynomialRegression
- * @param {Array<number>} x
- * @param {Array<number>} y
- * @param {number} degree - polynomial degree
- */
-class RobustPolynomialRegression extends ml_regression_base__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  constructor(x, y, degree) {
-    super();
-    if (x === true) {
-      this.degree = y.degree;
-      this.powers = y.powers;
-      this.coefficients = y.coefficients;
-    } else {
-      Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_1__["checkArrayLength"])(x, y);
-      robustPolynomial(this, x, y, degree);
-    }
-  }
-
-  toJSON() {
-    return {
-      name: 'robustPolynomialRegression',
-      degree: this.degree,
-      powers: this.powers,
-      coefficients: this.coefficients
-    };
-  }
-
-  _predict(x) {
-    return predict(x, this.powers, this.coefficients);
-  }
-
-  /**
-   * Display the formula
-   * @param {number} precision - precision for the numbers
-   * @return {string}
-   */
-  toString(precision) {
-    return this._toFormula(precision, false);
-  }
-
-  /**
-   * Display the formula in LaTeX format
-   * @param {number} precision - precision for the numbers
-   * @return {string}
-   */
-  toLaTeX(precision) {
-    return this._toFormula(precision, true);
-  }
-
-  _toFormula(precision, isLaTeX) {
-    let sup = '^';
-    let closeSup = '';
-    let times = ' * ';
-    if (isLaTeX) {
-      sup = '^{';
-      closeSup = '}';
-      times = '';
-    }
-
-    let fn = '';
-    let str = '';
-    for (let k = 0; k < this.coefficients.length; k++) {
-      str = '';
-      if (this.coefficients[k] !== 0) {
-        if (this.powers[k] === 0) {
-          str = Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_1__["maybeToPrecision"])(this.coefficients[k], precision);
-        } else {
-          if (this.powers[k] === 1) {
-            str = `${Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_1__["maybeToPrecision"])(this.coefficients[k], precision) +
-              times}x`;
-          } else {
-            str = `${Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_1__["maybeToPrecision"])(this.coefficients[k], precision) +
-              times}x${sup}${this.powers[k]}${closeSup}`;
-          }
-        }
-
-        if (this.coefficients[k] > 0 && k !== this.coefficients.length - 1) {
-          str = ` + ${str}`;
-        } else if (k !== this.coefficients.length - 1) {
-          str = ` ${str}`;
-        }
-      }
-      fn = str + fn;
-    }
-    if (fn.charAt(0) === '+') {
-      fn = fn.slice(1);
-    }
-
-    return `f(x) = ${fn}`;
-  }
-
-  static load(json) {
-    if (json.name !== 'robustPolynomialRegression') {
-      throw new TypeError('not a RobustPolynomialRegression model');
-    }
-    return new RobustPolynomialRegression(true, json);
-  }
-}
-
-function robustPolynomial(regression, x, y, degree) {
-  let powers = Array(degree)
-    .fill(0)
-    .map((_, index) => index);
-
-  const tuples = getRandomTuples(x, y, degree);
-
-  let min;
-  for (let i = 0; i < tuples.length; i++) {
-    let tuple = tuples[i];
-    let coefficients = calcCoefficients(tuple, powers);
-
-    let residuals = x.slice();
-    for (let j = 0; j < x.length; j++) {
-      residuals[j] = y[j] - predict(x[j], powers, coefficients);
-      residuals[j] = {
-        residual: residuals[j] * residuals[j],
-        coefficients
-      };
-    }
-
-    let median = residualsMedian(residuals);
-    if (!min || median.residual < min.residual) {
-      min = median;
-    }
-  }
-
-  regression.degree = degree;
-  regression.powers = powers;
-  regression.coefficients = min.coefficients;
-}
-
-/**
- * @ignore
- * @param {Array<number>} x
- * @param {Array<number>} y
- * @param {number} degree
- * @return {Array<{x:number,y:number}>}
- */
-function getRandomTuples(x, y, degree) {
-  let len = Math.floor(x.length / degree);
-  let tuples = new Array(len);
-
-  for (let i = 0; i < x.length; i++) {
-    let pos = Math.floor(Math.random() * len);
-
-    let counter = 0;
-    while (counter < x.length) {
-      if (!tuples[pos]) {
-        tuples[pos] = [
-          {
-            x: x[i],
-            y: y[i]
-          }
-        ];
-        break;
-      } else if (tuples[pos].length < degree) {
-        tuples[pos].push({
-          x: x[i],
-          y: y[i]
-        });
-        break;
-      } else {
-        counter++;
-        pos = (pos + 1) % len;
-      }
-    }
-
-    if (counter === x.length) {
-      return tuples;
-    }
-  }
-  return tuples;
-}
-
-/**
- * @ignore
- * @param {{x:number,y:number}} tuple
- * @param {Array<number>} powers
- * @return {Array<number>}
- */
-function calcCoefficients(tuple, powers) {
-  let X = tuple.slice();
-  let Y = tuple.slice();
-  for (let i = 0; i < X.length; i++) {
-    Y[i] = [tuple[i].y];
-    X[i] = new Array(powers.length);
-    for (let j = 0; j < powers.length; j++) {
-      X[i][j] = Math.pow(tuple[i].x, powers[j]);
-    }
-  }
-
-  return Object(ml_matrix__WEBPACK_IMPORTED_MODULE_0__["solve"])(X, Y).to1DArray();
-}
-
-function predict(x, powers, coefficients) {
-  let y = 0;
-  for (let k = 0; k < powers.length; k++) {
-    y += coefficients[k] * Math.pow(x, powers[k]);
-  }
-  return y;
-}
-
-function residualsMedian(residuals) {
-  residuals.sort((a, b) => a.residual - b.residual);
-
-  let l = residuals.length;
-  let half = Math.floor(l / 2);
-  return l % 2 === 0 ? residuals[half - 1] : residuals[half];
-}
-
-
-/***/ }),
-
 /***/ "../node_modules/ml-regression-simple-linear/src/index.js":
 /*!****************************************************************!*\
   !*** ../node_modules/ml-regression-simple-linear/src/index.js ***!
@@ -7774,465 +6921,6 @@ function theilSen(regression, x, y) {
   regression.slope = medianSlope;
   regression.intercept = Object(ml_array_median__WEBPACK_IMPORTED_MODULE_1__["default"])(cuts);
   regression.coefficients = [regression.intercept, regression.slope];
-}
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-regression/src/index.js":
-/*!**************************************************!*\
-  !*** ../node_modules/ml-regression/src/index.js ***!
-  \**************************************************/
-/*! exports provided: SimpleLinearRegression, SLR, PolynomialRegression, ExponentialRegression, PowerRegression, MultivariateLinearRegression, NLR, NonLinearRegression, KernelRidgeRegression, KRR, PolinomialFitting2D, TheilSenRegression, RobustPolynomialRegression */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NLR", function() { return NLR; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NonLinearRegression", function() { return NLR; });
-/* harmony import */ var _regression_potential_regression__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regression/potential-regression */ "../node_modules/ml-regression/src/regression/potential-regression.js");
-/* harmony import */ var ml_regression_simple_linear__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ml-regression-simple-linear */ "../node_modules/ml-regression-simple-linear/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SimpleLinearRegression", function() { return ml_regression_simple_linear__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SLR", function() { return ml_regression_simple_linear__WEBPACK_IMPORTED_MODULE_1__["default"]; });
-
-/* harmony import */ var ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ml-regression-polynomial */ "../node_modules/ml-regression-polynomial/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PolynomialRegression", function() { return ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_2__["default"]; });
-
-/* harmony import */ var ml_regression_exponential__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ml-regression-exponential */ "../node_modules/ml-regression-exponential/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "ExponentialRegression", function() { return ml_regression_exponential__WEBPACK_IMPORTED_MODULE_3__["default"]; });
-
-/* harmony import */ var ml_regression_power__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ml-regression-power */ "../node_modules/ml-regression-power/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PowerRegression", function() { return ml_regression_power__WEBPACK_IMPORTED_MODULE_4__["default"]; });
-
-/* harmony import */ var ml_regression_multivariate_linear__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ml-regression-multivariate-linear */ "../node_modules/ml-regression-multivariate-linear/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "MultivariateLinearRegression", function() { return ml_regression_multivariate_linear__WEBPACK_IMPORTED_MODULE_5__["default"]; });
-
-/* harmony import */ var _regression_kernel_ridge_regression__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./regression/kernel-ridge-regression */ "../node_modules/ml-regression/src/regression/kernel-ridge-regression.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "KernelRidgeRegression", function() { return _regression_kernel_ridge_regression__WEBPACK_IMPORTED_MODULE_6__["default"]; });
-
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "KRR", function() { return _regression_kernel_ridge_regression__WEBPACK_IMPORTED_MODULE_6__["default"]; });
-
-/* harmony import */ var _regression_poly_fit_regression2d__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./regression/poly-fit-regression2d */ "../node_modules/ml-regression/src/regression/poly-fit-regression2d.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "PolinomialFitting2D", function() { return _regression_poly_fit_regression2d__WEBPACK_IMPORTED_MODULE_7__["default"]; });
-
-/* harmony import */ var ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ml-regression-theil-sen */ "../node_modules/ml-regression-theil-sen/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TheilSenRegression", function() { return ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_8__["default"]; });
-
-/* harmony import */ var ml_regression_robust_polynomial__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ml-regression-robust-polynomial */ "../node_modules/ml-regression-robust-polynomial/src/index.js");
-/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "RobustPolynomialRegression", function() { return ml_regression_robust_polynomial__WEBPACK_IMPORTED_MODULE_9__["default"]; });
-
-
-
-
-
-
-
-
-const NLR = {
-  PotentialRegression: _regression_potential_regression__WEBPACK_IMPORTED_MODULE_0__["default"]
-};
-
-
-
-
-
-// robust regressions
-
-
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-regression/src/regression/kernel-ridge-regression.js":
-/*!*******************************************************************************!*\
-  !*** ../node_modules/ml-regression/src/regression/kernel-ridge-regression.js ***!
-  \*******************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return KernelRidgeRegression; });
-/* harmony import */ var ml_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ml-matrix */ "../node_modules/ml-matrix/src/index.js");
-/* harmony import */ var ml_kernel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ml-kernel */ "../node_modules/ml-kernel/src/kernel.js");
-/* harmony import */ var ml_kernel__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(ml_kernel__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var ml_regression_base__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ml-regression-base */ "../node_modules/ml-regression-base/src/index.js");
-
-
-
-
-const defaultOptions = {
-  lambda: 0.1,
-  kernelType: 'gaussian',
-  kernelOptions: {},
-  computeCoefficient: false
-};
-
-// Implements the Kernel ridge regression algorithm.
-// http://www.ics.uci.edu/~welling/classnotes/papers_class/Kernel-Ridge.pdf
-class KernelRidgeRegression extends ml_regression_base__WEBPACK_IMPORTED_MODULE_2__["default"] {
-  constructor(inputs, outputs, options) {
-    super();
-    if (inputs === true) {
-      // reloading model
-      this.alpha = outputs.alpha;
-      this.inputs = outputs.inputs;
-      this.kernelType = outputs.kernelType;
-      this.kernelOptions = outputs.kernelOptions;
-      this.kernel = new ml_kernel__WEBPACK_IMPORTED_MODULE_1___default.a(outputs.kernelType, outputs.kernelOptions);
-    } else {
-      inputs = ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].checkMatrix(inputs);
-      options = Object.assign({}, defaultOptions, options);
-
-      const kernelFunction = new ml_kernel__WEBPACK_IMPORTED_MODULE_1___default.a(
-        options.kernelType,
-        options.kernelOptions
-      );
-      const K = kernelFunction.compute(inputs);
-      const n = inputs.rows;
-      K.add(ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].eye(n, n).mul(options.lambda));
-
-      this.alpha = Object(ml_matrix__WEBPACK_IMPORTED_MODULE_0__["solve"])(K, outputs);
-      this.inputs = inputs;
-      this.kernelType = options.kernelType;
-      this.kernelOptions = options.kernelOptions;
-      this.kernel = kernelFunction;
-    }
-  }
-
-  _predict(newInputs) {
-    return this.kernel
-      .compute([newInputs], this.inputs)
-      .mmul(this.alpha)
-      .getRow(0);
-  }
-
-  toJSON() {
-    return {
-      name: 'kernelRidgeRegression',
-      alpha: this.alpha,
-      inputs: this.inputs,
-      kernelType: this.kernelType,
-      kernelOptions: this.kernelOptions
-    };
-  }
-
-  static load(json) {
-    if (json.name !== 'kernelRidgeRegression') {
-      throw new TypeError('not a KRR model');
-    }
-    return new KernelRidgeRegression(true, json);
-  }
-}
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-regression/src/regression/poly-fit-regression2d.js":
-/*!*****************************************************************************!*\
-  !*** ../node_modules/ml-regression/src/regression/poly-fit-regression2d.js ***!
-  \*****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PolynomialFitRegression2D; });
-/* harmony import */ var ml_matrix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ml-matrix */ "../node_modules/ml-matrix/src/index.js");
-/* harmony import */ var ml_regression_base__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ml-regression-base */ "../node_modules/ml-regression-base/src/index.js");
-
-
-
-const defaultOptions = {
-  order: 2
-};
-// Implements the Kernel ridge regression algorithm.
-// http://www.ics.uci.edu/~welling/classnotes/papers_class/Kernel-Ridge.pdf
-class PolynomialFitRegression2D extends ml_regression_base__WEBPACK_IMPORTED_MODULE_1__["default"] {
-  /**
-   * Constructor for the 2D polynomial fitting
-   *
-   * @param inputs
-   * @param outputs
-   * @param options
-   * @constructor
-   */
-  constructor(inputs, outputs, options) {
-    super();
-    if (inputs === true) {
-      // reloading model
-      this.coefficients = ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].columnVector(outputs.coefficients);
-      this.order = outputs.order;
-      if (outputs.r) {
-        this.r = outputs.r;
-        this.r2 = outputs.r2;
-      }
-      if (outputs.chi2) {
-        this.chi2 = outputs.chi2;
-      }
-    } else {
-      options = Object.assign({}, defaultOptions, options);
-      this.order = options.order;
-      this.coefficients = [];
-      this.X = inputs;
-      this.y = outputs;
-
-      this.train(this.X, this.y, options);
-    }
-  }
-
-  /**
-   * Function that fits the model given the data(X) and predictions(y).
-   * The third argument is an object with the following options:
-   * * order: order of the polynomial to fit.
-   *
-   * @param {Matrix} X - A matrix with n rows and 2 columns.
-   * @param {Matrix} y - A vector of the prediction values.
-   */
-  train(X, y) {
-    if (!ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].isMatrix(X)) X = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"](X);
-    if (!ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].isMatrix(y)) y = ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].columnVector(y);
-
-    if (y.rows !== X.rows) {
-      y = y.transpose();
-    }
-
-    if (X.columns !== 2) {
-      throw new RangeError(
-        `You give X with ${X.columns} columns and it must be 2`
-      );
-    }
-    if (X.rows !== y.rows) {
-      throw new RangeError('X and y must have the same rows');
-    }
-
-    var examples = X.rows;
-    var coefficients = ((this.order + 2) * (this.order + 1)) / 2;
-    this.coefficients = new Array(coefficients);
-
-    var x1 = X.getColumnVector(0);
-    var x2 = X.getColumnVector(1);
-
-    var scaleX1 =
-      1.0 /
-      x1
-        .clone()
-        .abs()
-        .max();
-    var scaleX2 =
-      1.0 /
-      x2
-        .clone()
-        .abs()
-        .max();
-    var scaleY =
-      1.0 /
-      y
-        .clone()
-        .abs()
-        .max();
-
-    x1.mulColumn(0, scaleX1);
-    x2.mulColumn(0, scaleX2);
-    y.mulColumn(0, scaleY);
-
-    var A = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"](examples, coefficients);
-    var col = 0;
-
-    for (var i = 0; i <= this.order; ++i) {
-      var limit = this.order - i;
-      for (var j = 0; j <= limit; ++j) {
-        var result = powColVector(x1, i).mulColumnVector(powColVector(x2, j));
-        A.setColumn(col, result);
-        col++;
-      }
-    }
-
-    var svd = new ml_matrix__WEBPACK_IMPORTED_MODULE_0__["SVD"](A.transpose(), {
-      computeLeftSingularVectors: true,
-      computeRightSingularVectors: true,
-      autoTranspose: false
-    });
-
-    var qqs = ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].rowVector(svd.diagonal);
-    qqs = qqs.apply(function (i, j) {
-      if (this.get(i, j) >= 1e-15) this.set(i, j, 1 / this.get(i, j));
-      else this.set(i, j, 0);
-    });
-
-    var qqs1 = ml_matrix__WEBPACK_IMPORTED_MODULE_0__["Matrix"].zeros(examples, coefficients);
-    for (i = 0; i < coefficients; ++i) {
-      qqs1.set(i, i, qqs.get(0, i));
-    }
-
-    qqs = qqs1;
-
-    var U = svd.rightSingularVectors;
-    var V = svd.leftSingularVectors;
-
-    this.coefficients = V.mmul(qqs.transpose())
-      .mmul(U.transpose())
-      .mmul(y);
-
-    col = 0;
-
-    for (i = 0; i <= coefficients; ++i) {
-      limit = this.order - i;
-      for (j = 0; j <= limit; ++j) {
-        this.coefficients.set(
-          col,
-          0,
-          (this.coefficients.get(col, 0) *
-            Math.pow(scaleX1, i) *
-            Math.pow(scaleX2, j)) /
-            scaleY
-        );
-        col++;
-      }
-    }
-  }
-
-  _predict(newInputs) {
-    var x1 = newInputs[0];
-    var x2 = newInputs[1];
-
-    var y = 0;
-    var column = 0;
-
-    for (var i = 0; i <= this.order; i++) {
-      for (var j = 0; j <= this.order - i; j++) {
-        y +=
-          Math.pow(x1, i) * Math.pow(x2, j) * this.coefficients.get(column, 0);
-        column++;
-      }
-    }
-
-    return y;
-  }
-
-  toJSON() {
-    return {
-      name: 'polyfit2D',
-      order: this.order,
-      coefficients: this.coefficients
-    };
-  }
-
-  static load(json) {
-    if (json.name !== 'polyfit2D') {
-      throw new TypeError('not a polyfit2D model');
-    }
-    return new PolynomialFitRegression2D(true, json);
-  }
-}
-
-/**
- * Function that given a column vector return this: vector^power
- *
- * @param x - Column vector.
- * @param power - Pow number.
- * @return {Suite|Matrix}
- */
-function powColVector(x, power) {
-  var result = x.clone();
-  for (var i = 0; i < x.rows; ++i) {
-    result.set(i, 0, Math.pow(result.get(i, 0), power));
-  }
-  return result;
-}
-
-
-/***/ }),
-
-/***/ "../node_modules/ml-regression/src/regression/potential-regression.js":
-/*!****************************************************************************!*\
-  !*** ../node_modules/ml-regression/src/regression/potential-regression.js ***!
-  \****************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return PotentialRegression; });
-/* harmony import */ var ml_regression_base__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ml-regression-base */ "../node_modules/ml-regression-base/src/index.js");
-/* harmony import */ var ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ml-regression-polynomial */ "../node_modules/ml-regression-polynomial/src/index.js");
-
-
-
-
-/*
- * Function that calculate the potential fit in the form f(x) = A*x^M
- * with a given M and return de A coefficient.
- *
- * @param {Vector} X - Vector of the x positions of the points.
- * @param {Vector} Y - Vector of the x positions of the points.
- * @param {Number} M - The exponent of the potential fit.
- * @return {Number} A - The A coefficient of the potential fit.
- */
-class PotentialRegression extends ml_regression_base__WEBPACK_IMPORTED_MODULE_0__["default"] {
-  /**
-   * @constructor
-   * @param x: Independent variable
-   * @param y: Dependent variable
-   * @param M
-   */
-  constructor(x, y, M) {
-    super();
-    if (x === true) {
-      // reloading model
-      this.A = y.A;
-      this.M = y.M;
-    } else {
-      var n = x.length;
-      if (n !== y.length) {
-        throw new RangeError('input and output array have a different length');
-      }
-
-      var linear = new ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_1__["default"](x, y, [M]);
-      this.A = linear.coefficients[0];
-      this.M = M;
-    }
-  }
-
-  _predict(x) {
-    return this.A * Math.pow(x, this.M);
-  }
-
-  toJSON() {
-    return {
-      name: 'potentialRegression',
-      A: this.A,
-      M: this.M
-    };
-  }
-
-  toString(precision) {
-    return `f(x) = ${Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_0__["maybeToPrecision"])(this.A, precision)} * x^${this.M}`;
-  }
-
-  toLaTeX(precision) {
-    if (this.M >= 0) {
-      return (
-        `f(x) = ${Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_0__["maybeToPrecision"])(this.A, precision)}x^{${this.M}}`
-      );
-    } else {
-      return (
-        `f(x) = \\frac{${
-          Object(ml_regression_base__WEBPACK_IMPORTED_MODULE_0__["maybeToPrecision"])(this.A, precision)
-        }}{x^{${
-          -this.M
-        }}}`
-      );
-    }
-  }
-
-  static load(json) {
-    if (json.name !== 'potentialRegression') {
-      throw new TypeError('not a potential regression model');
-    }
-    return new PotentialRegression(true, json);
-  }
 }
 
 
@@ -9124,14 +7812,22 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! d3 */ "d3");
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(d3__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var ml_regression__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ml-regression */ "../node_modules/ml-regression/src/index.js");
-/* harmony import */ var types_ColData__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! types/ColData */ "./types/ColData.ts");
-/* harmony import */ var types_MarginPair__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! types/MarginPair */ "./types/MarginPair.ts");
-/* harmony import */ var types_XAxis__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! types/XAxis */ "./types/XAxis.ts");
-/* harmony import */ var types_FieldSet__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! types/FieldSet */ "./types/FieldSet.ts");
-/* harmony import */ var types_Title__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! types/Title */ "./types/Title.ts");
-/* harmony import */ var _ScatterPanel_css__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ScatterPanel.css */ "./ScatterPanel.css");
-/* harmony import */ var _ScatterPanel_css__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_ScatterPanel_css__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var ml_regression_simple_linear__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ml-regression-simple-linear */ "../node_modules/ml-regression-simple-linear/src/index.js");
+/* harmony import */ var ml_regression_exponential__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ml-regression-exponential */ "../node_modules/ml-regression-exponential/src/index.js");
+/* harmony import */ var ml_regression_power__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ml-regression-power */ "../node_modules/ml-regression-power/src/index.js");
+/* harmony import */ var ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ml-regression-theil-sen */ "../node_modules/ml-regression-theil-sen/src/index.js");
+/* harmony import */ var ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ml-regression-polynomial */ "../node_modules/ml-regression-polynomial/src/index.js");
+/* harmony import */ var types_ColData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! types/ColData */ "./types/ColData.ts");
+/* harmony import */ var types_MarginPair__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! types/MarginPair */ "./types/MarginPair.ts");
+/* harmony import */ var types_XAxis__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! types/XAxis */ "./types/XAxis.ts");
+/* harmony import */ var types_FieldSet__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! types/FieldSet */ "./types/FieldSet.ts");
+/* harmony import */ var types_Title__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! types/Title */ "./types/Title.ts");
+/* harmony import */ var _ScatterPanel_css__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./ScatterPanel.css */ "./ScatterPanel.css");
+/* harmony import */ var _ScatterPanel_css__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_ScatterPanel_css__WEBPACK_IMPORTED_MODULE_13__);
+
+
+
+
 
 
 
@@ -9147,11 +7843,11 @@ var randomColor = __webpack_require__(/*! randomcolor */ "../node_modules/random
 
 function autoConfigure(options, colData) {
   if (options.xAxis.col === -1 || options.xAxis.col >= colData.length) {
-    options.xAxis = new types_XAxis__WEBPACK_IMPORTED_MODULE_6__["XAxis"](0, false);
+    options.xAxis = new types_XAxis__WEBPACK_IMPORTED_MODULE_10__["XAxis"](0, false);
   }
 
   if (options.xAxisTitle.text.length === 0) {
-    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_8__["Title"](colData[0].displayName, 'white', 2);
+    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"](colData[0].displayName, 'white', 2);
   }
 
   options.fieldSets = options.fieldSets.filter(function (f) {
@@ -9160,7 +7856,7 @@ function autoConfigure(options, colData) {
 
   if (options.fieldSets.length === 0) {
     var fieldSets = colData.map(function (f, i) {
-      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_7__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', false);
+      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_11__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', 3, false);
     });
     options.fieldSets = fieldSets.filter(function (c) {
       return c.col !== options.xAxis.col;
@@ -9177,6 +7873,8 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
   var lines = new Array(0); // as JSX.Element[];
 
   fieldSets.forEach(function (fieldSet, index) {
+    var _a;
+
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
       var path = '';
       var xyData = xValues.map(function (d, i) {
@@ -9196,7 +7894,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         var y = xyData.map(function (xy) {
           return xy[1];
         });
-        var SLR = new ml_regression__WEBPACK_IMPORTED_MODULE_3__["SimpleLinearRegression"](x, y); // check for start and end points inside the plotted area
+        var SLR = new ml_regression_simple_linear__WEBPACK_IMPORTED_MODULE_3__["default"](x, y); // check for start and end points inside the plotted area
 
         var x0 = xExtent[0];
         var y0 = SLR.predict(x0);
@@ -9232,7 +7930,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         var ey = xyData.map(function (xy) {
           return xy[1];
         });
-        var ER = new ml_regression__WEBPACK_IMPORTED_MODULE_3__["ExponentialRegression"](ex, ey);
+        var ER = new ml_regression_exponential__WEBPACK_IMPORTED_MODULE_4__["default"](ex, ey);
         var x0 = xExtent[0];
         var x1 = xExtent[1];
         var steps = 100;
@@ -9258,7 +7956,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         var py = xyData.map(function (xy) {
           return xy[1];
         });
-        var PR = new ml_regression__WEBPACK_IMPORTED_MODULE_3__["PowerRegression"](px, py);
+        var PR = new ml_regression_power__WEBPACK_IMPORTED_MODULE_5__["default"](px, py);
         var x0 = xExtent[0];
         var x1 = xExtent[1];
         var steps = 100;
@@ -9271,7 +7969,59 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
           xys.push([x, y]);
         }
 
-        path = "\n        " + xys.map(function (d, i) {
+        path = "\n      " + xys.map(function (d, i) {
+          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
+        }).join(' ') + "\n      ";
+      } else if (fieldSet.lineType === 'polynomial') {
+        xyData = xyData.filter(function (d) {
+          return d[0] > 0;
+        });
+        var pnx = xyData.map(function (xy) {
+          return xy[0];
+        });
+        var pny = xyData.map(function (xy) {
+          return xy[1];
+        });
+        var PN = new ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_7__["default"](pnx, pny, (_a = fieldSet.polynomialOrder) !== null && _a !== void 0 ? _a : 3);
+        var x0 = xExtent[0];
+        var x1 = xExtent[1];
+        var steps = 100;
+        var dx = (x1 - x0) / (steps - 1);
+        var xys = new Array(0);
+
+        for (var i = 0; i < steps; i++) {
+          var x = x0 + i * dx;
+          var y = PN.predict(x);
+          xys.push([x, y]);
+        }
+
+        path = "\n    " + xys.map(function (d, i) {
+          return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
+        }).join(' ') + "\n    ";
+      } else if (fieldSet.lineType === 'theilsen') {
+        xyData = xyData.filter(function (d) {
+          return d[0] > 0;
+        });
+        var tx = xyData.map(function (xy) {
+          return xy[0];
+        });
+        var ty = xyData.map(function (xy) {
+          return xy[1];
+        });
+        var TS = new ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_6__["default"](tx, ty);
+        var x0 = xExtent[0];
+        var x1 = xExtent[1];
+        var steps = 100;
+        var dx = (x1 - x0) / (steps - 1);
+        var xys = new Array(0);
+
+        for (var i = 0; i < steps; i++) {
+          var x = x0 + i * dx;
+          var y = TS.predict(x);
+          xys.push([x, y]);
+        }
+
+        path = "\n      " + xys.map(function (d, i) {
           return (i === 0 ? 'M' : 'L') + " " + xScale(d[0]) + " " + yScale(d[1]);
         }).join(' ') + "\n      ";
       }
@@ -9527,8 +8277,8 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
     return c[1];
   }))];
   var labels = isXAxisLabelValid(options, colData) ? colValues[options.label.col] : [];
-  var xMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_5__["MarginPair"](options.xMargins.lower || 0, options.xMargins.upper || 0);
-  var yMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_5__["MarginPair"](options.yMargins.lower || 0, options.yMargins.upper || 0);
+  var xMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_9__["MarginPair"](options.xMargins.lower || 0, options.xMargins.upper || 0);
+  var yMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_9__["MarginPair"](options.yMargins.lower || 0, options.yMargins.upper || 0);
   var legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
   var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
   var xTitle = drawXTitle(options, width, height, xMargins, yMargins);
@@ -9596,7 +8346,7 @@ var ScatterPanel = function ScatterPanel(_a) {
     frame.fields.forEach(function (field) {
       var _a;
 
-      colData_1.push(new types_ColData__WEBPACK_IMPORTED_MODULE_4__["ColData"](field.name, ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) || field.name, field.type, field.values.toArray().map(function (v) {
+      colData_1.push(new types_ColData__WEBPACK_IMPORTED_MODULE_8__["ColData"](field.name, ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) || field.name, field.type, field.values.toArray().map(function (v) {
         return v;
       })));
     });
@@ -9827,6 +8577,23 @@ var FieldSetEditor = function FieldSetEditor(_a) {
             _onChange(values_1);
           }
         }));
+        var polynomialOrder = values_1[index].lineType === 'polynomial' ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "ScatterFlex ScatterSize"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "ScatterLabel"
+        }, "Order"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+          type: "number",
+          label: "Line Size",
+          value: values_1[index].polynomialOrder,
+          min: 1,
+          max: 10,
+          title: "Set order of polynomial fit",
+          onChange: function onChange(e) {
+            values_1[index].polynomialOrder = e.target.valueAsNumber;
+
+            _onChange(values_1);
+          }
+        })) : null;
         selects_1.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "FieldSetEditor"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -9897,13 +8664,19 @@ var FieldSetEditor = function FieldSetEditor(_a) {
             label: 'Linear',
             value: 'linear'
           }, {
+            label: 'Theil–Sen',
+            value: 'theilsen'
+          }, {
             label: 'Exponential',
             value: 'exponential'
           }, {
             label: 'Power',
             value: 'power'
+          }, {
+            label: 'Polynomial',
+            value: 'polynomial'
           }]
-        })), lineSize), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null)));
+        })), polynomialOrder, lineSize), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null)));
       });
     }
 
@@ -9913,7 +8686,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       variant: "secondary",
       size: "sm",
       onClick: function onClick() {
-        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 0, 'none', false));
+        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 0, 'none', 3, false));
 
         _onChange(values_1);
       }
@@ -10538,13 +9311,14 @@ __webpack_require__.r(__webpack_exports__);
 var FieldSet =
 /** @class */
 function () {
-  function FieldSet(col, sizeCol, color, dotSize, lineSize, lineType, hidden) {
+  function FieldSet(col, sizeCol, color, dotSize, lineSize, lineType, polynomialOrder, hidden) {
     this.col = col;
     this.sizeCol = sizeCol;
     this.color = color;
     this.dotSize = dotSize;
     this.lineSize = lineSize;
     this.lineType = lineType;
+    this.polynomialOrder = polynomialOrder;
     this.hidden = hidden;
   }
 

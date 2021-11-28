@@ -9005,14 +9005,14 @@ ml-matrix@^6.1.2, ml-matrix@^6.4.1, ml-matrix@^6.8.0:
   dependencies:
     ml-array-rescale "^1.3.6"
 
-ml-regression-base@^2.0.1, ml-regression-base@^2.1.3:
+ml-regression-base@^2.0.1, ml-regression-base@^2.1.3, ml-regression-base@^2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/ml-regression-base/-/ml-regression-base-2.1.5.tgz#a37fe34377a65611826ea32408586d86c1d42a07"
   integrity sha512-A6+cmwg6Nvwu0+Z0lg+NvvGysSXcuwbbzHnMFrBJosUnNM+FkMusYK9arbRpPQBQjj+IYeMP8W0K9uTFHiJIkw==
   dependencies:
     is-any-array "^1.0.1"
 
-ml-regression-exponential@^2.0.0:
+ml-regression-exponential@^2.0.0, ml-regression-exponential@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ml-regression-exponential/-/ml-regression-exponential-2.1.0.tgz#567bf3972c4e140c3f06690772b1f28051704d6c"
   integrity sha512-6ZgGbzIkXnONfGGUU0LjIb9qb35WzVqdAFSX8vFr8UEhgXhfgEws9pGrBJu19VBEh7ZTtttcPObI3aoBscq4Kg==
@@ -9027,7 +9027,7 @@ ml-regression-multivariate-linear@^2.0.2:
   dependencies:
     ml-matrix "^6.4.1"
 
-ml-regression-polynomial@^2.0.0:
+ml-regression-polynomial@^2.0.0, ml-regression-polynomial@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/ml-regression-polynomial/-/ml-regression-polynomial-2.2.0.tgz#0ba22aa203debe917dd058e7a54b5cc7537e1149"
   integrity sha512-WxFsEmi6oLxgq9TeaVoAA+vVUJFp1kGarX6WWClR8OmlanoIW5iLMnaeXfQcYuH8xNq4R1Cax2N9hYYmeWWkLg==

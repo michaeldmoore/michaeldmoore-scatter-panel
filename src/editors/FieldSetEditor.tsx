@@ -54,6 +54,27 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
           </div>
         );
 
+        const polynomialOrder = values[index].lineType === 'polynomial'
+        ?
+        (
+          <div className="ScatterFlex ScatterSize">
+            <div className="ScatterLabel">Order</div>
+            <Input
+              type="number"
+              label="Line Size"
+              value={values[index].polynomialOrder}
+              min={1}
+              max={10}
+              title="Set order of polynomial fit"
+              onChange={(e) => {
+                values[index].polynomialOrder = (e.target as HTMLInputElement).valueAsNumber;
+                onChange(values);
+              }}
+            />
+          </div>
+        )
+        : null;
+
         selects.push(
           <div className="FieldSetEditor">
             <div className="ScatterFlex">
@@ -110,10 +131,13 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                     { label: 'None', value: 'none' },
                     { label: 'Simple', value: 'simple' },
                     { label: 'Linear', value: 'linear' },
+                    { label: 'Theil–Sen', value: 'theilsen' },
                     { label: 'Exponential', value: 'exponential' },
-                    { label: 'Power', value: 'power' }]}
+                    { label: 'Power', value: 'power' },
+                    { label: 'Polynomial', value: 'polynomial' }]}
                 />
               </div>
+              {polynomialOrder}
               {lineSize}
             </div>
             <hr />
@@ -130,7 +154,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
             variant="secondary"
             size="sm"
             onClick={() => {
-              values.push(new FieldSet(-1, -1, randomColor(), 2, 0, 'none', false));
+              values.push(new FieldSet(-1, -1, randomColor(), 2, 0, 'none', 3, false));
               onChange(values);
             }}
           >
