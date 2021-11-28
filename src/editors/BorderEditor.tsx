@@ -6,9 +6,9 @@ import { Border } from '../types/Border';
 interface Props extends StandardEditorProps<Border> { }
 
 export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
-  const color = value.size > 0
-    ?
-    (<div className="ScatterDotColor">
+  const color = value.size > 0 ?
+    (
+    <div className="ScatterDotColor">
       <ColorPicker
         color={value.color}
         enableNamedColors={false}
@@ -17,11 +17,11 @@ export const BorderEditor: React.FC<Props> = ({ value, onChange }) => {
           onChange(value);
         }}
       />
-    </div>)
+    </div>
+    )
     : null;
 
-  return
-  (
+  return (
     <div className="ScatterFlex">
       <div className="ScatterFlex ScatterSize">
         <div className="ScatterLabel">Size</div>

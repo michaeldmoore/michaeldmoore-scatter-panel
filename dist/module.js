@@ -2035,8 +2035,7 @@ var BorderEditor = function BorderEditor(_a) {
       _onChange(value);
     }
   })) : null;
-  return;
-  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "ScatterFlex ScatterSize"
@@ -2535,8 +2534,7 @@ var TitleEditor = function TitleEditor(_a) {
       _onChange(value);
     }
   })) : null;
-  return;
-  react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "TitleEditor"
   }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "TitleText"

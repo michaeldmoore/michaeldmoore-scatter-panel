@@ -18,8 +18,7 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
       />
     </div> : null;
 
-  return
-  (
+  return (
     <div className="TitleEditor">
       <div className="TitleText">
         <Input
