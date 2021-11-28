@@ -44,7 +44,6 @@
     "d3": "^6.3.1",
     "jquery": "^3.5.1",
     "ml-regression": "^5.0.0",
-    "ml-regression-simple-linear": "^2.0.3",
     "randomcolor": "^0.6.2",
     "react": "^17.0.1"
   }
