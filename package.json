@@ -38,13 +38,14 @@
     "@grafana/data": "latest",
     "@grafana/ui": "latest",
     "@types/d3": "^6.2.0",
+    "@types/jquery": "^3.5.5",
     "@types/randomcolor": "^0.5.5",
     "@types/regression": "^2.0.0",
-    "@types/jquery": "^3.5.5",
     "d3": "^6.3.1",
     "jquery": "^3.5.1",
+    "ml-regression": "^5.0.0",
+    "ml-regression-simple-linear": "^2.0.3",
     "randomcolor": "^0.6.2",
-    "react": "^17.0.1",
-    "regression": "^2.0.1"
+    "react": "^17.0.1"
   }
 }

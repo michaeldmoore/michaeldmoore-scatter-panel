@@ -2,7 +2,7 @@ import React from 'react';
 import { PanelProps } from '@grafana/data';
 import $ from 'jquery';
 import * as d3 from 'd3';
-import regression, { DataPoint } from 'regression';
+import { SimpleLinearRegression, ExponentialRegression, PowerRegression } from 'ml-regression';
 import { ScatterOptions } from 'types/ScatterOptions';
 import { ColData } from 'types/ColData';
 import { MarginPair } from 'types/MarginPair';
@@ -38,35 +38,6 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.yMargins.upper = 20;
 }
 
-function getRegression(method: string, xyData: regression.DataPoint[]) {
-  if (method === 'exponential') {
-    return regression.exponential(xyData);
-  }
-
-  if (method === 'power') {
-    return regression.power(xyData);
-  }
-
-  return regression.linear(xyData);
-}
-
-function evaluate(method: string, reg: regression.Result, val: number) {
-  if (method === 'exponential') {
-    return reg.equation[0] * Math.exp(reg.equation[1] * val);
-  }
-
-  if (method === 'power') {
-    return reg.equation[0] * (val ** reg.equation[1]);
-  }
-
-  if (method === 'XLinear') {
-    return (val - reg.equation[1]) / reg.equation[0];
-  }
-
-  // must be "YLinear":
-  return (reg.equation[0] * val) + reg.equation[1];
-}
-
 function drawLines(
   options: ScatterOptions,
   fieldSets: FieldSet[],
@@ -83,42 +54,44 @@ function drawLines(
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
       let path = '';
 
-      let xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter((xy) => xy[1] != null) as DataPoint[];
+      let xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter((xy) => xy[1] != null);
       if (fieldSet.lineType === 'simple') {
         path = `
         ${xyData.map((xy, i) => `${i === 0 ? 'M' : 'L'} ${xScale(xy[0])} ${yScale(xy[1])}`).join(' ')}
       `;
       } else if (fieldSet.lineType === 'linear') {
-        const reg = getRegression(fieldSet.lineType, xyData);
+        const x = xyData.map((xy) => xy[0]);
+        const y = xyData.map((xy) => xy[1]);
 
+        const SLR = new SimpleLinearRegression(x, y);
         // check for start and end points inside the plotted area
         let x0 = xExtent[0];
-        let y0 = evaluate('YLinear', reg, x0);
+        let y0 = SLR.predict(x0);
         if (y0 < yExtent[0]) {
           y0 = yExtent[0];
-          x0 = evaluate('XLinear', reg, y0);
+          x0 = SLR.computeX(y0);
         }
         if (y0 > yExtent[1]) {
           y0 = yExtent[1];
-          x0 = evaluate('XLinear', reg, y0);
+          x0 = SLR.computeX(y0);
         }
 
         let x1 = xExtent[1];
-        let y1 = evaluate('YLinear', reg, x1);
+        let y1 = SLR.predict(x1);
         if (y1 < yExtent[0]) {
           y1 = yExtent[0];
-          x1 = evaluate('XLinear', reg, y1);
+          x1 = SLR.computeX(y1);
         }
         if (y1 > yExtent[1]) {
           y1 = yExtent[1];
-          x1 = evaluate('XLinear', reg, y1);
+          x1 = SLR.computeX(y1);
         }
 
         path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
-      } else {
-        if (fieldSet.lineType === 'power') xyData = xyData.filter((d) => d[0] > 0);
-
-        const reg = getRegression(fieldSet.lineType, xyData);
+      } else if (fieldSet.lineType === 'exponential') {
+        const ex = xyData.map((xy) => xy[0]);
+        const ey = xyData.map((xy) => xy[1]);
+        const ER = new ExponentialRegression(ex, ey);
 
         const x0 = xExtent[0];
         const x1 = xExtent[1];
@@ -128,10 +101,28 @@ function drawLines(
         const xys = new Array(0);
         for (let i = 0; i < steps; i++) {
           const x = x0 + i * dx;
-          if (fieldSet.lineType !== 'power' || x > 0) {
-            const y = evaluate(fieldSet.lineType, reg, x);
-            xys.push([x, y]);
-          }
+          const y = ER.predict(x);
+          xys.push([x, y]);
+        }
+        path = `
+        ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
+      `;
+      } else if (fieldSet.lineType === 'power') {
+        xyData = xyData.filter((d) => d[0] > 0);
+        const px = xyData.map((xy) => xy[0]);
+        const py = xyData.map((xy) => xy[1]);
+        const PR = new PowerRegression(px, py);
+
+        const x0 = xExtent[0];
+        const x1 = xExtent[1];
+
+        const steps = 100;
+        const dx = (x1 - x0) / (steps - 1);
+        const xys = new Array(0);
+        for (let i = 0; i < steps; i++) {
+          const x = x0 + i * dx;
+          const y = PR.predict(x);
+          xys.push([x, y]);
         }
         path = `
         ${xys.map((d, i) => `${i === 0 ? 'M' : 'L'} ${xScale(d[0])} ${yScale(d[1])}`).join(' ')}
@@ -201,7 +192,7 @@ function drawLabels(options: ScatterOptions,
   xValues: number[],
   xScale: Function) {
   return xValues.map((x, i: number) => {
-    if (i < labels.length) {
+    if (Array.isArray(labels) && i < labels.length) {
       return (
         <text
           key={`label-[${i}]`}
@@ -388,6 +379,18 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
   return null;
 }
 
+function isXAxisLabelValid(
+  options: ScatterOptions,
+  colData: {
+    name: string,
+    displayName: string,
+    type: string,
+    values: any[]
+  }[],
+) {
+  return options.label.col >= 0 && colData[options.label.col].type === 'string';
+}
+
 function generateContent(
   options: ScatterOptions,
   width: number,
@@ -420,7 +423,7 @@ function generateContent(
       || d3.max(yExtents.map((c) => c[1]) as number[]),
   ] as number[];
 
-  const labels = options.label.col >= 0 ? colValues[options.label.col] : [];
+  const labels = isXAxisLabelValid(options, colData) ? colValues[options.label.col] : [];
   const xMargins = new MarginPair(options.xMargins.lower || 0, options.xMargins.upper || 0);
   const yMargins = new MarginPair(options.yMargins.lower || 0, options.yMargins.upper || 0);
   const legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
@@ -462,7 +465,7 @@ function generateContent(
 
   let xAxis = d3.axisBottom(xScale);
 
-  if (options.label.col >= 0) xAxis = xAxis.ticks(0);
+  if (labels.length > 0) xAxis = xAxis.ticks(0);
   else xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
 
   const yScale = d3
