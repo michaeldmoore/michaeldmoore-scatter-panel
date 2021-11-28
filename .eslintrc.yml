@@ -17,6 +17,8 @@ rules: {
         'no-use-before-define': 'off',
         '@typescript-eslint/no-use-before-define': ['error', {variables: false}],
         'linebreak-style': 'off',
+        'operator-linebreak': 'off',
+        'arrow-body-style': 'off',
         'max-len': 'off',
         'no-plusplus': 'off',
         'import/prefer-default-export': 'off',
