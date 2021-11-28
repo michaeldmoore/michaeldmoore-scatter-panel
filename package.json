@@ -17,7 +17,6 @@
     "email": "plugins@grafana.com"
   },
   "devDependencies": {
-    "@grafana/data": "latest",
     "@grafana/toolkit": "latest",
     "@grafana/ui": "latest",
     "@types/d3": "^6.2.0",
@@ -40,6 +39,7 @@
     "node": ">=12"
   },
   "dependencies": {
+    "@grafana/data": "latest",
     "@types/jquery": "^3.5.5",
     "d3": "^6.3.1",
     "jquery": "^3.5.1",

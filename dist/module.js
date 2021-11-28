@@ -1554,45 +1554,37 @@ function evaluateYPower(reg: regression.Result, x: number) {
 
 
 function getRegression(method, xyData) {
-  switch (method) {
-    case 'exponential':
-      return regression__WEBPACK_IMPORTED_MODULE_3___default.a.exponential(xyData);
-      break;
-
-    case 'power':
-      return regression__WEBPACK_IMPORTED_MODULE_3___default.a.power(xyData);
-      break;
-
-    case 'linear':
-    default:
-      return regression__WEBPACK_IMPORTED_MODULE_3___default.a.linear(xyData);
-      break;
+  if (method === 'exponential') {
+    return regression__WEBPACK_IMPORTED_MODULE_3___default.a.exponential(xyData);
   }
+
+  if (method === 'power') {
+    return regression__WEBPACK_IMPORTED_MODULE_3___default.a.power(xyData);
+  }
+
+  return regression__WEBPACK_IMPORTED_MODULE_3___default.a.linear(xyData);
 }
 
 function evaluate(method, reg, val) {
-  switch (method) {
-    case "exponential":
-      return reg.equation[0] * Math.exp(reg.equation[1] * val);
-      break;
-
-    case "power":
-      return reg.equation[0] * Math.pow(val, reg.equation[1]);
-      break;
-
-    case "XLinear":
-      return (val - reg.equation[1]) / reg.equation[0];
-      break;
-
-    case "YLinear":
-    default:
-      return reg.equation[0] * val + reg.equation[1];
-      break;
+  if (method === 'exponential') {
+    return reg.equation[0] * Math.exp(reg.equation[1] * val);
   }
+
+  if (method === 'power') {
+    return reg.equation[0] * Math.pow(val, reg.equation[1]);
+  }
+
+  if (method === 'XLinear') {
+    return (val - reg.equation[1]) / reg.equation[0];
+  } // must be "YLinear":
+
+
+  return reg.equation[0] * val + reg.equation[1];
 }
 
 function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent) {
-  var lines = new Array(0);
+  var lines = new Array(0); // as JSX.Element[];
+
   fieldSets.forEach(function (fieldSet, index) {
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
       var path = '';
@@ -1668,7 +1660,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
           className += ' ScatterLineHidden';
         }
 
-        lines.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("path", {
+        lines.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("path", {
           key: "line-[" + index + "]",
           className: className,
           d: path,
@@ -1685,7 +1677,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
 function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale) {
   return fieldSets.map(function (y, i) {
     return xValues.map(function (x, j) {
-      var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol; //y.dotSize;
+      var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol; // y.dotSize;
 
       var yValue = yValues[i][j];
 
@@ -1696,7 +1688,7 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
           className += ' ScatterSetHidden';
         }
 
-        return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("circle", {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("circle", {
           key: "circle-[" + y + "][" + i + "]",
           cx: xScale(x),
           cy: yScale(yValue),
@@ -1706,7 +1698,7 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
         });
       }
 
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         key: "circle-[" + y + "][" + i + "]"
       });
     });
@@ -1716,7 +1708,7 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
 function drawLabels(options, labels, xValues, xScale) {
   return xValues.map(function (x, i) {
     if (i < labels.length) {
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
         key: "label-[" + i + "]",
         x: xScale(x),
         alignmentBaseline: "hanging",
@@ -1725,7 +1717,9 @@ function drawLabels(options, labels, xValues, xScale) {
         fontSize: options.label.textSize * 4,
         fontWeight: "100"
       }, labels[i]);
-    } else return null;
+    }
+
+    return null;
   });
 }
 
@@ -1799,7 +1793,7 @@ function drawLegend(options, width, height, xMargins, yMargins, colNames, panelI
       var legends_1 = new Array(0);
       fieldSets_1.forEach(function (f, i) {
         var className = f.hidden ? 'ScatterLegendText ScatterLegendTextHidden' : 'ScatterLegendText';
-        legends_1.push(react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+        legends_1.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
           transform: "translate(" + offset_1 + ", " + 30 * scale_1 * i + ") scale(" + scale_1 + ")",
           className: className,
           alignmentBaseline: "hanging",
@@ -1810,7 +1804,7 @@ function drawLegend(options, width, height, xMargins, yMargins, colNames, panelI
           }
         }, colNames[f.col]));
       });
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
         id: "legend",
         transform: "translate(" + (width - dx) + ", " + yMargins.upper + ")"
       }, legends_1);
@@ -1828,10 +1822,10 @@ function drawXTitle(options, width, height, xMargins, yMargins) {
     var dx = 8.2 * scale * title.text.length;
     var dy = 14;
     yMargins.lower += dy * scale;
-    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
       id: "XTitle",
       transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + (height - dy * scale) + ") scale(" + scale + ")"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
       className: "ScatterXTitleRect",
       alignmentBaseline: "hanging",
       textAnchor: "middle",
@@ -1854,10 +1848,10 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
 
     if (options.rotateYAxisTitle) {
       xMargins.lower += dy * scale;
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
         id: "YTitle",
         transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") rotate(-90) scale(" + scale + ")"
-      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
         className: "ScatterYTitleRect",
         alignmentBaseline: "hanging",
         textAnchor: "middle",
@@ -1868,10 +1862,10 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
     }
 
     xMargins.lower += dx * scale;
-    return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
       id: "YTitle",
       transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + scale + ")"
-    }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("text", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
       className: "ScatterYTitleRect",
       textAnchor: "left",
       width: dx,
@@ -1891,7 +1885,7 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   var colNames = colData.map(function (c) {
     return c.displayName || c.name;
   });
-  var xValues = colData[options.xAxis.col].type !== "string" ? colValues[options.xAxis.col] : Array.from(colValues[0], function (x, i) {
+  var xValues = colData[options.xAxis.col].type !== 'string' ? colValues[options.xAxis.col] : Array.from(colValues[0], function (x, i) {
     return i;
   });
   var xExtent = [options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3__WEBPACK_IMPORTED_MODULE_2__["min"](xValues), options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3__WEBPACK_IMPORTED_MODULE_2__["max"](xValues)];
@@ -1912,7 +1906,7 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   var legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
   var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
   var xTitle = drawXTitle(options, width, height, xMargins, yMargins);
-  var border = options.border.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("rect", {
+  var border = options.border.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("rect", {
     id: "border",
     transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
     width: width - xMargins.lower - xMargins.upper,
@@ -1921,9 +1915,9 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
     strokeWidth: options.border.size,
     fill: "none"
   }) : null;
-  var clippath = react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("defs", null, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("clipPath", {
+  var clippath = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("defs", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("clipPath", {
     id: "grid-" + panelId + "." + width
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("rect", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("rect", {
     transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
     width: width - xMargins.lower - xMargins.upper,
     height: height - yMargins.upper - yMargins.lower
@@ -1933,30 +1927,30 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   if (options.label.col >= 0) xAxis = xAxis.ticks(0);else xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
   var yScale = d3__WEBPACK_IMPORTED_MODULE_2__["scaleLinear"]().nice().domain(yExtent).range([height - yMargins.lower, yMargins.upper]);
   var yAxis = d3__WEBPACK_IMPORTED_MODULE_2__["axisLeft"](yScale).tickSize(xMargins.lower + xMargins.upper - width);
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("svg", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("svg", {
     width: width,
     height: height
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
     className: "ScatterPanel-" + panelId
-  }, legend, xTitle, yTitle, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+  }, legend, xTitle, yTitle, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
     id: "YGrid",
     transform: "translate(0, " + (height - yMargins.lower) + ")",
     ref: function ref(node) {
       d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(xAxis).selectAll('line').attr('stroke', options.grid.color);
     }
-  }), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
+  }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
     id: "HGrid",
     transform: "translate(" + xMargins.lower + ", 0)",
     ref: function ref(node) {
       d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(yAxis).selectAll('line').attr('stroke', options.grid.color);
     }
-  }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
-    id: 'lines',
+  }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+    id: "lines",
     clipPath: "url(#grid-" + panelId + "." + width + ")"
-  }, drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
-    id: 'dots'
-  }, drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale)), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("g", {
-    id: 'labels',
+  }, drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+    id: "dots"
+  }, drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+    id: "labels",
     transform: "translate(0, " + (height - yMargins.lower + options.label.textSize + 3) + ")"
   }, drawLabels(options, labels, xValues, xScale))));
 }
@@ -1982,12 +1976,12 @@ var ScatterPanel = function ScatterPanel(_a) {
     });
 
     if (colData_1.length < 2) {
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           overflow: 'hidden',
           height: '100%'
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "To get started, create a table query that returns 2 or more numeric columns"));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "To get started, create a table query that returns 2 or more numeric columns"));
     }
 
     if (options.xAxis.col === -1 || options.fieldSets.length === 0) {
@@ -1996,12 +1990,12 @@ var ScatterPanel = function ScatterPanel(_a) {
     }
 
     if (options.xAxis.col >= colData_1.length) {
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           overflow: 'hidden',
           height: '100%'
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "X Axis field setting not found in current query"));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "X Axis field setting not found in current query"));
     }
 
     var fieldSets = options.fieldSets.filter(function (x) {
@@ -2009,23 +2003,23 @@ var ScatterPanel = function ScatterPanel(_a) {
     });
 
     if (fieldSets.length === 0) {
-      return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         style: {
           overflow: 'hidden',
           height: '100%'
         }
-      }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "No Y Axis(s) data found in current query"));
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "No Y Axis(s) data found in current query"));
     }
 
     return generateContent(options, width, height, fieldSets, colData_1, panelId);
   }
 
-  return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     style: {
       overflow: 'hidden',
       height: '100%'
     }
-  }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "No data"), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("p", null, "To get started, create a table query that returns 2 or more numeric columns"));
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "No data"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "To get started, create a table query that returns 2 or more numeric columns"));
 };
 
 /***/ }),

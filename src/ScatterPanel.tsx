@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { PanelProps } from '@grafana/data';
 import $ from 'jquery';
 import * as d3 from 'd3';
@@ -55,42 +55,32 @@ function evaluateYPower(reg: regression.Result, x: number) {
 }
 */
 function getRegression(method: string, xyData: regression.DataPoint[]) {
-  switch (method) {
-    case 'exponential':
-      return regression.exponential(xyData);
-      break;
-
-    case 'power':
-      return regression.power(xyData);
-      break;
-
-    case 'linear':
-    default:
-      return regression.linear(xyData);
-      break;
-
+  if (method === 'exponential') {
+    return regression.exponential(xyData);
   }
+
+  if (method === 'power') {
+    return regression.power(xyData);
+  }
+
+  return regression.linear(xyData);
 }
 
 function evaluate(method: string, reg: regression.Result, val: number) {
-  switch (method) {
-    case "exponential":
-      return reg.equation[0] * Math.exp(reg.equation[1] * val);
-      break;
-
-    case "power":
-      return reg.equation[0] * (val ** reg.equation[1]);
-      break;
-
-    case "XLinear":
-      return (val - reg.equation[1]) / reg.equation[0];
-      break;
-
-    case "YLinear":
-    default:
-      return (reg.equation[0] * val) + reg.equation[1];
-      break;
+  if (method === 'exponential') {
+    return reg.equation[0] * Math.exp(reg.equation[1] * val);
   }
+
+  if (method === 'power') {
+    return reg.equation[0] * (val ** reg.equation[1]);
+  }
+
+  if (method === 'XLinear') {
+    return (val - reg.equation[1]) / reg.equation[0];
+  }
+
+  // must be "YLinear":
+  return (reg.equation[0] * val) + reg.equation[1];
 }
 
 function drawLines(
@@ -103,13 +93,13 @@ function drawLines(
   xExtent: number[],
   yExtent: number[],
 ) {
-  const lines = new Array(0) as JSX.Element[];
+  const lines = new Array(0);// as JSX.Element[];
 
   fieldSets.forEach((fieldSet, index) => {
     if (fieldSet.lineType !== 'none' && fieldSet.lineSize > 0) {
       let path = '';
 
-      let xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter(xy => xy[1] != null) as DataPoint[];
+      let xyData = xValues.map((d, i) => [d, yValues[index][i]]).filter((xy) => xy[1] != null) as DataPoint[];
       if (fieldSet.lineType === 'simple') {
         path = `
         ${xyData.map((xy, i) => `${i === 0 ? 'M' : 'L'} ${xScale(xy[0])} ${yScale(xy[1])}`).join(' ')}
@@ -142,8 +132,7 @@ function drawLines(
 
         path = `M ${xScale(x0)} ${yScale(y0)} L ${xScale(x1)} ${yScale(y1)}`;
       } else {
-        if (fieldSet.lineType === 'power')
-          xyData = xyData.filter(d => d[0] > 0);
+        if (fieldSet.lineType === 'power') xyData = xyData.filter((d) => d[0] > 0);
 
         const reg = getRegression(fieldSet.lineType, xyData);
 
@@ -195,10 +184,9 @@ function drawDots(options: ScatterOptions,
   colValues: number[][],
   xScale: Function,
   yScale: Function) {
-
   return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
-      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;//y.dotSize;
+      const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;// y.dotSize;
 
       const yValue = yValues[i][j];
 
@@ -219,7 +207,7 @@ function drawDots(options: ScatterOptions,
           />
         );
       }
-      return <div key={`circle-[${y}][${i}]`}></div>;
+      return <div key={`circle-[${y}][${i}]`} />;
     })
   ));
 }
@@ -228,7 +216,6 @@ function drawLabels(options: ScatterOptions,
   labels: string[],
   xValues: number[],
   xScale: Function) {
-
   return xValues.map((x, i: number) => {
     if (i < labels.length) {
       return (
@@ -245,10 +232,8 @@ function drawLabels(options: ScatterOptions,
         </text>
       );
     }
-    else
-      return null;
-  }
-  )
+    return null;
+  });
 }
 
 function applySetFieldSetHidden(
@@ -349,7 +334,8 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, xMar
     yMargins.lower += dy * scale;
 
     return (
-      <g id="XTitle"
+      <g
+        id="XTitle"
         transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height - dy * scale}) scale(${scale})`}
       >
         <text
@@ -379,7 +365,8 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
       xMargins.lower += dy * scale;
 
       return (
-        <g id="YTitle"
+        <g
+          id="YTitle"
           transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) rotate(-90) scale(${scale})`}
         >
           <text
@@ -398,7 +385,8 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
     xMargins.lower += dx * scale;
 
     return (
-      <g id="YTitle"
+      <g
+        id="YTitle"
         transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) scale(${scale})`}
       >
         <text
@@ -429,11 +417,11 @@ function generateContent(
   }[],
   panelId: number,
 ) {
-//  const visibleFieldSets = fieldSets;
+  //  const visibleFieldSets = fieldSets;
 
   const colValues = colData.map((c) => c.values);
   const colNames = colData.map((c) => c.displayName || c.name);
-  const xValues = colData[options.xAxis.col].type !== "string" ? colValues[options.xAxis.col] : Array.from(colValues[0],(x,i)=>i);
+  const xValues = colData[options.xAxis.col].type !== 'string' ? colValues[options.xAxis.col] : Array.from(colValues[0], (x, i) => i);
   const xExtent = [
     options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3.min(xValues),
     options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3.max(xValues),
@@ -456,7 +444,8 @@ function generateContent(
   const xTitle = drawXTitle(options, width, height, xMargins, yMargins);
 
   const border = options.border.size > 0 ? (
-    <rect id="border"
+    <rect
+      id="border"
       transform={`translate(${xMargins.lower}, ${yMargins.upper})`}
       width={width - xMargins.lower - xMargins.upper}
       height={height - yMargins.upper - yMargins.lower}
@@ -489,10 +478,8 @@ function generateContent(
 
   let xAxis = d3.axisBottom(xScale);
 
-  if (options.label.col >= 0)
-    xAxis = xAxis.ticks(0);
-  else
-    xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
+  if (options.label.col >= 0) xAxis = xAxis.ticks(0);
+  else xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
 
   const yScale = d3
     .scaleLinear()
@@ -500,7 +487,7 @@ function generateContent(
     .domain(yExtent as [number, number])
     .range([height - yMargins.lower, yMargins.upper]);
 
-  let yAxis = d3.axisLeft(yScale).tickSize(xMargins.lower + xMargins.upper - width);
+  const yAxis = d3.axisLeft(yScale).tickSize(xMargins.lower + xMargins.upper - width);
 
   return (
     <svg
@@ -511,7 +498,8 @@ function generateContent(
         {legend}
         {xTitle}
         {yTitle}
-        <g id="YGrid"
+        <g
+          id="YGrid"
           transform={`translate(0, ${height - yMargins.lower})`}
           ref={(node) => {
             d3.select(node)
@@ -520,7 +508,8 @@ function generateContent(
               .attr('stroke', options.grid.color);
           }}
         />
-        <g id="HGrid"
+        <g
+          id="HGrid"
           transform={`translate(${xMargins.lower}, 0)`}
           ref={(node) => {
             d3.select(node)
@@ -531,13 +520,14 @@ function generateContent(
         />
         {clippath}
         {border}
-        <g id='lines' clipPath={`url(#grid-${panelId}.${width})`}>
+        <g id="lines" clipPath={`url(#grid-${panelId}.${width})`}>
           {drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
         </g>
-        <g id='dots'>
+        <g id="dots">
           {drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScale)}
         </g>
-        <g id='labels'
+        <g
+          id="labels"
           transform={`translate(0, ${height - yMargins.lower + options.label.textSize + 3})`}
         >
           {drawLabels(options, labels, xValues, xScale)}
@@ -561,7 +551,7 @@ export const ScatterPanel: React.FC<Props> = ({
         field.name,
         field.config?.displayName || field.name,
         field.type,
-        field.values.toArray().map(v => v as number),
+        field.values.toArray().map((v) => v as number),
       ));
     });
 
