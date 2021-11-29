@@ -7,6 +7,7 @@
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch",
+    "sign": "grafana-toolkit plugin:sign",
     "lint": "eslint src/**.ts*"
   },
   "repository": "github:michaeldmoore/michaeldmoore-scatter-panel",
