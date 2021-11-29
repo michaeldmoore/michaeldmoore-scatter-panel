@@ -1,7 +1,3 @@
-declare module ThielSenRegression {
-  export interface ThielSenRegressionModel {
-    name: 'ThielSenRegression';
-  }
-}
+import ThielSenRegression from 'ml-regression-theil-sen';
 
 export = ThielSenRegression;

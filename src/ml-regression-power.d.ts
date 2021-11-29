@@ -1,7 +1,3 @@
-declare module PowerRegression {
-  export interface PowerRegressionModel {
-    name: 'PowerRegression';
-  }
-}
+import PowerRegression from 'ml-regression-power';
 
 export = PowerRegression;

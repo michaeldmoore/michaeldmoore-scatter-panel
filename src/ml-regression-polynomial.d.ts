@@ -1,7 +1,3 @@
-declare module PolynomialRegression {
-  export interface PolynomialRegressionModel {
-    name: 'PolynomialRegression';
-  }
-}
+import PolynomialRegression from 'ml-regression-polynomial';
 
 export = PolynomialRegression;

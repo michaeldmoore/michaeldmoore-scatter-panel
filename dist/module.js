@@ -7814,9 +7814,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var d3__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(d3__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var ml_regression_simple_linear__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ml-regression-simple-linear */ "../node_modules/ml-regression-simple-linear/src/index.js");
 /* harmony import */ var ml_regression_exponential__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ml-regression-exponential */ "../node_modules/ml-regression-exponential/src/index.js");
-/* harmony import */ var ml_regression_power__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ml-regression-power */ "../node_modules/ml-regression-power/src/index.js");
-/* harmony import */ var ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ml-regression-theil-sen */ "../node_modules/ml-regression-theil-sen/src/index.js");
-/* harmony import */ var ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ml-regression-polynomial */ "../node_modules/ml-regression-polynomial/src/index.js");
+/* harmony import */ var ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ml-regression-polynomial */ "../node_modules/ml-regression-polynomial/src/index.js");
+/* harmony import */ var ml_regression_power__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ml-regression-power */ "../node_modules/ml-regression-power/src/index.js");
+/* harmony import */ var ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ml-regression-theil-sen */ "../node_modules/ml-regression-theil-sen/src/index.js");
 /* harmony import */ var types_ColData__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! types/ColData */ "./types/ColData.ts");
 /* harmony import */ var types_MarginPair__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! types/MarginPair */ "./types/MarginPair.ts");
 /* harmony import */ var types_XAxis__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! types/XAxis */ "./types/XAxis.ts");
@@ -7956,7 +7956,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         var py = xyData.map(function (xy) {
           return xy[1];
         });
-        var PR = new ml_regression_power__WEBPACK_IMPORTED_MODULE_5__["default"](px, py);
+        var PR = new ml_regression_power__WEBPACK_IMPORTED_MODULE_6__["default"](px, py);
         var x0 = xExtent[0];
         var x1 = xExtent[1];
         var steps = 100;
@@ -7982,7 +7982,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         var pny = xyData.map(function (xy) {
           return xy[1];
         });
-        var PN = new ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_7__["default"](pnx, pny, (_a = fieldSet.polynomialOrder) !== null && _a !== void 0 ? _a : 3);
+        var PN = new ml_regression_polynomial__WEBPACK_IMPORTED_MODULE_5__["default"](pnx, pny, (_a = fieldSet.polynomialOrder) !== null && _a !== void 0 ? _a : 3);
         var x0 = xExtent[0];
         var x1 = xExtent[1];
         var steps = 100;
@@ -8008,7 +8008,7 @@ function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent
         var ty = xyData.map(function (xy) {
           return xy[1];
         });
-        var TS = new ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_6__["default"](tx, ty);
+        var TS = new ml_regression_theil_sen__WEBPACK_IMPORTED_MODULE_7__["default"](tx, ty);
         var x0 = xExtent[0];
         var x1 = xExtent[1];
         var steps = 100;
