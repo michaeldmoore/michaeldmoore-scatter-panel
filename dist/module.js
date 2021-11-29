@@ -7847,7 +7847,7 @@ function autoConfigure(options, colData) {
   }
 
   if (options.xAxisTitle.text.length === 0) {
-    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"](colData[0].displayName, 'white', 2);
+    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"](colData[0].displayName, 'white', 2, false);
   }
 
   options.fieldSets = options.fieldSets.filter(function (f) {
@@ -8193,13 +8193,29 @@ function drawXTitle(options, width, height, xMargins, yMargins) {
     var scale = title.textSize;
     var dx = 8.2 * scale * title.text.length;
     var dy = 14;
+
+    if (options.xAxisTitle.rotated) {
+      yMargins.lower += dx;
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+        id: "XTitle",
+        transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ")  rotate(-90) scale(" + scale + ")"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        className: "ScatterYTitleRect",
+        alignmentBaseline: "middle",
+        textAnchor: "left",
+        width: dx,
+        height: dy,
+        fill: title.color
+      }, title.text));
+    }
+
     yMargins.lower += dy * scale;
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
       id: "XTitle",
-      transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + (height - dy * scale) + ") scale(" + scale + ")"
+      transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ") scale(" + scale + ")"
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
       className: "ScatterXTitleRect",
-      alignmentBaseline: "hanging",
+      alignmentBaseline: "baseline",
       textAnchor: "middle",
       width: dx,
       height: dy,
@@ -8218,7 +8234,7 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
     var dx = 8.2 * title.text.length;
     var dy = 14;
 
-    if (options.rotateYAxisTitle) {
+    if (options.yAxisTitle.rotated) {
       xMargins.lower += dy * scale;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
         id: "YTitle",
@@ -8979,7 +8995,19 @@ var TitleEditor = function TitleEditor(_a) {
 
       _onChange(value);
     }
-  })), color);
+  })), color, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "ScatterFlex"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "ScatterCheckbox",
+    title: "Rotate Y Axis title"
+  }, "Rotate"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+    value: value.rotated,
+    onChange: function onChange(e) {
+      value.rotated = e.currentTarget.checked;
+
+      _onChange(value);
+    }
+  })));
 };
 
 /***/ }),
@@ -9135,7 +9163,7 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](Scatt
     name: 'X Axis Title',
     category: ['X Axis'],
     editor: editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__["TitleEditor"],
-    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1)
+    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1, false)
   });
   builder.addCustomEditor({
     id: 'label',
@@ -9175,18 +9203,7 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](Scatt
     name: 'Y Axis Title',
     category: ['Y Axis'],
     editor: editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__["TitleEditor"],
-    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1)
-  });
-  builder.addBooleanSwitch({
-    path: 'rotateYAxisTitle',
-    name: 'Rotate Y Axis Title',
-    category: ['Y Axis'],
-    defaultValue: false,
-    showIf: function showIf(config) {
-      var _a;
-
-      return ((_a = config.yAxisTitle.text) === null || _a === void 0 ? void 0 : _a.length) > 0;
-    }
+    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1, false)
   });
   builder.addCustomEditor({
     id: 'legend',
@@ -9447,10 +9464,11 @@ __webpack_require__.r(__webpack_exports__);
 var Title =
 /** @class */
 function () {
-  function Title(text, color, textSize) {
+  function Title(text, color, textSize, rotated) {
     this.text = text;
     this.color = color;
     this.textSize = textSize;
+    this.rotated = rotated;
   }
 
   return Title;

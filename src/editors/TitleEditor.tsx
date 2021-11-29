@@ -1,9 +1,9 @@
 import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
-import { ColorPicker, Input } from '@grafana/ui';
+import { Checkbox, ColorPicker, Input } from '@grafana/ui';
 import { Title } from '../types/Title';
 
-interface Props extends StandardEditorProps<Title> { }
+interface Props extends StandardEditorProps<Title> {}
 
 export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
   const color = value.textSize > 0 ?
@@ -47,6 +47,17 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
         />
       </div>
       {color}
+
+      <div className="ScatterFlex">
+        <div className="ScatterCheckbox" title="Rotate Y Axis title">Rotate</div>
+        <Checkbox
+          value={value.rotated}
+          onChange={(e) => {
+            value.rotated = e.currentTarget.checked;
+            onChange(value);
+          }}
+        />
+      </div>
     </div>
   );
 };

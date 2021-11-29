@@ -21,7 +21,6 @@ export interface ScatterOptions {
   legend: Legend,
   xAxisTitle: Title,
   yAxisTitle: Title,
-  rotateYAxisTitle: boolean,
   grid: Grid,
   border: Border
 }

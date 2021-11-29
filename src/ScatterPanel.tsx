@@ -25,7 +25,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   }
 
   if (options.xAxisTitle.text.length === 0) {
-    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2);
+    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2, false);
   }
 
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
@@ -350,16 +350,37 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, xMar
     const dx = 8.2 * scale * title.text.length;
     const dy = 14;
 
+    if (options.xAxisTitle.rotated) {
+      yMargins.lower += dx;
+
+      return (
+        <g
+          id="XTitle"
+          transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height})  rotate(-90) scale(${scale})`}
+        >
+          <text
+            className="ScatterYTitleRect"
+            alignmentBaseline="middle"
+            textAnchor="left"
+            width={dx}
+            height={dy}
+            fill={title.color}
+          >
+            {title.text}
+          </text>
+        </g>
+      );
+    }
     yMargins.lower += dy * scale;
 
     return (
       <g
         id="XTitle"
-        transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height - dy * scale}) scale(${scale})`}
+        transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height}) scale(${scale})`}
       >
         <text
           className="ScatterXTitleRect"
-          alignmentBaseline="hanging"
+          alignmentBaseline="baseline"
           textAnchor="middle"
           width={dx}
           height={dy}
@@ -380,7 +401,7 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
     const dx = 8.2 * title.text.length;
     const dy = 14;
 
-    if (options.rotateYAxisTitle) {
+    if (options.yAxisTitle.rotated) {
       xMargins.lower += dy * scale;
 
       return (

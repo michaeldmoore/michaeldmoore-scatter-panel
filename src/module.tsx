@@ -54,7 +54,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'X Axis Title',
       category: ['X Axis'],
       editor: TitleEditor,
-      defaultValue: new Title('', '#777', 1),
+      defaultValue: new Title('', '#777', 1, false),
     });
 
     builder.addCustomEditor({
@@ -99,17 +99,7 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Y Axis Title',
       category: ['Y Axis'],
       editor: TitleEditor,
-      defaultValue: new Title('', '#777', 1),
-    });
-
-    builder.addBooleanSwitch({
-      path: 'rotateYAxisTitle',
-      name: 'Rotate Y Axis Title',
-      category: ['Y Axis'],
-      defaultValue: false,
-      showIf: (config: { yAxisTitle: { text: string | any[] } }) => (
-        config.yAxisTitle.text?.length > 0
-      ),
+      defaultValue: new Title('', '#777', 1, false),
     });
 
     builder.addCustomEditor({

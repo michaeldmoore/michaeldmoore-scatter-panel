@@ -4,6 +4,7 @@ export class Title {
     public text: string,
     public color: string,
     public textSize: number,
+    public rotated: boolean,
   ) {
   }
 }
