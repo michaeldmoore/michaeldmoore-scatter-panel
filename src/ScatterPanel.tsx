@@ -25,7 +25,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   }
 
   if (options.xAxisTitle.text.length === 0) {
-    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2, false);
+    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2, false, false);
   }
 
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
@@ -469,11 +469,9 @@ function generateContent(
   }[],
   panelId: number,
 ) {
-  //  const visibleFieldSets = fieldSets;
-
   const colValues = colData.map((c) => c.values);
   const colNames = colData.map((c) => c.displayName || c.name);
-  const xValues = colData[options.xAxis.col].type !== 'string' ? colValues[options.xAxis.col] : Array.from(colValues[0], (x, i) => i);
+  const xValues = colData[options.xAxis.col].type !== 'string' ? colValues[options.xAxis.col] : Array.from(colValues[0], (x, i) => i + 1);
   const xExtent = [
     options.xAxisExtents.min === 0 ? 0 : options.xAxisExtents.min || d3.min(xValues),
     options.xAxisExtents.max === 0 ? 0 : options.xAxisExtents.max || d3.max(xValues),
@@ -519,8 +517,7 @@ function generateContent(
     </defs>
   );
 
-  const xScale = d3
-    .scaleLinear()
+  const xScale = (options.xAxisTitle.logScale ? d3.scaleLog() : d3.scaleLinear())
     .nice()
     .domain(xExtent as [number, number])
     .range([
@@ -533,8 +530,7 @@ function generateContent(
   if (labels.length > 0) xAxis = xAxis.ticks(0);
   else xAxis = xAxis.tickSize(yMargins.upper + yMargins.lower - height);
 
-  const yScale = d3
-    .scaleLinear()
+  const yScale = (options.yAxisTitle.logScale ? d3.scaleLog() : d3.scaleLinear())
     .nice()
     .domain(yExtent as [number, number])
     .range([height - yMargins.lower, yMargins.upper]);

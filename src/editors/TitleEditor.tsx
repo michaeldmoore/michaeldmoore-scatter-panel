@@ -58,6 +58,17 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           }}
         />
       </div>
+
+      <div className="ScatterFlex">
+        <div className="ScatterCheckbox" title="Log Scale">Log Scale</div>
+        <Checkbox
+          value={value.logScale}
+          onChange={(e) => {
+            value.logScale = e.currentTarget.checked;
+            onChange(value);
+          }}
+        />
+      </div>
     </div>
   );
 };

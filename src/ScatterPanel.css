@@ -60,10 +60,11 @@
 
 .ScatterCheckbox {
   padding-top: 6px;
-  padding-left: 5px;
-  width: 55px;
+  padding-right: 10px;
+  width: 75px;
   color: rgb(159, 167, 179);
   font-size: 12px;
+  text-align: right;
 }
 
 .ScatterFlex label {
@@ -114,4 +115,17 @@
 
 .ScatterLegendTextHidden{
     fill:rgba(119, 119, 119, 0.25);
+}
+
+.ScatterTooltip {	
+  position: absolute;			
+  text-align: center;			
+  width: 60px;					
+  height: 28px;					
+  padding: 2px;				
+  font: 12px sans-serif;		
+  background: lightsteelblue;	
+  border: 0px;		
+  border-radius: 8px;			
+  pointer-events: none;			
 }
