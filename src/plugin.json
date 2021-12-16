@@ -6,7 +6,7 @@
     "description": "A really easy-to-use scatter-plot plugin panel for table formatted Grafana data",
     "author": {
       "name": "Michael Moore",
-      "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel"
+      "url": "https://github.com/michaeldmoore/michaeldmoore-scatter-panel"
     },
     "keywords": [
       "Grafana",
@@ -22,11 +22,11 @@
     "links": [
       {
         "name": "Project Site",
-        "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel"
+        "url": "https://github.com/michaeldmoore/michaeldmoore-scatter-panel"
       },
       {
         "name": "License",
-        "url": "https://github.com/michaedmoore/michaeldmoore-scatter-panel/LICENSE"
+        "url": "https://github.com/michaeldmoore/michaeldmoore-scatter-panel/blob/master/LICENSE"
       }
     ],
     "screenshots": [
