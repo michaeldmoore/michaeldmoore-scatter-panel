@@ -7859,7 +7859,7 @@ function autoConfigure(options, colData) {
       return new types_FieldSet__WEBPACK_IMPORTED_MODULE_11__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', 3, false);
     });
     options.fieldSets = fieldSets.filter(function (c) {
-      return c.col !== options.xAxis.col;
+      return c.col !== options.xAxis.col && colData[c.col].type !== 'string';
     });
   }
 

@@ -33,7 +33,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   if (options.fieldSets.length === 0) {
     const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', 3, false));
 
-    options.fieldSets = fieldSets.filter((c) => c.col !== options.xAxis.col);
+    options.fieldSets = fieldSets.filter((c) => c.col !== options.xAxis.col && colData[c.col].type !== 'string');
   }
 
   options.xMargins.lower = 30;
