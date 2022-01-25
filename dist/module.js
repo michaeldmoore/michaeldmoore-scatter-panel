@@ -8190,79 +8190,56 @@ function drawXTitle(options, width, height, xMargins, yMargins) {
   var title = options.xAxisTitle;
 
   if (title.text) {
-    var scale = title.textSize;
-    var dx = 8.2 * scale * title.text.length;
-    var dy = 14;
-
     if (options.xAxisTitle.rotated) {
-      yMargins.lower += dx;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
         id: "XTitle",
-        transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ")  rotate(-90) scale(" + scale + ")"
+        transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ")  rotate(-90) scale(" + title.textSize + ")"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-        className: "ScatterYTitleRect",
+        className: "ScatterXTitleRect",
         alignmentBaseline: "middle",
         textAnchor: "left",
-        width: dx,
-        height: dy,
+        fill: title.color
+      }, title.text));
+    } else {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+        id: "XTitle",
+        transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ") scale(" + title.textSize + ")"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        className: "ScatterXTitleRect",
+        alignmentBaseline: "text-after-edge",
+        textAnchor: "middle",
         fill: title.color
       }, title.text));
     }
-
-    yMargins.lower += dy * scale;
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
-      id: "XTitle",
-      transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ") scale(" + scale + ")"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-      className: "ScatterXTitleRect",
-      alignmentBaseline: "baseline",
-      textAnchor: "middle",
-      width: dx,
-      height: dy,
-      fill: title.color
-    }, title.text));
-  }
-
-  return null;
+  } else return null;
 }
 
 function drawYTitle(options, width, height, xMargins, yMargins) {
   var title = options.yAxisTitle;
 
   if (title.text) {
-    var scale = title.textSize;
-    var dx = 8.2 * title.text.length;
-    var dy = 14;
-
     if (options.yAxisTitle.rotated) {
-      xMargins.lower += dy * scale;
       return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
         id: "YTitle",
-        transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") rotate(-90) scale(" + scale + ")"
+        transform: "translate(0, " + (height + yMargins.upper - yMargins.lower) / 2.0 + ") rotate(-90) scale(" + title.textSize + ")"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
         className: "ScatterYTitleRect",
         alignmentBaseline: "hanging",
         textAnchor: "middle",
-        width: dx,
-        height: dy,
+        fill: title.color
+      }, title.text));
+    } else {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+        id: "YTitle",
+        transform: "translate(0, " + (height + yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + title.textSize + ")"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        className: "ScatterYTitleRect",
+        alignmentBaseline: "middle",
+        textAnchor: "left",
         fill: title.color
       }, title.text));
     }
-
-    xMargins.lower += dx * scale;
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
-      id: "YTitle",
-      transform: "translate(0, " + (height - yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + scale + ")"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-      className: "ScatterYTitleRect",
-      textAnchor: "left",
-      width: dx,
-      height: dy,
-      fill: title.color
-    }, title.text));
-  }
-
-  return null;
+  } else return null;
 }
 
 function isXAxisLabelValid(options, colData) {
@@ -8294,9 +8271,18 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
   var labels = isXAxisLabelValid(options, colData) ? colValues[options.label.col] : [];
   var xMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_9__["MarginPair"](options.xMargins.lower || 0, options.xMargins.upper || 0);
   var yMargins = new types_MarginPair__WEBPACK_IMPORTED_MODULE_9__["MarginPair"](options.yMargins.lower || 0, options.yMargins.upper || 0);
-  var legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
-  var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
+  var legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId); // offset left and bottom margins to allow room for the titles (if any)
+
+  if (options.xAxisTitle.text.length) {
+    yMargins.lower += options.xAxisTitle.rotated ? 8.2 * options.xAxisTitle.textSize * options.xAxisTitle.text.length : 14 * options.xAxisTitle.textSize;
+  }
+
+  if (options.yAxisTitle.text.length) {
+    xMargins.lower += !options.yAxisTitle.rotated ? 8.2 * options.yAxisTitle.textSize * options.yAxisTitle.text.length : 14 * options.yAxisTitle.textSize;
+  }
+
   var xTitle = drawXTitle(options, width, height, xMargins, yMargins);
+  var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
   var border = options.border.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("rect", {
     id: "border",
     transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",

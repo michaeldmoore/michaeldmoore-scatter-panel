@@ -346,24 +346,16 @@ function drawLegend(options: ScatterOptions, width: number, height: number, xMar
 function drawXTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair) {
   const title = options.xAxisTitle;
   if (title.text) {
-    const scale = title.textSize;
-    const dx = 8.2 * scale * title.text.length;
-    const dy = 14;
-
     if (options.xAxisTitle.rotated) {
-      yMargins.lower += dx;
-
       return (
         <g
           id="XTitle"
-          transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height})  rotate(-90) scale(${scale})`}
+          transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height})  rotate(-90) scale(${title.textSize})`}
         >
           <text
-            className="ScatterYTitleRect"
+            className="ScatterXTitleRect"
             alignmentBaseline="middle"
             textAnchor="left"
-            width={dx}
-            height={dy}
             fill={title.color}
           >
             {title.text}
@@ -371,50 +363,41 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, xMar
         </g>
       );
     }
-    yMargins.lower += dy * scale;
-
-    return (
-      <g
-        id="XTitle"
-        transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height}) scale(${scale})`}
-      >
-        <text
-          className="ScatterXTitleRect"
-          alignmentBaseline="baseline"
-          textAnchor="middle"
-          width={dx}
-          height={dy}
-          fill={title.color}
+    else {
+      return (
+        <g
+          id="XTitle"
+          transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height}) scale(${title.textSize})`}
         >
-          {title.text}
-        </text>
-      </g>
-    );
+          <text
+            className="ScatterXTitleRect"
+            alignmentBaseline="text-after-edge"
+            textAnchor="middle"
+            fill={title.color}
+          >
+            {title.text}
+          </text>
+        </g>
+      );
+    }
   }
-  return null;
+  else
+    return null;
 }
 
 function drawYTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair) {
   const title = options.yAxisTitle;
   if (title.text) {
-    const scale = title.textSize;
-    const dx = 8.2 * title.text.length;
-    const dy = 14;
-
     if (options.yAxisTitle.rotated) {
-      xMargins.lower += dy * scale;
-
       return (
         <g
           id="YTitle"
-          transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) rotate(-90) scale(${scale})`}
+          transform={`translate(0, ${(height + yMargins.upper - yMargins.lower) / 2.0}) rotate(-90) scale(${title.textSize})`}
         >
           <text
             className="ScatterYTitleRect"
             alignmentBaseline="hanging"
             textAnchor="middle"
-            width={dx}
-            height={dy}
             fill={title.color}
           >
             {title.text}
@@ -422,26 +405,26 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
         </g>
       );
     }
-    xMargins.lower += dx * scale;
-
-    return (
-      <g
-        id="YTitle"
-        transform={`translate(0, ${(height - yMargins.upper - yMargins.lower) / 2.0}) scale(${scale})`}
-      >
-        <text
-          className="ScatterYTitleRect"
-          textAnchor="left"
-          width={dx}
-          height={dy}
-          fill={title.color}
+    else {
+      return (
+        <g
+          id="YTitle"
+          transform={`translate(0, ${(height + yMargins.upper - yMargins.lower) / 2.0}) scale(${title.textSize})`}
         >
-          {title.text}
-        </text>
-      </g>
-    );
+          <text
+            className="ScatterYTitleRect"
+              alignmentBaseline="middle"
+              textAnchor="left"
+            fill={title.color}
+          >
+            {title.text}
+          </text>
+        </g>
+      );
+      }
   }
-  return null;
+  else
+    return null;
 }
 
 function isXAxisLabelValid(
@@ -490,8 +473,18 @@ function generateContent(
   const xMargins = new MarginPair(options.xMargins.lower || 0, options.xMargins.upper || 0);
   const yMargins = new MarginPair(options.yMargins.lower || 0, options.yMargins.upper || 0);
   const legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
-  const yTitle = drawYTitle(options, width, height, xMargins, yMargins);
+
+  // offset left and bottom margins to allow room for the titles (if any)
+  if (options.xAxisTitle.text.length){
+    yMargins.lower += options.xAxisTitle.rotated ? 8.2 * options.xAxisTitle.textSize * options.xAxisTitle.text.length : 14 * options.xAxisTitle.textSize; 
+  }
+
+  if (options.yAxisTitle.text.length){
+    xMargins.lower += !options.yAxisTitle.rotated ? 8.2 * options.yAxisTitle.textSize * options.yAxisTitle.text.length : 14 * options.yAxisTitle.textSize; 
+  }
+
   const xTitle = drawXTitle(options, width, height, xMargins, yMargins);
+  const yTitle = drawYTitle(options, width, height, xMargins, yMargins);
 
   const border = options.border.size > 0 ? (
     <rect
