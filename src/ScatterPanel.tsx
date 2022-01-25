@@ -343,7 +343,7 @@ function drawLegend(options: ScatterOptions, width: number, height: number, xMar
   return null;
 }
 
-function drawXTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair) {
+function drawXTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair) {
   const title = options.xAxisTitle;
   if (title.text) {
     if (options.xAxisTitle.rotated) {
@@ -363,29 +363,28 @@ function drawXTitle(options: ScatterOptions, width: number, height: number, xMar
         </g>
       );
     }
-    else {
-      return (
-        <g
-          id="XTitle"
-          transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height}) scale(${title.textSize})`}
+
+    return (
+      <g
+        id="XTitle"
+        transform={`translate(${(width + xMargins.lower - xMargins.upper) / 2.0}, ${height}) scale(${title.textSize})`}
+      >
+        <text
+          className="ScatterXTitleRect"
+          alignmentBaseline="text-after-edge"
+          textAnchor="middle"
+          fill={title.color}
         >
-          <text
-            className="ScatterXTitleRect"
-            alignmentBaseline="text-after-edge"
-            textAnchor="middle"
-            fill={title.color}
-          >
-            {title.text}
-          </text>
-        </g>
-      );
-    }
+          {title.text}
+        </text>
+      </g>
+    );
   }
-  else
-    return null;
+
+  return null;
 }
 
-function drawYTitle(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair) {
+function drawYTitle(options: ScatterOptions, width: number, height: number, yMargins: MarginPair) {
   const title = options.yAxisTitle;
   if (title.text) {
     if (options.yAxisTitle.rotated) {
@@ -405,26 +404,25 @@ function drawYTitle(options: ScatterOptions, width: number, height: number, xMar
         </g>
       );
     }
-    else {
-      return (
-        <g
-          id="YTitle"
-          transform={`translate(0, ${(height + yMargins.upper - yMargins.lower) / 2.0}) scale(${title.textSize})`}
+
+    return (
+      <g
+        id="YTitle"
+        transform={`translate(0, ${(height + yMargins.upper - yMargins.lower) / 2.0}) scale(${title.textSize})`}
+      >
+        <text
+          className="ScatterYTitleRect"
+          alignmentBaseline="middle"
+          textAnchor="left"
+          fill={title.color}
         >
-          <text
-            className="ScatterYTitleRect"
-              alignmentBaseline="middle"
-              textAnchor="left"
-            fill={title.color}
-          >
-            {title.text}
-          </text>
-        </g>
-      );
-      }
+          {title.text}
+        </text>
+      </g>
+    );
   }
-  else
-    return null;
+
+  return null;
 }
 
 function isXAxisLabelValid(
@@ -475,16 +473,16 @@ function generateContent(
   const legend = drawLegend(options, width, height, xMargins, yMargins, colNames, panelId);
 
   // offset left and bottom margins to allow room for the titles (if any)
-  if (options.xAxisTitle.text.length){
-    yMargins.lower += options.xAxisTitle.rotated ? 8.2 * options.xAxisTitle.textSize * options.xAxisTitle.text.length : 14 * options.xAxisTitle.textSize; 
+  if (options.xAxisTitle.text.length) {
+    yMargins.lower += options.xAxisTitle.rotated ? 8.2 * options.xAxisTitle.textSize * options.xAxisTitle.text.length : 14 * options.xAxisTitle.textSize;
   }
 
-  if (options.yAxisTitle.text.length){
-    xMargins.lower += !options.yAxisTitle.rotated ? 8.2 * options.yAxisTitle.textSize * options.yAxisTitle.text.length : 14 * options.yAxisTitle.textSize; 
+  if (options.yAxisTitle.text.length) {
+    xMargins.lower += !options.yAxisTitle.rotated ? 8.2 * options.yAxisTitle.textSize * options.yAxisTitle.text.length : 14 * options.yAxisTitle.textSize;
   }
 
-  const xTitle = drawXTitle(options, width, height, xMargins, yMargins);
-  const yTitle = drawYTitle(options, width, height, xMargins, yMargins);
+  const xTitle = drawXTitle(options, width, height, xMargins);
+  const yTitle = drawYTitle(options, width, height, yMargins);
 
   const border = options.border.size > 0 ? (
     <rect

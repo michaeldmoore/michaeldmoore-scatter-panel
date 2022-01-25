@@ -8186,7 +8186,7 @@ function drawLegend(options, width, height, xMargins, yMargins, colNames, panelI
   return null;
 }
 
-function drawXTitle(options, width, height, xMargins, yMargins) {
+function drawXTitle(options, width, height, xMargins) {
   var title = options.xAxisTitle;
 
   if (title.text) {
@@ -8200,21 +8200,23 @@ function drawXTitle(options, width, height, xMargins, yMargins) {
         textAnchor: "left",
         fill: title.color
       }, title.text));
-    } else {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
-        id: "XTitle",
-        transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ") scale(" + title.textSize + ")"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-        className: "ScatterXTitleRect",
-        alignmentBaseline: "text-after-edge",
-        textAnchor: "middle",
-        fill: title.color
-      }, title.text));
     }
-  } else return null;
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+      id: "XTitle",
+      transform: "translate(" + (width + xMargins.lower - xMargins.upper) / 2.0 + ", " + height + ") scale(" + title.textSize + ")"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+      className: "ScatterXTitleRect",
+      alignmentBaseline: "text-after-edge",
+      textAnchor: "middle",
+      fill: title.color
+    }, title.text));
+  }
+
+  return null;
 }
 
-function drawYTitle(options, width, height, xMargins, yMargins) {
+function drawYTitle(options, width, height, yMargins) {
   var title = options.yAxisTitle;
 
   if (title.text) {
@@ -8228,18 +8230,20 @@ function drawYTitle(options, width, height, xMargins, yMargins) {
         textAnchor: "middle",
         fill: title.color
       }, title.text));
-    } else {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
-        id: "YTitle",
-        transform: "translate(0, " + (height + yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + title.textSize + ")"
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
-        className: "ScatterYTitleRect",
-        alignmentBaseline: "middle",
-        textAnchor: "left",
-        fill: title.color
-      }, title.text));
     }
-  } else return null;
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+      id: "YTitle",
+      transform: "translate(0, " + (height + yMargins.upper - yMargins.lower) / 2.0 + ") scale(" + title.textSize + ")"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+      className: "ScatterYTitleRect",
+      alignmentBaseline: "middle",
+      textAnchor: "left",
+      fill: title.color
+    }, title.text));
+  }
+
+  return null;
 }
 
 function isXAxisLabelValid(options, colData) {
@@ -8281,8 +8285,8 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
     xMargins.lower += !options.yAxisTitle.rotated ? 8.2 * options.yAxisTitle.textSize * options.yAxisTitle.text.length : 14 * options.yAxisTitle.textSize;
   }
 
-  var xTitle = drawXTitle(options, width, height, xMargins, yMargins);
-  var yTitle = drawYTitle(options, width, height, xMargins, yMargins);
+  var xTitle = drawXTitle(options, width, height, xMargins);
+  var yTitle = drawYTitle(options, width, height, yMargins);
   var border = options.border.size > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("rect", {
     id: "border",
     transform: "translate(" + xMargins.lower + ", " + yMargins.upper + ")",
