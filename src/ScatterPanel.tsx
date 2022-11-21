@@ -25,7 +25,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   }
 
   if (options.xAxisTitle.text.length === 0) {
-    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2, false, false);
+    options.xAxisTitle = new Title(colData[0].displayName, 'white', 2, false, false, 4, 'white');
   }
 
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
@@ -648,6 +648,8 @@ function generateContent(
           ref={(node) => {
             d3.select(node)
               .call(xAxis as any)
+              .style('font-size', options.xAxisTitle.fontSize * 4)
+              .attr('color', options.xAxisTitle.fontColor)
               .selectAll('line')
               .attr('stroke', options.grid.color);
           }}
@@ -658,6 +660,8 @@ function generateContent(
           ref={(node) => {
             d3.select(node)
               .call(yAxis as any)
+              .style('font-size', options.yAxisTitle.fontSize * 4)
+              .attr('color', options.yAxisTitle.fontColor)
               .selectAll('line')
               .attr('stroke', options.grid.color);
           }}

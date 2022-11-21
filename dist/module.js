@@ -97,7 +97,7 @@ define(["@grafana/data","@grafana/ui","d3","jquery","react"], function(__WEBPACK
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ReferenceLineValue {\n  width: 65px;\n}\n\n.ReferenceLineLabel {\n  width: 100px;\n}\n\n.ReferenceLineDeleteButton {\n  margin-top: 4px;\n  margin-left: 20px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;EACX,cAAc;EACd,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,kBAAkB;EAClB,kBAAkB;EAClB,WAAW;EACX,YAAY;EACZ,YAAY;EACZ,qBAAqB;EACrB,0BAA0B;EAC1B,WAAW;EACX,kBAAkB;EAClB,oBAAoB;AACtB","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ReferenceLineValue {\n  width: 65px;\n}\n\n.ReferenceLineLabel {\n  width: 100px;\n}\n\n.ReferenceLineDeleteButton {\n  margin-top: 4px;\n  margin-left: 20px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}"]}]);
+exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 90px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ReferenceLineValue {\n  width: 65px;\n}\n\n.ReferenceLineLabel {\n  width: 100px;\n}\n\n.ReferenceLineDeleteButton {\n  margin-top: 4px;\n  margin-left: 20px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;EACX,cAAc;EACd,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,kBAAkB;EAClB,kBAAkB;EAClB,WAAW;EACX,YAAY;EACZ,YAAY;EACZ,qBAAqB;EACrB,0BAA0B;EAC1B,WAAW;EACX,kBAAkB;EAClB,oBAAoB;AACtB","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 90px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ReferenceLineValue {\n  width: 65px;\n}\n\n.ReferenceLineLabel {\n  width: 100px;\n}\n\n.ReferenceLineDeleteButton {\n  margin-top: 4px;\n  margin-left: 20px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}"]}]);
 // Exports
 module.exports = exports;
 
@@ -7847,7 +7847,7 @@ function autoConfigure(options, colData) {
   }
 
   if (options.xAxisTitle.text.length === 0) {
-    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"](colData[0].displayName, 'white', 2, false, false);
+    options.xAxisTitle = new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"](colData[0].displayName, 'white', 2, false, false, 4, 'white');
   }
 
   options.fieldSets = options.fieldSets.filter(function (f) {
@@ -8396,13 +8396,13 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
     id: "YGrid",
     transform: "translate(0, " + (height - yMargins.lower) + ")",
     ref: function ref(node) {
-      d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(xAxis).selectAll('line').attr('stroke', options.grid.color);
+      d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(xAxis).style('font-size', options.xAxisTitle.fontSize * 4).attr('color', options.xAxisTitle.fontColor).selectAll('line').attr('stroke', options.grid.color);
     }
   }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
     id: "HGrid",
     transform: "translate(" + xMargins.lower + ", 0)",
     ref: function ref(node) {
-      d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(yAxis).selectAll('line').attr('stroke', options.grid.color);
+      d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(yAxis).style('font-size', options.yAxisTitle.fontSize * 4).attr('color', options.yAxisTitle.fontColor).selectAll('line').attr('stroke', options.grid.color);
     }
   }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
     id: "ReferenceLines"
@@ -9251,6 +9251,31 @@ var TitleEditor = function TitleEditor(_a) {
 
       _onChange(value);
     }
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "ScatterFlex ScatterSize"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "ScatterLabel"
+  }, "Tick Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+    type: "number",
+    min: 0,
+    max: 10,
+    title: "Set size of text",
+    value: value.fontSize,
+    onChange: function onChange(e) {
+      value.fontSize = e.target.valueAsNumber;
+
+      _onChange(value);
+    }
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "LabelColor"
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+    color: value.fontColor,
+    enableNamedColors: false,
+    onChange: function onChange(e) {
+      value.fontColor = e;
+
+      _onChange(value);
+    }
   })));
 };
 
@@ -9409,7 +9434,7 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](Scatt
     name: 'X Axis Title',
     category: ['X Axis'],
     editor: editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__["TitleEditor"],
-    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1, false, false)
+    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1, false, false, 4, 'white')
   });
   builder.addCustomEditor({
     id: 'label',
@@ -9457,7 +9482,7 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](Scatt
     name: 'Y Axis Title',
     category: ['Y Axis'],
     editor: editors_TitleEditor__WEBPACK_IMPORTED_MODULE_3__["TitleEditor"],
-    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1, false, false)
+    defaultValue: new types_Title__WEBPACK_IMPORTED_MODULE_12__["Title"]('', '#777', 1, false, false, 4, 'white')
   });
   builder.addCustomEditor({
     id: 'legend',
@@ -9748,12 +9773,14 @@ __webpack_require__.r(__webpack_exports__);
 var Title =
 /** @class */
 function () {
-  function Title(text, color, textSize, rotated, logScale) {
+  function Title(text, color, textSize, rotated, logScale, fontSize, fontColor) {
     this.text = text;
     this.color = color;
     this.textSize = textSize;
     this.rotated = rotated;
     this.logScale = logScale;
+    this.fontSize = fontSize;
+    this.fontColor = fontColor;
   }
 
   return Title;

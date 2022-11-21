@@ -6,6 +6,8 @@ export class Title {
     public textSize: number,
     public rotated: boolean,
     public logScale: boolean,
+    public fontSize: number,
+    public fontColor: string,
   ) {
   }
 }

@@ -69,6 +69,31 @@ export const TitleEditor: React.FC<Props> = ({ value, onChange }) => {
           }}
         />
       </div>
+
+      <div className="ScatterFlex ScatterSize">
+      <div className="ScatterLabel">Tick Size</div>
+      <Input
+        type="number"
+        min={0}
+        max={10}
+        title="Set size of text"
+        value={value.fontSize}
+        onChange={(e) => {
+          value.fontSize = (e.target as HTMLInputElement).valueAsNumber;
+          onChange(value);
+        }}
+      />
+      </div>
+      <div className="LabelColor">
+        <ColorPicker
+          color={value.fontColor}
+          enableNamedColors={false}
+          onChange={(e) => {
+            value.fontColor = e;
+            onChange(value);
+          }}
+        />
+      </div>
     </div>
   );
 };
