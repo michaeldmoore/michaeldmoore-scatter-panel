@@ -31,7 +31,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
 
   if (options.fieldSets.length === 0) {
-    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', 3, false));
+    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', 3, false, -1));
 
     options.fieldSets = fieldSets.filter((c) => c.col !== options.xAxis.col && colData[c.col].type !== 'string');
   }
@@ -40,6 +40,103 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.xMargins.upper = 10;
   options.yMargins.lower = 20;
   options.yMargins.upper = 20;
+}
+
+function drawReferenceLines(
+  options: ScatterOptions,
+  xScale: Function,
+  yScale: Function,
+  xExtent: number[],
+  yExtent: number[],
+) {
+  const ReferenceLinesContent = new Array(0);// as JSX.Element[];
+
+  options.ReferenceLines.forEach((ReferenceLine, index) => {
+    if (ReferenceLine.vertical) {
+      if (ReferenceLine.value < xExtent[0] || ReferenceLine.value > xExtent[1]) {
+        return;
+      }
+
+      const xValue = xScale(ReferenceLine.value);
+
+      const label = ReferenceLine.label.length > 0 ?
+        (
+          <text
+            key={`ReferenceLinelabel-[${index}]`}
+            className="scatter-ReferenceLinelabel"
+            x={xValue}
+            y={yScale(yExtent[1])-5}
+            alignmentBaseline="baseline"
+            textAnchor="middle"
+            fill={ReferenceLine.lineColor}
+            fontSize={options.label.textSize * 6}
+            fontWeight="100"
+          >
+            {ReferenceLine.label}
+          </text>
+        ) : null;
+
+      ReferenceLinesContent.push(
+        <g>
+          <line
+            key={`ReferenceLine-[${index}]`}
+            className="scatter-ReferenceLineline"
+            x1={xValue}
+            x2={xValue}
+            y1={yScale(yExtent[0])}
+            y2={yScale(yExtent[1])}
+            stroke={ReferenceLine.lineColor}
+            strokeWidth={ReferenceLine.lineSize}
+            fill="none"
+          />
+          {label}
+        </g>,
+      );
+    }
+    else {
+      const yValue = yScale(ReferenceLine.value);
+      const height = yScale(yExtent[0]) - yValue;
+  
+      if (height < 0 || height > yScale(yExtent[0]) - yScale(yExtent[1])) {
+        return;
+      }
+  
+      const label = ReferenceLine.label.length > 0 ?
+        (
+          <text
+            key={`ReferenceLinelabel-[${index}]`}
+            className="scatter-ReferenceLinelabel"
+            x={xScale(xExtent[1]) + 5}
+            y={yValue}
+            alignmentBaseline="middle"
+            textAnchor="left"
+            fill={ReferenceLine.lineColor}
+            fontSize={options.label.textSize * 6}
+            fontWeight="100"
+          >
+            {ReferenceLine.label}
+          </text>
+        ) : null;
+  
+      ReferenceLinesContent.push(
+        <g>
+          <line
+            key={`ReferenceLine-[${index}]`}
+            className="scatter-ReferenceLineline"
+            x1={xScale(xExtent[0])}
+            x2={xScale(xExtent[1])}
+            y1={yValue}
+            y2={yValue}
+            stroke={ReferenceLine.lineColor}
+            strokeWidth={ReferenceLine.lineSize}
+            fill="none"
+          />
+          {label}
+        </g>,
+      );
+    }
+  });
+  return ReferenceLinesContent;
 }
 
 function drawLines(
@@ -206,6 +303,7 @@ function drawDots(options: ScatterOptions,
   return fieldSets.map((y, i: number) => (
     xValues.map((x, j) => {
       const dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;
+      const dotColor = y.colorCol >= 0 ? colValues[y.colorCol][j] : y.color;
 
       const yValue = yValues[i][j];
 
@@ -222,7 +320,7 @@ function drawDots(options: ScatterOptions,
             cy={yScale(yValue)}
             r={dotSize}
             className={className}
-            fill={y.color}
+            fill={dotColor.toString()}
           />
         );
       }
@@ -300,8 +398,12 @@ function onLegendClick(e: React.MouseEvent, index: number, fieldSets: FieldSet[]
 }
 
 function drawLegend(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair, colNames: string[], panelId: number) {
+  // figure the rightMarginOffset, starting with the space needed for the longest reference line text
+  let rightMarginOffset = d3.max(options.ReferenceLines.map((r) => r.vertical ? 0 : r.label.length)) as number * 8.0;
+
   if (options.legend.size) {
     const scale = options.legend.size / 3;
+
     const fieldSets = options.fieldSets.filter((x: FieldSet) => x.col >= 0 && x.col < colNames.length);
 
     const maxLength = d3.max(fieldSets.map((f) => colNames[f.col].length)) as number;
@@ -309,8 +411,10 @@ function drawLegend(options: ScatterOptions, width: number, height: number, xMar
     if (fieldSets.length > 0) {
       const offset = 20;
       const dx = offset + (8.6 * scale * maxLength);
-
-      xMargins.upper += dx;
+      if (rightMarginOffset < dx) {
+        rightMarginOffset = dx;
+      }
+      xMargins.upper += rightMarginOffset;
 
       const legends = new Array(0);
 
@@ -340,6 +444,7 @@ function drawLegend(options: ScatterOptions, width: number, height: number, xMar
     }
   }
 
+  xMargins.upper += rightMarginOffset;
   return null;
 }
 
@@ -559,6 +664,9 @@ function generateContent(
         />
         {clippath}
         {border}
+        <g id="ReferenceLines">
+          {drawReferenceLines(options, xScale, yScale, xExtent, yExtent)}
+        </g>
         <g id="lines" clipPath={`url(#grid-${panelId}.${width})`}>
           {drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)}
         </g>

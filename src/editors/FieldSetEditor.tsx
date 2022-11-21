@@ -11,12 +11,21 @@ interface Props extends StandardEditorProps<FieldSet[]> { }
 
 export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => {
   if (context.data && context.data.length > 0) {
-    const options = context.data
+    const numberOptions = context.data
       .flatMap((frame) => frame.fields)
       .map((field, index) => ({
         label: field.config?.displayName ? field.config.displayName : field.name,
         value: index,
-        valid: field.type !== 'string',
+        valid: field.type === 'number',
+      }))
+      .filter((o) => o.valid);
+
+    const stringOptions = context.data
+      .flatMap((frame) => frame.fields)
+      .map((field, index) => ({
+        label: field.config?.displayName ? field.config.displayName : field.name,
+        value: index,
+        valid: field.type === 'string',
       }))
       .filter((o) => o.valid);
 
@@ -26,14 +35,20 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
       sizeOptions.push({ label: i, value: -i });
     }
 
-    options.forEach((o) => {
+    numberOptions.forEach((o) => {
       sizeOptions.push(o);
+    });
+
+    const colorOptions = Array(0);
+    colorOptions.push({ label: "default", value: -1});
+    stringOptions.forEach((o) => {
+      colorOptions.push(o);
     });
 
     const selects = new Array(0);
 
     const values = context.options.fieldSets.filter((x: FieldSet) => x.col != null);
-
+      
     if (values) {
       values.forEach((val: Number, index: number) => {
         const lineSize = values[index].lineType === 'none' ? null : (
@@ -75,6 +90,25 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
           )
           : null;
 
+          const colorOverride = 
+          (
+            <div className="ScatterFlex ScatterDotSize">
+              <div className="ScatterLabel">Dot Color</div>
+              <div className="ScatterSelect">
+                <Select<number>
+                  isLoading={false}
+                  value={values[index].colorCol}
+                  isClearable={false}
+                  onChange={(e) => {
+                    values[index].colorCol = e.value;
+                    onChange(values);
+                  }}
+                  options={colorOptions}
+                />
+              </div>
+            </div>
+          );
+
         selects.push(
           <div className="FieldSetEditor">
             <div className="ScatterFlex">
@@ -87,7 +121,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                     if (e) { values[index].col = e.value; } else { values.splice(index, 1); }
                     onChange(values);
                   }}
-                  options={options}
+                  options={numberOptions}
                 />
               </div>
               <div className="ScatterFlex ScatterDotSize">
@@ -117,6 +151,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
                 />
               </div>
             </div>
+            {colorOverride}
             <div className="ScatterFlex">
               <div className="ScatterFlex ScatterLineType">
                 <div className="ScatterLabel">Line</div>
@@ -154,14 +189,14 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
             variant="secondary"
             size="sm"
             onClick={() => {
-              values.push(new FieldSet(-1, -1, randomColor(), 2, 0, 'none', 3, false));
+              values.push(new FieldSet(-1, -1, randomColor(), 2, 0, 'none', 3, false, -1));
               onChange(values);
             }}
           >
             <i className="fa fa-plus" />
-            {' '}
+            {'  '}
             Add
-            {item.name.replace('(s)', '')}
+            {'   ' + item.name.replace('(s)', '')}
           </Button>
           <hr />
         </div>

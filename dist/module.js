@@ -97,7 +97,7 @@ define(["@grafana/data","@grafana/ui","d3","jquery","react"], function(__WEBPACK
 var ___CSS_LOADER_API_IMPORT___ = __webpack_require__(/*! ../node_modules/css-loader/dist/runtime/api.js */ "../node_modules/css-loader/dist/runtime/api.js");
 exports = ___CSS_LOADER_API_IMPORT___(true);
 // Module
-exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;EACZ,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;EACX,cAAc;EACd,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,kBAAkB;EAClB,kBAAkB;EAClB,WAAW;EACX,YAAY;EACZ,YAAY;EACZ,qBAAqB;EACrB,0BAA0B;EAC1B,WAAW;EACX,kBAAkB;EAClB,oBAAoB;AACtB","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 180px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}"]}]);
+exports.push([module.i, ".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ReferenceLineValue {\n  width: 65px;\n}\n\n.ReferenceLineLabel {\n  width: 100px;\n}\n\n.ReferenceLineDeleteButton {\n  margin-top: 4px;\n  margin-left: 20px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}", "",{"version":3,"sources":["ScatterPanel.css"],"names":[],"mappings":"AAAA;EACE,mBAAmB;AACrB;;AAEA;EACE,aAAa;EACb,iBAAiB;EACjB,YAAY;AACd;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;EACb,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,WAAW;EACX,mBAAmB;AACrB;;AAEA;EACE,gBAAgB;EAChB,WAAW;EACX,cAAc;EACd,eAAe;EACf,kBAAkB;AACpB;;AAEA;EACE,gBAAgB;EAChB,mBAAmB;EACnB,WAAW;EACX,cAAc;EACd,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,eAAe;AACjB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,iBAAiB;AACnB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,aAAa;AACf;;AAEA;EACE,gBAAgB;AAClB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,YAAY;AACd;;AAEA;EACE,eAAe;EACf,iBAAiB;AACnB;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,uBAAuB;AACzB;;AAEA;EACE,+BAA+B;AACjC;;AAEA;EACE,kBAAkB;EAClB,kBAAkB;EAClB,WAAW;EACX,YAAY;EACZ,YAAY;EACZ,qBAAqB;EACrB,0BAA0B;EAC1B,WAAW;EACX,kBAAkB;EAClB,oBAAoB;AACtB","file":"ScatterPanel.css","sourcesContent":[".FieldSetEditor {\n  margin-bottom: 25px;\n}\n\n.ScatterFlex {\n  display: flex;\n  flex-wrap: nowrap;\n  padding: 1px;\n}\n\n.ScatterSize {\n  width: 115px;\n}\n\n.ScatterSize input {\n  width: 55px;\n}\n\n.ScatterDotSize {\n  width: 220px;\n}\n\n.ScatterDotColor {\n  padding-top: 7px;\n}\n\n.ScatterSelect {\n  display: flex;\n  min-width: 160px;\n}\n\n.ScatterExtents {\n  display: flex;\n}\n\n.ScatterExtentLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterMargins {\n  display: flex;\n}\n\n.ScatterMarginLimit {\n  width: 90px;\n  padding-right: 20px;\n}\n\n.ScatterLabel {\n  padding-top: 6px;\n  width: 85px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: center;\n}\n\n.ScatterCheckbox {\n  padding-top: 6px;\n  padding-right: 10px;\n  width: 75px;\n  color: #9fa7b3;\n  font-size: 12px;\n  text-align: right;\n}\n\n.ScatterFlex label {\n  margin-top: 5px;\n}\n\n.ScatterSetHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterLine {\n  fill: none;\n}\n\n.ScatterLineHidden {\n  opacity: 0.25;\n  stroke-width: 1px;\n}\n\n.TitleEditor {\n  display: flex;\n}\n\n.TitleText {\n  width: 160px;\n}\n\n.TitleColor {\n  padding-top: 7px;\n}\n\n.LabelEditor {\n  display: flex;\n}\n\n.LabelColor {\n  padding-top: 7px;\n}\n\n.ReferenceLineValue {\n  width: 65px;\n}\n\n.ReferenceLineLabel {\n  width: 100px;\n}\n\n.ReferenceLineDeleteButton {\n  margin-top: 4px;\n  margin-left: 20px;\n}\n\n.ScatterLegend input {\n  width: 50px;\n}\n\n.ScatterLegendText {\n  border: 1px solid white;\n}\n\n.ScatterLegendTextHidden {\n  fill: rgba(119, 119, 119, 0.25);\n}\n\n.ScatterTooltip {\n  position: absolute;\n  text-align: center;\n  width: 60px;\n  height: 28px;\n  padding: 2px;\n  font: 12px sans-serif;\n  background: lightsteelblue;\n  border: 0px;\n  border-radius: 8px;\n  pointer-events: none;\n}"]}]);
 // Exports
 module.exports = exports;
 
@@ -7856,7 +7856,7 @@ function autoConfigure(options, colData) {
 
   if (options.fieldSets.length === 0) {
     var fieldSets = colData.map(function (f, i) {
-      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_11__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', 3, false);
+      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_11__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', 3, false, -1);
     });
     options.fieldSets = fieldSets.filter(function (c) {
       return c.col !== options.xAxis.col && colData[c.col].type !== 'string';
@@ -7867,6 +7867,73 @@ function autoConfigure(options, colData) {
   options.xMargins.upper = 10;
   options.yMargins.lower = 20;
   options.yMargins.upper = 20;
+}
+
+function drawReferenceLines(options, xScale, yScale, xExtent, yExtent) {
+  var ReferenceLinesContent = new Array(0); // as JSX.Element[];
+
+  options.ReferenceLines.forEach(function (ReferenceLine, index) {
+    if (ReferenceLine.vertical) {
+      if (ReferenceLine.value < xExtent[0] || ReferenceLine.value > xExtent[1]) {
+        return;
+      }
+
+      var xValue = xScale(ReferenceLine.value);
+      var label = ReferenceLine.label.length > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        key: "ReferenceLinelabel-[" + index + "]",
+        className: "scatter-ReferenceLinelabel",
+        x: xValue,
+        y: yScale(yExtent[1]) - 5,
+        alignmentBaseline: "baseline",
+        textAnchor: "middle",
+        fill: ReferenceLine.lineColor,
+        fontSize: options.label.textSize * 6,
+        fontWeight: "100"
+      }, ReferenceLine.label) : null;
+      ReferenceLinesContent.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("line", {
+        key: "ReferenceLine-[" + index + "]",
+        className: "scatter-ReferenceLineline",
+        x1: xValue,
+        x2: xValue,
+        y1: yScale(yExtent[0]),
+        y2: yScale(yExtent[1]),
+        stroke: ReferenceLine.lineColor,
+        strokeWidth: ReferenceLine.lineSize,
+        fill: "none"
+      }), label));
+    } else {
+      var yValue = yScale(ReferenceLine.value);
+      var height = yScale(yExtent[0]) - yValue;
+
+      if (height < 0 || height > yScale(yExtent[0]) - yScale(yExtent[1])) {
+        return;
+      }
+
+      var label = ReferenceLine.label.length > 0 ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("text", {
+        key: "ReferenceLinelabel-[" + index + "]",
+        className: "scatter-ReferenceLinelabel",
+        x: xScale(xExtent[1]) + 5,
+        y: yValue,
+        alignmentBaseline: "middle",
+        textAnchor: "left",
+        fill: ReferenceLine.lineColor,
+        fontSize: options.label.textSize * 6,
+        fontWeight: "100"
+      }, ReferenceLine.label) : null;
+      ReferenceLinesContent.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("line", {
+        key: "ReferenceLine-[" + index + "]",
+        className: "scatter-ReferenceLineline",
+        x1: xScale(xExtent[0]),
+        x2: xScale(xExtent[1]),
+        y1: yValue,
+        y2: yValue,
+        stroke: ReferenceLine.lineColor,
+        strokeWidth: ReferenceLine.lineSize,
+        fill: "none"
+      }), label));
+    }
+  });
+  return ReferenceLinesContent;
 }
 
 function drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent) {
@@ -8051,6 +8118,7 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
   return fieldSets.map(function (y, i) {
     return xValues.map(function (x, j) {
       var dotSize = y.sizeCol >= 0 ? colValues[y.sizeCol][j] : -y.sizeCol;
+      var dotColor = y.colorCol >= 0 ? colValues[y.colorCol][j] : y.color;
       var yValue = yValues[i][j];
 
       if (dotSize > 0 && yValue != null) {
@@ -8066,7 +8134,7 @@ function drawDots(options, fieldSets, xValues, yValues, colValues, xScale, yScal
           cy: yScale(yValue),
           r: dotSize,
           className: className,
-          fill: y.color
+          fill: dotColor.toString()
         });
       }
 
@@ -8149,6 +8217,11 @@ function onLegendClick(e, index, fieldSets, panelId) {
 }
 
 function drawLegend(options, width, height, xMargins, yMargins, colNames, panelId) {
+  // figure the rightMarginOffset, starting with the space needed for the longest reference line text
+  var rightMarginOffset = d3__WEBPACK_IMPORTED_MODULE_2__["max"](options.ReferenceLines.map(function (r) {
+    return r.vertical ? 0 : r.label.length;
+  })) * 8.0;
+
   if (options.legend.size) {
     var scale_1 = options.legend.size / 3;
     var fieldSets_1 = options.fieldSets.filter(function (x) {
@@ -8161,7 +8234,12 @@ function drawLegend(options, width, height, xMargins, yMargins, colNames, panelI
     if (fieldSets_1.length > 0) {
       var offset_1 = 20;
       var dx = offset_1 + 8.6 * scale_1 * maxLength;
-      xMargins.upper += dx;
+
+      if (rightMarginOffset < dx) {
+        rightMarginOffset = dx;
+      }
+
+      xMargins.upper += rightMarginOffset;
       var legends_1 = new Array(0);
       fieldSets_1.forEach(function (f, i) {
         var className = f.hidden ? 'ScatterLegendText ScatterLegendTextHidden' : 'ScatterLegendText';
@@ -8183,6 +8261,7 @@ function drawLegend(options, width, height, xMargins, yMargins, colNames, panelI
     }
   }
 
+  xMargins.upper += rightMarginOffset;
   return null;
 }
 
@@ -8326,6 +8405,8 @@ function generateContent(options, width, height, fieldSets, colData, panelId) {
       d3__WEBPACK_IMPORTED_MODULE_2__["select"](node).call(yAxis).selectAll('line').attr('stroke', options.grid.color);
     }
   }), clippath, border, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
+    id: "ReferenceLines"
+  }, drawReferenceLines(options, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
     id: "lines",
     clipPath: "url(#grid-" + panelId + "." + width + ")"
   }, drawLines(options, fieldSets, xValues, yValues, xScale, yScale, xExtent, yExtent)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("g", {
@@ -8492,7 +8573,6 @@ var ExtentsEditor = function ExtentsEditor(_a) {
   })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterExtentLimit"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    className: "ScatterExtentLimit",
     type: "number",
     value: value.max,
     title: "Axis Max (leave blank for auto)",
@@ -8533,7 +8613,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       context = _a.context;
 
   if (context.data && context.data.length > 0) {
-    var options_1 = context.data.flatMap(function (frame) {
+    var numberOptions_1 = context.data.flatMap(function (frame) {
       return frame.fields;
     }).map(function (field, index) {
       var _a;
@@ -8541,7 +8621,20 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       return {
         label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
         value: index,
-        valid: field.type !== 'string'
+        valid: field.type === 'number'
+      };
+    }).filter(function (o) {
+      return o.valid;
+    });
+    var stringOptions = context.data.flatMap(function (frame) {
+      return frame.fields;
+    }).map(function (field, index) {
+      var _a;
+
+      return {
+        label: ((_a = field.config) === null || _a === void 0 ? void 0 : _a.displayName) ? field.config.displayName : field.name,
+        value: index,
+        valid: field.type === 'string'
       };
     }).filter(function (o) {
       return o.valid;
@@ -8555,8 +8648,16 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       });
     }
 
-    options_1.forEach(function (o) {
+    numberOptions_1.forEach(function (o) {
       sizeOptions_1.push(o);
+    });
+    var colorOptions_1 = Array(0);
+    colorOptions_1.push({
+      label: "default",
+      value: -1
+    });
+    stringOptions.forEach(function (o) {
+      colorOptions_1.push(o);
     });
     var selects_1 = new Array(0);
     var values_1 = context.options.fieldSets.filter(function (x) {
@@ -8599,6 +8700,23 @@ var FieldSetEditor = function FieldSetEditor(_a) {
             _onChange(values_1);
           }
         })) : null;
+        var colorOverride = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "ScatterFlex ScatterDotSize"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "ScatterLabel"
+        }, "Dot Color"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: "ScatterSelect"
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Select"], {
+          isLoading: false,
+          value: values_1[index].colorCol,
+          isClearable: false,
+          onChange: function onChange(e) {
+            values_1[index].colorCol = e.value;
+
+            _onChange(values_1);
+          },
+          options: colorOptions_1
+        })));
         selects_1.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "FieldSetEditor"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -8618,7 +8736,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
             _onChange(values_1);
           },
-          options: options_1
+          options: numberOptions_1
         })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex ScatterDotSize"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -8645,7 +8763,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
 
             _onChange(values_1);
           }
-        }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        }))), colorOverride, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex"
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
           className: "ScatterFlex ScatterLineType"
@@ -8691,13 +8809,13 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       variant: "secondary",
       size: "sm",
       onClick: function onClick() {
-        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 0, 'none', 3, false));
+        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 0, 'none', 3, false, -1));
 
         _onChange(values_1);
       }
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "fa fa-plus"
-    }), ' ', "Add", item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+    }), '  ', "Add", '   ' + item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, selects_1, addButton);
   }
 
@@ -8900,7 +9018,7 @@ var MarginPairEditor = function MarginPairEditor(_a) {
   return react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterMargins"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
-    className: "ScatterMargin"
+    className: "ScatterMarginLimit"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
     type: "number",
     value: value.lower,
@@ -8913,7 +9031,7 @@ var MarginPairEditor = function MarginPairEditor(_a) {
   })), react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", {
     className: "ScatterExtentLimit"
   }, react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-    className: "ScatterExtentLimit",
+    className: "ScatterMarginLimit",
     type: "number",
     value: value.upper,
     //        title="Right Margin"
@@ -8923,6 +9041,131 @@ var MarginPairEditor = function MarginPairEditor(_a) {
       _onChange(value);
     }
   })));
+};
+
+/***/ }),
+
+/***/ "./editors/ReferenceLinesEditor.tsx":
+/*!******************************************!*\
+  !*** ./editors/ReferenceLinesEditor.tsx ***!
+  \******************************************/
+/*! exports provided: ReferenceLinesEditor */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReferenceLinesEditor", function() { return ReferenceLinesEditor; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @grafana/ui */ "@grafana/ui");
+/* harmony import */ var _grafana_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _types_ReferenceLine__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../types/ReferenceLine */ "./types/ReferenceLine.ts");
+
+
+
+
+var randomColor = __webpack_require__(/*! randomcolor */ "../node_modules/randomcolor/randomColor.js");
+
+var ReferenceLinesEditor = function ReferenceLinesEditor(_a) {
+  var item = _a.item,
+      _onChange = _a.onChange,
+      context = _a.context;
+
+  if (context.data && context.data.length > 0) {
+    var ReferenceLines_1 = context.options.ReferenceLines;
+    var ReferenceLinesContent_1 = new Array(0);
+    context.options.ReferenceLines.forEach(function (ReferenceLine, index) {
+      ReferenceLinesContent_1.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ReferenceLineEditor"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterFlex"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterLabel"
+      }, "Value"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+        className: 'ReferenceLineValue',
+        type: "number",
+        value: ReferenceLine.value,
+        onChange: function onChange(e) {
+          ReferenceLine.value = e.target.valueAsNumber;
+
+          _onChange(ReferenceLines_1);
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: 'ScatterFlex ScatterSize'
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterLabel"
+      }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+        type: "number",
+        min: 0,
+        max: 10,
+        title: "Set size of text",
+        value: ReferenceLine.lineSize,
+        onChange: function onChange(e) {
+          ReferenceLine.lineSize = e.target.valueAsNumber;
+
+          _onChange(ReferenceLines_1);
+        }
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterDotColor"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
+        color: ReferenceLine.lineColor,
+        enableNamedColors: false,
+        onChange: function onChange(e) {
+          ReferenceLine.lineColor = e;
+
+          _onChange(ReferenceLines_1);
+        }
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterLabel"
+      }, "Label"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
+        className: 'ReferenceLineLabel',
+        type: "string",
+        value: ReferenceLine.label,
+        onChange: function onChange(e) {
+          ReferenceLine.label = e.target.value.toString();
+
+          _onChange(ReferenceLines_1);
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterFlex"
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        className: "ScatterCheckbox",
+        title: "Draw X axis right to left"
+      }, "Vertical"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
+        value: ReferenceLine.vertical,
+        onChange: function onChange(e) {
+          ReferenceLine.vertical = e.currentTarget.checked;
+
+          _onChange(ReferenceLines_1);
+        }
+      })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+        className: 'ReferenceLineDeleteButton',
+        variant: "secondary",
+        size: "sm",
+        onClick: function onClick() {
+          ReferenceLines_1.splice(index, 1);
+
+          _onChange(ReferenceLines_1);
+        }
+      }, ' ', react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+        className: "fa fa-trash"
+      }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null)));
+    });
+    var addButton = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+      variant: "secondary",
+      size: "sm",
+      onClick: function onClick() {
+        ReferenceLines_1.push(new _types_ReferenceLine__WEBPACK_IMPORTED_MODULE_2__["ReferenceLine"]('', 0, randomColor(), 1, false));
+
+        _onChange(ReferenceLines_1);
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-plus"
+    }), '  ', "Add", ' ' + item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, ReferenceLinesContent_1, addButton);
+  }
+
+  return null;
 };
 
 /***/ }),
@@ -9114,6 +9357,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ScatterPanel__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ScatterPanel */ "./ScatterPanel.tsx");
 /* harmony import */ var editors_XAxisEditor__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! editors/XAxisEditor */ "./editors/XAxisEditor.tsx");
 /* harmony import */ var editors_FieldSetEditor__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! editors/FieldSetEditor */ "./editors/FieldSetEditor.tsx");
+/* harmony import */ var editors_ReferenceLinesEditor__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! editors/ReferenceLinesEditor */ "./editors/ReferenceLinesEditor.tsx");
+
 
 
 
@@ -9180,6 +9425,14 @@ var plugin = new _grafana_data__WEBPACK_IMPORTED_MODULE_0__["PanelPlugin"](Scatt
     name: 'Field(s)',
     category: ['Y Axis'],
     editor: editors_FieldSetEditor__WEBPACK_IMPORTED_MODULE_18__["FieldSetEditor"],
+    defaultValue: []
+  });
+  builder.addCustomEditor({
+    id: 'ReferenceLines',
+    path: 'ReferenceLines',
+    name: 'Reference Line(s)',
+    category: ['Y Axis'],
+    editor: editors_ReferenceLinesEditor__WEBPACK_IMPORTED_MODULE_19__["ReferenceLinesEditor"],
     defaultValue: []
   });
   builder.addCustomEditor({
@@ -9329,7 +9582,7 @@ __webpack_require__.r(__webpack_exports__);
 var FieldSet =
 /** @class */
 function () {
-  function FieldSet(col, sizeCol, color, dotSize, lineSize, lineType, polynomialOrder, hidden) {
+  function FieldSet(col, sizeCol, color, dotSize, lineSize, lineType, polynomialOrder, hidden, colorCol) {
     this.col = col;
     this.sizeCol = sizeCol;
     this.color = color;
@@ -9338,6 +9591,7 @@ function () {
     this.lineType = lineType;
     this.polynomialOrder = polynomialOrder;
     this.hidden = hidden;
+    this.colorCol = colorCol;
   }
 
   return FieldSet;
@@ -9445,6 +9699,35 @@ function () {
   }
 
   return MarginPair;
+}();
+
+
+
+/***/ }),
+
+/***/ "./types/ReferenceLine.ts":
+/*!********************************!*\
+  !*** ./types/ReferenceLine.ts ***!
+  \********************************/
+/*! exports provided: ReferenceLine */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ReferenceLine", function() { return ReferenceLine; });
+/* eslint no-useless-constructor:off, no-unused-vars:off, no-empty-function:off */
+var ReferenceLine =
+/** @class */
+function () {
+  function ReferenceLine(label, value, lineColor, lineSize, vertical) {
+    this.label = label;
+    this.value = value;
+    this.lineColor = lineColor;
+    this.lineSize = lineSize;
+    this.vertical = vertical;
+  }
+
+  return ReferenceLine;
 }();
 
 

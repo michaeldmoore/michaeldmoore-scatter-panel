@@ -18,6 +18,7 @@ import { ScatterOptions } from 'types/ScatterOptions';
 import { ScatterPanel } from 'ScatterPanel';
 import { XAxisEditor } from 'editors/XAxisEditor';
 import { FieldSetEditor } from 'editors/FieldSetEditor';
+import { ReferenceLinesEditor } from 'editors/ReferenceLinesEditor';
 
 export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
   .setPanelOptions((builder) => {
@@ -72,6 +73,15 @@ export const plugin = new PanelPlugin<ScatterOptions>(ScatterPanel)
       name: 'Field(s)',
       category: ['Y Axis'],
       editor: FieldSetEditor,
+      defaultValue: [],
+    });
+
+    builder.addCustomEditor({
+      id: 'ReferenceLines',
+      path: 'ReferenceLines',
+      name: 'Reference Line(s)',
+      category: ['Y Axis'],
+      editor: ReferenceLinesEditor,
       defaultValue: [],
     });
 

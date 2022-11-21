@@ -37,7 +37,7 @@
 }
 
 .ScatterExtentLimit{
-  width: 180px;
+  width: 90px;
   padding-right:20px;
 }
 
@@ -46,7 +46,7 @@
 }
 
 .ScatterMarginLimit{
-  width: 180px;
+  width: 90px;
   padding-right:20px;
 }
 
@@ -104,6 +104,18 @@
   padding-top:7px;
 }
 
+.ReferenceLineValue{
+  width:65px;
+}
+
+.ReferenceLineLabel{
+  width:100px;
+}
+
+.ReferenceLineDeleteButton{
+  margin-top:4px;
+  margin-left:20px;
+}
 
 .ScatterLegend input {
   width: 50px;

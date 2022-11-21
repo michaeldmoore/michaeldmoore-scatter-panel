@@ -1,6 +1,6 @@
 {
   "name": "michaeldmoore-scatter-plugin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A simple scatter-plot plugin panel table formatted data in Grafana using the react panel template",
   "scripts": {
     "build": "grafana-toolkit plugin:build",

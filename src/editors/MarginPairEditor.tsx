@@ -7,7 +7,7 @@ interface Props extends StandardEditorProps<MarginPair> { }
 
 export const MarginPairEditor: React.FC<Props> = ({ value, onChange }) => (
   <div className="ScatterMargins">
-    <div className="ScatterMargin">
+    <div className="ScatterMarginLimit">
       <Input
         type="number"
         value={value.lower}
@@ -20,7 +20,7 @@ export const MarginPairEditor: React.FC<Props> = ({ value, onChange }) => (
     </div>
     <div className="ScatterExtentLimit">
       <Input
-        className="ScatterExtentLimit"
+        className="ScatterMarginLimit"
         type="number"
         value={value.upper}
 //        title="Right Margin"

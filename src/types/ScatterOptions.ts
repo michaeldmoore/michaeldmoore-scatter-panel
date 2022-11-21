@@ -8,6 +8,7 @@ import { Legend } from './Legend';
 import { Extents } from './Extents';
 import { Label } from './Label';
 import { MarginPair } from './MarginPair';
+import { ReferenceLine } from './ReferenceLine';
 
 export interface ScatterOptions {
   xAxis: XAxis,
@@ -22,5 +23,6 @@ export interface ScatterOptions {
   xAxisTitle: Title,
   yAxisTitle: Title,
   grid: Grid,
-  border: Border
+  border: Border,
+  ReferenceLines: ReferenceLine[],
 }
