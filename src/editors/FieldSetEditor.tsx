@@ -40,7 +40,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
     });
 
     const colorOptions = Array(0);
-    colorOptions.push({ label: "default", value: -1});
+    colorOptions.push({ label: 'default', value: -1 });
     stringOptions.forEach((o) => {
       colorOptions.push(o);
     });
@@ -48,7 +48,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
     const selects = new Array(0);
 
     const values = context.options.fieldSets.filter((x: FieldSet) => x.col != null);
-      
+
     if (values) {
       values.forEach((val: Number, index: number) => {
         const lineSize = values[index].lineType === 'none' ? null : (
@@ -90,24 +90,24 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
           )
           : null;
 
-          const colorOverride = 
-          (
-            <div className="ScatterFlex ScatterDotSize">
-              <div className="ScatterLabel">Dot Color</div>
-              <div className="ScatterSelect">
-                <Select<number>
-                  isLoading={false}
-                  value={values[index].colorCol}
-                  isClearable={false}
-                  onChange={(e) => {
-                    values[index].colorCol = e.value;
-                    onChange(values);
-                  }}
-                  options={colorOptions}
-                />
-              </div>
+        const colorOverride =
+        (
+          <div className="ScatterFlex ScatterDotSize">
+            <div className="ScatterLabel">Dot Color</div>
+            <div className="ScatterSelect">
+              <Select<number>
+                isLoading={false}
+                value={values[index].colorCol}
+                isClearable={false}
+                onChange={(e) => {
+                  values[index].colorCol = e.value;
+                  onChange(values);
+                }}
+                options={colorOptions}
+              />
             </div>
-          );
+          </div>
+        );
 
         selects.push(
           <div className="FieldSetEditor">
@@ -196,7 +196,8 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
             <i className="fa fa-plus" />
             {'  '}
             Add
-            {'   ' + item.name.replace('(s)', '')}
+            {'  '}
+            {item.name.replace('(s)', '')}
           </Button>
           <hr />
         </div>

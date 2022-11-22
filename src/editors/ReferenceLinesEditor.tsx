@@ -1,7 +1,7 @@
 import React from 'react';
 import { StandardEditorProps } from '@grafana/data';
 import {
-  Button, ColorPicker, Input, Checkbox
+  Button, ColorPicker, Input, Checkbox,
 } from '@grafana/ui';
 import { ReferenceLine } from '../types/ReferenceLine';
 
@@ -14,68 +14,68 @@ export const ReferenceLinesEditor: React.FC<Props> = ({ item, onChange, context 
     const ReferenceLines = context.options.ReferenceLines;
 
     const ReferenceLinesContent = new Array(0);
-     
-    context.options.ReferenceLines.forEach((ReferenceLine: ReferenceLine, index: number) => {
+
+    context.options.ReferenceLines.forEach((line: ReferenceLine, index: number) => {
       ReferenceLinesContent.push(
         <div className="ReferenceLineEditor">
           <div className="ScatterFlex">
             <div className="ScatterLabel">Value</div>
             <Input
-              className='ReferenceLineValue'
+              className="ReferenceLineValue"
               type="number"
-              value={ReferenceLine.value}
+              value={line.value}
               onChange={(e) => {
-                ReferenceLine.value = (e.target as HTMLInputElement).valueAsNumber;
+                line.value = (e.target as HTMLInputElement).valueAsNumber;
                 onChange(ReferenceLines);
               }}
             />
-            <div className='ScatterFlex ScatterSize'>
+            <div className="ScatterFlex ScatterSize">
               <div className="ScatterLabel">Size</div>
               <Input
                 type="number"
                 min={0}
                 max={10}
                 title="Set size of text"
-                value={ReferenceLine.lineSize}
+                value={line.lineSize}
                 onChange={(e) => {
-                  ReferenceLine.lineSize = (e.target as HTMLInputElement).valueAsNumber;
+                  line.lineSize = (e.target as HTMLInputElement).valueAsNumber;
                   onChange(ReferenceLines);
                 }}
               />
             </div>
             <div className="ScatterDotColor">
               <ColorPicker
-                color={ReferenceLine.lineColor}
+                color={line.lineColor}
                 enableNamedColors={false}
                 onChange={(e) => {
-                  ReferenceLine.lineColor = e;
+                  line.lineColor = e;
                   onChange(ReferenceLines);
                 }}
               />
             </div>
             <div className="ScatterLabel">Label</div>
             <Input
-              className='ReferenceLineLabel'
+              className="ReferenceLineLabel"
               type="string"
-              value={ReferenceLine.label}
+              value={line.label}
               onChange={(e) => {
-                ReferenceLine.label = (e.target as HTMLInputElement).value.toString();
+                line.label = (e.target as HTMLInputElement).value.toString();
                 onChange(ReferenceLines);
               }}
             />
             <div className="ScatterFlex">
               <div className="ScatterCheckbox" title="Draw X axis right to left">Vertical</div>
               <Checkbox
-                value={ReferenceLine.vertical}
+                value={line.vertical}
                 onChange={(e) => {
-                  ReferenceLine.vertical = e.currentTarget.checked;
+                  line.vertical = e.currentTarget.checked;
                   onChange(ReferenceLines);
                 }}
               />
             </div>
 
             <Button
-              className='ReferenceLineDeleteButton'
+              className="ReferenceLineDeleteButton"
               variant="secondary"
               size="sm"
               onClick={() => {
@@ -92,7 +92,7 @@ export const ReferenceLinesEditor: React.FC<Props> = ({ item, onChange, context 
       );
     });
 
-    const addButton = 
+    const addButton =
       (
         <div>
           <Button
@@ -106,7 +106,8 @@ export const ReferenceLinesEditor: React.FC<Props> = ({ item, onChange, context 
             <i className="fa fa-plus" />
             {'  '}
             Add
-            {' ' + item.name.replace('(s)', '')}
+            {'  '}
+            {item.name.replace('(s)', '')}
           </Button>
           <hr />
         </div>

@@ -8653,7 +8653,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
     });
     var colorOptions_1 = Array(0);
     colorOptions_1.push({
-      label: "default",
+      label: 'default',
       value: -1
     });
     stringOptions.forEach(function (o) {
@@ -8815,7 +8815,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       }
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "fa fa-plus"
-    }), '  ', "Add", '   ' + item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+    }), '  ', "Add", '  ', item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, selects_1, addButton);
   }
 
@@ -9074,7 +9074,7 @@ var ReferenceLinesEditor = function ReferenceLinesEditor(_a) {
   if (context.data && context.data.length > 0) {
     var ReferenceLines_1 = context.options.ReferenceLines;
     var ReferenceLinesContent_1 = new Array(0);
-    context.options.ReferenceLines.forEach(function (ReferenceLine, index) {
+    context.options.ReferenceLines.forEach(function (line, index) {
       ReferenceLinesContent_1.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ReferenceLineEditor"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -9082,16 +9082,16 @@ var ReferenceLinesEditor = function ReferenceLinesEditor(_a) {
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ScatterLabel"
       }, "Value"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-        className: 'ReferenceLineValue',
+        className: "ReferenceLineValue",
         type: "number",
-        value: ReferenceLine.value,
+        value: line.value,
         onChange: function onChange(e) {
-          ReferenceLine.value = e.target.valueAsNumber;
+          line.value = e.target.valueAsNumber;
 
           _onChange(ReferenceLines_1);
         }
       }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-        className: 'ScatterFlex ScatterSize'
+        className: "ScatterFlex ScatterSize"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ScatterLabel"
       }, "Size"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
@@ -9099,30 +9099,30 @@ var ReferenceLinesEditor = function ReferenceLinesEditor(_a) {
         min: 0,
         max: 10,
         title: "Set size of text",
-        value: ReferenceLine.lineSize,
+        value: line.lineSize,
         onChange: function onChange(e) {
-          ReferenceLine.lineSize = e.target.valueAsNumber;
+          line.lineSize = e.target.valueAsNumber;
 
           _onChange(ReferenceLines_1);
         }
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ScatterDotColor"
       }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["ColorPicker"], {
-        color: ReferenceLine.lineColor,
+        color: line.lineColor,
         enableNamedColors: false,
         onChange: function onChange(e) {
-          ReferenceLine.lineColor = e;
+          line.lineColor = e;
 
           _onChange(ReferenceLines_1);
         }
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
         className: "ScatterLabel"
       }, "Label"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Input"], {
-        className: 'ReferenceLineLabel',
+        className: "ReferenceLineLabel",
         type: "string",
-        value: ReferenceLine.label,
+        value: line.label,
         onChange: function onChange(e) {
-          ReferenceLine.label = e.target.value.toString();
+          line.label = e.target.value.toString();
 
           _onChange(ReferenceLines_1);
         }
@@ -9132,14 +9132,14 @@ var ReferenceLinesEditor = function ReferenceLinesEditor(_a) {
         className: "ScatterCheckbox",
         title: "Draw X axis right to left"
       }, "Vertical"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Checkbox"], {
-        value: ReferenceLine.vertical,
+        value: line.vertical,
         onChange: function onChange(e) {
-          ReferenceLine.vertical = e.currentTarget.checked;
+          line.vertical = e.currentTarget.checked;
 
           _onChange(ReferenceLines_1);
         }
       })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_grafana_ui__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-        className: 'ReferenceLineDeleteButton',
+        className: "ReferenceLineDeleteButton",
         variant: "secondary",
         size: "sm",
         onClick: function onClick() {
@@ -9161,7 +9161,7 @@ var ReferenceLinesEditor = function ReferenceLinesEditor(_a) {
       }
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
       className: "fa fa-plus"
-    }), '  ', "Add", ' ' + item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
+    }), '  ', "Add", '  ', item.name.replace('(s)', '')), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("hr", null));
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, ReferenceLinesContent_1, addButton);
   }
 
