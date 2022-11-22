@@ -7856,7 +7856,7 @@ function autoConfigure(options, colData) {
 
   if (options.fieldSets.length === 0) {
     var fieldSets = colData.map(function (f, i) {
-      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_11__["FieldSet"](i, -1, randomColor(), 3, 1, 'none', 3, false, -1);
+      return new types_FieldSet__WEBPACK_IMPORTED_MODULE_11__["FieldSet"](i, -1, randomColor(), 2, 1, 'none', 3, false, -1);
     });
     options.fieldSets = fieldSets.filter(function (c) {
       return c.col !== options.xAxis.col && colData[c.col].type !== 'string';
@@ -8218,9 +8218,9 @@ function onLegendClick(e, index, fieldSets, panelId) {
 
 function drawLegend(options, width, height, xMargins, yMargins, colNames, panelId) {
   // figure the rightMarginOffset, starting with the space needed for the longest reference line text
-  var rightMarginOffset = d3__WEBPACK_IMPORTED_MODULE_2__["max"](options.ReferenceLines.map(function (r) {
+  var rightMarginOffset = options.ReferenceLines.length > 0 ? d3__WEBPACK_IMPORTED_MODULE_2__["max"](options.ReferenceLines.map(function (r) {
     return r.vertical ? 0 : r.label.length;
-  })) * 8.0;
+  })) * 8.0 : 0.0;
 
   if (options.legend.size) {
     var scale_1 = options.legend.size / 3;
@@ -8641,7 +8641,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
     });
     var sizeOptions_1 = Array(0);
 
-    for (var i = 1; i < 11; i += 2) {
+    for (var i = 1; i < 8; i += 1) {
       sizeOptions_1.push({
         label: i,
         value: -i
@@ -8809,7 +8809,7 @@ var FieldSetEditor = function FieldSetEditor(_a) {
       variant: "secondary",
       size: "sm",
       onClick: function onClick() {
-        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 0, 'none', 3, false, -1));
+        values_1.push(new _types_FieldSet__WEBPACK_IMPORTED_MODULE_2__["FieldSet"](-1, -1, randomColor(), 2, 1, 'none', 3, false, -1));
 
         _onChange(values_1);
       }

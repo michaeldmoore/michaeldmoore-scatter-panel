@@ -31,7 +31,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
 
     const sizeOptions = Array(0);
 
-    for (let i = 1; i < 11; i += 2) {
+    for (let i = 1; i < 8; i += 1) {
       sizeOptions.push({ label: i, value: -i });
     }
 
@@ -189,7 +189,7 @@ export const FieldSetEditor: React.FC<Props> = ({ item, onChange, context }) => 
             variant="secondary"
             size="sm"
             onClick={() => {
-              values.push(new FieldSet(-1, -1, randomColor(), 2, 0, 'none', 3, false, -1));
+              values.push(new FieldSet(-1, -1, randomColor(), 2, 1, 'none', 3, false, -1));
               onChange(values);
             }}
           >

@@ -31,7 +31,7 @@ function autoConfigure(options: ScatterOptions, colData: ColData[]) {
   options.fieldSets = options.fieldSets.filter((f) => f.col >= 0 && f.col < colData.length && f.col !== options.xAxis.col);
 
   if (options.fieldSets.length === 0) {
-    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 3, 1, 'none', 3, false, -1));
+    const fieldSets = colData.map((f, i) => new FieldSet(i, -1, randomColor(), 2, 1, 'none', 3, false, -1));
 
     options.fieldSets = fieldSets.filter((c) => c.col !== options.xAxis.col && colData[c.col].type !== 'string');
   }
@@ -65,7 +65,7 @@ function drawReferenceLines(
             key={`ReferenceLinelabel-[${index}]`}
             className="scatter-ReferenceLinelabel"
             x={xValue}
-            y={yScale(yExtent[1])-5}
+            y={yScale(yExtent[1]) - 5}
             alignmentBaseline="baseline"
             textAnchor="middle"
             fill={ReferenceLine.lineColor}
@@ -92,15 +92,14 @@ function drawReferenceLines(
           {label}
         </g>,
       );
-    }
-    else {
+    } else {
       const yValue = yScale(ReferenceLine.value);
       const height = yScale(yExtent[0]) - yValue;
-  
+
       if (height < 0 || height > yScale(yExtent[0]) - yScale(yExtent[1])) {
         return;
       }
-  
+
       const label = ReferenceLine.label.length > 0 ?
         (
           <text
@@ -117,7 +116,7 @@ function drawReferenceLines(
             {ReferenceLine.label}
           </text>
         ) : null;
-  
+
       ReferenceLinesContent.push(
         <g>
           <line
@@ -399,7 +398,7 @@ function onLegendClick(e: React.MouseEvent, index: number, fieldSets: FieldSet[]
 
 function drawLegend(options: ScatterOptions, width: number, height: number, xMargins: MarginPair, yMargins: MarginPair, colNames: string[], panelId: number) {
   // figure the rightMarginOffset, starting with the space needed for the longest reference line text
-  let rightMarginOffset = d3.max(options.ReferenceLines.map((r) => r.vertical ? 0 : r.label.length)) as number * 8.0;
+  let rightMarginOffset = options.ReferenceLines.length > 0 ? d3.max(options.ReferenceLines.map((r) => (r.vertical ? 0 : r.label.length))) as number * 8.0 : 0.0;
 
   if (options.legend.size) {
     const scale = options.legend.size / 3;
