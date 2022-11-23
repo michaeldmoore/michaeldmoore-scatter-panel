@@ -2,8 +2,8 @@
 
 [![Build](https://github.com/michaeldmoore/michaeldmoore-scatter-panel/workflows/CI/badge.svg)](https://github.com/michaeldmoore/michaeldmoore-scatter-panel/actions?query=workflow%3A%22CI%22)
 [![Release](https://github.com/michaeldmoore/michaeldmoore-scatter-panel/workflows/Release/badge.svg)](https://github.com/michaeldmoore/michaeldmoore-scatter-panel/actions?query=workflow%3ARelease)
-[![Marketplace](https://img.shields.io/badge/dynamic/json?color=orange&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22michaeldmoore-treemap-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/michaeldmoore-treemap-panel)
-[![Downloads](https://img.shields.io/badge/dynamic/json?color=orange&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22michaeldmoore-treemap-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/michaeldmoore-treemap-panel)
+[![Marketplace](https://img.shields.io/badge/dynamic/json?color=orange&label=marketplace&prefix=v&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22michaeldmoore-scatter-panel%22%29%5D.version&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/michaeldmoore-scatter-panel)
+[![Downloads](https://img.shields.io/badge/dynamic/json?color=orange&label=downloads&query=%24.items%5B%3F%28%40.slug%20%3D%3D%20%22michaeldmoore-scatter-panel%22%29%5D.downloads&url=https%3A%2F%2Fgrafana.com%2Fapi%2Fplugins)](https://grafana.com/grafana/plugins/michaeldmoore-scatter-panel)
 [![License](https://img.shields.io/github/license/michaeldmoore/michaeldmoore-scatter-panel)](LICENSE)
 
 

@@ -9,28 +9,28 @@ Hash: SHA512
   "signedByOrgName": "michaeldmoore",
   "plugin": "michaeldmoore-scatter-panel",
   "version": "1.2.0",
-  "time": 1669127711963,
+  "time": 1669214164955,
   "keyId": "7e4d0c6a708866e7",
   "files": {
-    "CHANGELOG.md": "41314338bb044f3e08dc334afdf5c3e1b76f9bff4568c98edcb31a6bf882e58e",
+    "CHANGELOG.md": "182513a9a115a41961e3bf028271a74d481dd3806e8c671e342208421ddb8a06",
     "img/logo.svg": "1ebabac67031b933be87f03efde9e41b5142e6ca1aea272aa110cfcc5ce8ecb6",
     "img/screenshot.png": "b86d038886aa17d53962928478b7bcecfaf36a4926f4fd7c4f9c5b99b4f6d765",
     "index.html": "2fa2c4168c5bb7b8502989f437e4a1a71e663702b0ec9c01530215c8c026dcaf",
     "LICENSE": "e03ba41d7fab20700769fe4118bab50d800cb74f990353a05d2f5fff1c228363",
     "module.js": "4f3d40e13c911feb7121a15ce6097e09f8e30139dff24a1a99f27ff19127f9b7",
     "module.js.map": "9f317027c65db14a709a30b22f5ea0a135b5e75d2bc176f4f9c7e5d791b3dce2",
-    "plugin.json": "45175ce9a12623a56b80a41f9580fe347fbd2f84f26df9c37b7f080413274c6f",
-    "README.md": "de3cc82232bc463064ef391d3adcc6cd2c9ca1dc76a201a5e7cadaa5e514365f"
+    "plugin.json": "b8bed7d4d6d170bc0d9145a148ee965fdaae162c9141cc3c1b8d168f030ef6d7",
+    "README.md": "99d3675ffe3239c39b124125deb8acba2fe648399ae717bc8f5eab03b0b12155"
   }
 }
 -----BEGIN PGP SIGNATURE-----
 Version: OpenPGP.js v4.10.10
 Comment: https://openpgpjs.org
 
-wrgEARMKAAYFAmN83iAAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
-cIhm5x0NAgkBxEMFRNh9kW3PqF1sBVhBKx9dZHwvTTxoA5BkOBA49Uz6Czrt
-dz8WsSEKaP/oPmIW3pyPzxKPsIv3ZosWMKBrH+kCB3MBJmT/2t0gkfoQnn5P
-ypFA4fbPJ4l/ab8fZihyU1nDdMIx84j69zedk1WtjB6WWpxQ2rcDBI9+MJhB
-tprSQbT3
-=liWd
+wrgEARMKAAYFAmN+L9UAIQkQfk0ManCIZucWIQTzOyW2kQdOhGNlcPN+TQxq
+cIhm54viAgUdNFcQsJlrFTQlErwjZQ+12+8EX8ZLxs6QZPWmyYX8YizQsFLy
+q6Tg9zFH4Xp2i8LMh3r2pdEcCfzYAcDUicdyWAIJAQ6X0v0Afci/BNXfbP0i
+GO/9Rl97JyUSPe6D0+1jBP5+HQG2Q1pdwI8wIGns8GC4PJLClGBHHbe7OEWH
+BD5PTn66
+=n6r4
 -----END PGP SIGNATURE-----
