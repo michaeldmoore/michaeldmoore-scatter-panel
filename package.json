@@ -1,0 +1,32 @@
+{
+  "name": "michaeldmoore-scatter-panel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A modern X/Y scatter and line visualization panel for Grafana.",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "dev": "grafana-toolkit plugin:dev",
+    "test": "grafana-toolkit test",
+    "lint": "grafana-toolkit plugin:lint"
+  },
+  "dependencies": {
+    "@grafana/data": "^13.2.1",
+    "@grafana/runtime": "^13.2.1",
+    "@grafana/ui": "^13.2.2",
+    "@emotion/css": "^11.13.5",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "uplot": "^1.6.32"
+  },
+  "devDependencies": {
+    "@grafana/create-plugin": "latest",
+    "@grafana/e2e": "latest",
+    "@grafana/plugin-e2e": "latest",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "typescript": "^5.9.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
