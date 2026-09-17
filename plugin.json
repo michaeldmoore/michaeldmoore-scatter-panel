@@ -1,0 +1,37 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "panel",
+  "name": "Scatter",
+  "id": "michaeldmoore-scatter-panel",
+  "info": {
+    "description": "An X/Y scatter and line visualization for Grafana with per-series colour and line-width controls.",
+    "author": {
+      "name": "Michael D Moore"
+    },
+    "keywords": [
+      "scatter",
+      "xy",
+      "line",
+      "plot",
+      "visualization"
+    ],
+    "logos": {
+      "small": "img/scatter.svg",
+      "large": "img/scatter.svg"
+    },
+    "links": [
+      {
+        "name": "GitHub",
+        "url": "https://github.com/michaeldmoore/michaeldmoore-scatter-panel"
+      }
+    ],
+    "screenshots": [],
+    "version": "0.1.0",
+    "updated": "2026-09-17"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=13.2.0",
+    "plugins": []
+  },
+  "suggestions": true
+}
