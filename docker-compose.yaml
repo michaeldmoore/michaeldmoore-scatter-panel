@@ -1,0 +1,12 @@
+services:
+  grafana:
+    image: grafana/grafana:13.2.0
+    container_name: scatter-panel-grafana
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./dist:/var/lib/grafana/plugins/michaeldmoore-scatter-panel
+      - ./provisioning:/etc/grafana/provisioning
+    environment:
+      GF_PLUGINS_ALLOW_LOADING_UNSIGNED_PLUGINS: michaeldmoore-scatter-panel
+      GF_LOG_LEVEL: info
