@@ -4,29 +4,52 @@
   "private": true,
   "description": "A modern X/Y scatter and line visualization panel for Grafana.",
   "scripts": {
-    "build": "grafana-toolkit plugin:build",
-    "dev": "grafana-toolkit plugin:dev",
-    "test": "grafana-toolkit test",
-    "lint": "grafana-toolkit plugin:lint"
+    "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
+    "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
+    "test": "jest --passWithNoTests --maxWorkers 4",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint --cache .",
+    "e2e": "playwright test",
+    "server": "docker compose up --build",
+    "sign": "sign-plugin",
+    "update": "npx @grafana/create-plugin@latest update"
   },
-  "dependencies": {
-    "@grafana/data": "^13.2.1",
-    "@grafana/runtime": "^13.2.1",
-    "@grafana/ui": "^13.2.2",
-    "@emotion/css": "^11.13.5",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "uplot": "^1.6.32"
-  },
+  "author": "Michael D Moore",
+  "license": "Apache-2.0",
   "devDependencies": {
-    "@grafana/create-plugin": "latest",
-    "@grafana/e2e": "latest",
+    "@grafana/eslint-config": "latest",
     "@grafana/plugin-e2e": "latest",
-    "@types/react": "^19.1.10",
-    "@types/react-dom": "^19.1.7",
-    "typescript": "^5.9.2"
+    "@grafana/sign-plugin": "latest",
+    "@grafana/tsconfig": "latest",
+    "@playwright/test": "latest",
+    "@swc/core": "latest",
+    "@swc/jest": "latest",
+    "@testing-library/jest-dom": "latest",
+    "@testing-library/react": "latest",
+    "@types/jest": "latest",
+    "@types/node": "latest",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "latest",
+    "jest": "latest",
+    "prettier": "latest",
+    "sass": "latest",
+    "swc-loader": "latest",
+    "typescript": "5.9.2",
+    "webpack": "latest",
+    "webpack-cli": "latest"
   },
   "engines": {
-    "node": ">=20"
-  }
+    "node": ">=22"
+  },
+  "dependencies": {
+    "@emotion/css": "11.10.6",
+    "@grafana/data": "13.2.1",
+    "@grafana/runtime": "13.2.1",
+    "@grafana/ui": "13.2.2",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "uplot": "latest"
+  },
+  "packageManager": "npm@10.9.8"
 }
