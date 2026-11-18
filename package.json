@@ -1,5 +1,5 @@
 {
-  "name": "michaeldmoore-newscatter-panel",
+  "name": "michaeldmoore-scatter-panel",
   "version": "0.1.0",
   "private": true,
   "description": "A Grafana panel plugin that displays its panel name.",

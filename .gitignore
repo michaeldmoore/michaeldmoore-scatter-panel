@@ -6,3 +6,4 @@ test-results/
 .DS_Store
 .env
 npm-debug.log*
+.eslintcache
