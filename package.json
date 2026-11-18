@@ -1,11 +1,11 @@
 {
-  "name": "michaeldmoore-scatter-panel",
+  "name": "michaeldmoore-newscatter-panel",
   "version": "0.1.0",
   "private": true,
-  "description": "A modern X/Y scatter and line visualization panel for Grafana.",
+  "description": "A Grafana panel plugin that displays its panel name.",
   "scripts": {
-    "build": "webpack -c ./.config/webpack/webpack.config.ts --env production",
-    "dev": "webpack -w -c ./.config/webpack/webpack.config.ts --env development",
+    "build": "webpack -c ./.config/webpack/webpack.config.cjs --env production",
+    "dev": "webpack -w -c ./.config/webpack/webpack.config.cjs --env development",
     "test": "jest --passWithNoTests --maxWorkers 4",
     "typecheck": "tsc --noEmit",
     "lint": "eslint --cache .",

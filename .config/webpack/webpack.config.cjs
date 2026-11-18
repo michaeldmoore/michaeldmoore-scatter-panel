@@ -1,10 +1,9 @@
-import path from 'path';
-import type { Configuration } from 'webpack';
-import CopyPlugin from 'copy-webpack-plugin';
+const path = require('path');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const root = path.resolve(__dirname, '../..');
 
-export default (env: { production?: boolean } = {}): Configuration => ({
+module.exports = (env = {}) => ({
   mode: env.production ? 'production' : 'development',
   context: root,
   entry: './src/module.ts',

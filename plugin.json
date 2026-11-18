@@ -1,20 +1,14 @@
 {
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/main/docs/sources/developers/plugins/plugin.schema.json",
   "type": "panel",
-  "name": "Scatter",
-  "id": "michaeldmoore-scatter-panel",
+  "name": "New Scatter Panel",
+  "id": "michaeldmoore-newscatter-panel",
   "info": {
-    "description": "An X/Y scatter and line visualization for Grafana with per-series colour and line-width controls.",
+    "description": "A simple Grafana panel that displays its name.",
     "author": {
       "name": "Michael D Moore"
     },
-    "keywords": [
-      "scatter",
-      "xy",
-      "line",
-      "plot",
-      "visualization"
-    ],
+    "keywords": ["scatter", "panel", "visualization"],
     "logos": {
       "small": "img/scatter.svg",
       "large": "img/scatter.svg"
@@ -27,7 +21,7 @@
     ],
     "screenshots": [],
     "version": "0.1.0",
-    "updated": "2026-09-17"
+    "updated": "2026-11-18"
   },
   "dependencies": {
     "grafanaDependency": ">=13.2.0",

@@ -1,26 +1,14 @@
-# Scatter
+# New Scatter Panel
 
-A modern Grafana panel plugin for X/Y scatter and line visualizations.
-
-## Planned features
-
-- X/Y plotting from Grafana data frames
-- Multiple Y series
-- Per-series colour and line-width controls
-- Optional point markers and configurable point size
-- Linear and logarithmic axes
-- Automatic or fixed axis ranges
-- Axis titles, grid and legend controls
-- Tooltips and Grafana data links
-- Grafana variables and transformations
-- Dark and light themes
-- Responsive rendering
+A Grafana panel plugin that displays its name in a read-only text box. This is the starting point for the new scatter panel implementation.
 
 ## Development
 
-This project targets modern Grafana versions and is intended to be maintained with the current `@grafana/create-plugin` tooling.
+- `npm run dev` builds the plugin in watch mode.
+- `npm run build` creates a production build in `dist`.
+- `npm run typecheck` checks the TypeScript sources.
 
-The plugin is a visualization only: data acquisition remains the responsibility of Grafana data sources and transformations.
+Run the plugin in Grafana with `docker compose up`.
 
 ## Repository
 
